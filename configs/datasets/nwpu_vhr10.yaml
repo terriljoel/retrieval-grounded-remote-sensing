@@ -1,0 +1,32 @@
+dataset:
+  name: NWPU_VHR-10
+  version: raw_v1
+  path: "shared_resources/datasets/raw/"
+  archive: "shared_resources/datasets/archive/NWPU VHR-10 dataset.zip"
+  raw-filename: "NWPU VHR-10 dataset.zip"
+  annotation_format: "nwpu_txt"
+  class_id_base: 1
+  
+classes:
+  1: airplane
+  2: ship 
+  3: storage_tank
+  4: baseball_diamond
+  5: tennis_court
+  6: basketball_court
+  7: ground_track_field
+  8: harbor
+  9: bridge
+  10: vehicle
+extensions:
+  images:
+    - .jpg
+    - .png
+    - .jpeg
+    - .tif  
+    - .tiff 
+    - .bmp
+  annotations:
+    - .json
+    - .xml
+    - .txt
