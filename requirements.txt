@@ -2,3 +2,4 @@ pandas
 matplotlib 
 pillow 
 pyyaml
+iterative-stratification

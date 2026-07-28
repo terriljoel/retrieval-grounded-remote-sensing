@@ -9,6 +9,59 @@ from pathlib import Path
 from sklearn.model_selection import train_test_split
 
 from src.data.models import DatasetItem
+from iterstrat.ml_stratifiers import (
+    MultilabelStratifiedShuffleSplit,
+)
+import numpy as np
+
+from src.data.parsers.nwpu import (
+    parse_nwpu_annotation,
+)
+
+
+def create_multilabel_targets(
+    items: list[DatasetItem],
+    number_of_classes: int = 10,
+) -> np.ndarray:
+    """Create class-presence targets plus one background target."""
+    targets = np.zeros(
+        (len(items), number_of_classes + 1),
+        dtype=np.int8,
+    )
+
+    background_index = number_of_classes
+
+    for item_index, item in enumerate(items):
+        if item.is_background:
+            targets[item_index, background_index] = 1
+            continue
+
+        if item.annotation_path is None:
+            raise ValueError(
+                f"Positive image has no annotation: "
+                f"{item.image_path}"
+            )
+
+        boxes = parse_nwpu_annotation(
+            item.annotation_path
+        )
+
+        for box in boxes:
+            zero_based_class_id = box.class_id - 1
+
+            if zero_based_class_id not in range(
+                number_of_classes
+            ):
+                raise ValueError(
+                    f"Unexpected class ID: {box.class_id}"
+                )
+
+            targets[
+                item_index,
+                zero_based_class_id,
+            ] = 1
+
+    return targets
 
 
 @dataclass(frozen=True)
@@ -40,77 +93,100 @@ DatasetSplits = dict[str, list[DatasetItem]]
 def create_dataset_splits(
     items: list[DatasetItem],
     config: SplitConfig = SplitConfig(),
-    stratify_backgrounds: bool = True,
 ) -> DatasetSplits:
-    """Create deterministic train, validation, and test splits.
-
-    When ``stratify_backgrounds`` is enabled, positive and background
-    images retain approximately the same proportions in each split.
-    """
+    """Create deterministic multilabel-stratified splits."""
     config.validate()
 
     if not items:
-        raise ValueError("Cannot split an empty dataset.")
+        raise ValueError(
+            "Cannot split an empty dataset."
+        )
 
-    image_paths = [item.image_path.resolve() for item in items]
+    image_paths = [
+        item.image_path.resolve()
+        for item in items
+    ]
 
     if len(image_paths) != len(set(image_paths)):
-        raise ValueError("Duplicate image paths were provided.")
+        raise ValueError(
+            "Duplicate image paths were provided."
+        )
 
-    stratification_labels = None
+    targets = create_multilabel_targets(items)
 
-    if stratify_backgrounds:
-        stratification_labels = [
-            item.is_background
-            for item in items
-        ]
+    item_indices = np.arange(len(items))
 
-        if len(set(stratification_labels)) < 2:
-            raise ValueError(
-                "Background stratification requires both positive "
-                "and background images."
-            )
-
-    remaining_ratio = config.val_ratio + config.test_ratio
-
-    train_items, remaining_items = train_test_split(
-        items,
-        test_size=remaining_ratio,
-        random_state=config.seed,
-        shuffle=True,
-        stratify=stratification_labels,
+    remaining_ratio = (
+        config.val_ratio
+        + config.test_ratio
     )
 
-    remaining_stratification = None
+    train_splitter = (
+        MultilabelStratifiedShuffleSplit(
+            n_splits=1,
+            test_size=remaining_ratio,
+            random_state=config.seed,
+        )
+    )
 
-    if stratify_backgrounds:
-        remaining_stratification = [
-            item.is_background
-            for item in remaining_items
-        ]
+    train_indices, remaining_indices = next(
+        train_splitter.split(
+            item_indices,
+            targets,
+        )
+    )
+
+    remaining_targets = targets[
+        remaining_indices
+    ]
 
     relative_test_ratio = (
-        config.test_ratio / remaining_ratio
+        config.test_ratio
+        / remaining_ratio
     )
 
-    val_items, test_items = train_test_split(
-        remaining_items,
-        test_size=relative_test_ratio,
-        random_state=config.seed,
-        shuffle=True,
-        stratify=remaining_stratification,
+    validation_splitter = (
+        MultilabelStratifiedShuffleSplit(
+            n_splits=1,
+            test_size=relative_test_ratio,
+            random_state=config.seed,
+        )
     )
+
+    validation_relative_indices, test_relative_indices = next(
+        validation_splitter.split(
+            remaining_indices,
+            remaining_targets,
+        )
+    )
+
+    validation_indices = remaining_indices[
+        validation_relative_indices
+    ]
+
+    test_indices = remaining_indices[
+        test_relative_indices
+    ]
 
     splits = {
-        "train": list(train_items),
-        "val": list(val_items),
-        "test": list(test_items),
+        "train": [
+            items[index]
+            for index in train_indices
+        ],
+        "val": [
+            items[index]
+            for index in validation_indices
+        ],
+        "test": [
+            items[index]
+            for index in test_indices
+        ],
     }
 
     validate_dataset_splits(
         splits,
         expected_total=len(items),
-        require_backgrounds=stratify_backgrounds,
+        require_backgrounds=True,
     )
 
     return splits
