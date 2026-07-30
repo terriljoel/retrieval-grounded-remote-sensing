@@ -2,3 +2,4 @@
 shared_resources/*
 !shared_resources/.gitkeep
 *.pyc
+.agents/
