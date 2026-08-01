@@ -6,8 +6,6 @@ import csv
 from dataclasses import dataclass
 from pathlib import Path
 
-from sklearn.model_selection import train_test_split
-
 from src.data.models import DatasetItem
 from iterstrat.ml_stratifiers import (
     MultilabelStratifiedShuffleSplit,
@@ -320,8 +318,9 @@ def save_split_manifest(
                         f"{annotation_path}"
                     ) from error
 
+            source_type = "background" if item.is_background else "positive"
             records.append({
-                "image_id": image_path.stem,
+                "image_id": f"{source_type}_{image_path.stem}",
                 "image_path": str(relative_image_path),
                 "annotation_path": relative_annotation_path,
                 "is_background": item.is_background,

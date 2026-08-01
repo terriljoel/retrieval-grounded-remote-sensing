@@ -1,5 +1,7 @@
-pandas 
-matplotlib 
-pillow 
-pyyaml
 iterative-stratification
+matplotlib
+numpy
+pandas
+pillow
+pyyaml
+ultralytics

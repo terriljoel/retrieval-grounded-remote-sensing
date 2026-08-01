@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retrieval-grounded-remote-sensing"
+version = "0.1.0"
+description = "Retrieval-grounded object detection for remote-sensing imagery"
+readme = "README.md"
+requires-python = ">=3.10"
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+rs-prepare-detector = "scripts.prepare_dataset:main"
+rs-train-detector = "scripts.train_detector:main"
+rs-evaluate-detector = "scripts.evaluate_detector:main"
+rs-predict-detector = "scripts.predict_detector:main"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "scripts*"]
+namespaces = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
