@@ -5,11 +5,17 @@ from pathlib import Path
 import re
 from typing import Any
 
+from src.data.manifests import load_split_manifest
+from src.data.parsers.nwpu import parse_nwpu_annotation
 from src.detection.config import resolve_path, save_resolved_config
 from src.detection.inference import (
+    ComparisonRecord,
     DetectionRecord,
+    GroundTruthRecord,
     InferenceImageRecord,
+    compare_predictions_to_ground_truth,
     discover_inference_images,
+    parse_yolo_ground_truth,
     write_inference_tables,
 )
 from src.detection.reporting import collect_runtime_metadata, write_json
@@ -186,32 +192,121 @@ def _safe_run_component(value: str) -> str:
     return cleaned
 
 
+def _ground_truth_annotation_path(
+    image_path: Path,
+    source: Path,
+    ground_truth_root: Path,
+) -> Path | None:
+    """Match an image to a label by relative path, then by filename stem."""
+    if ground_truth_root.is_file():
+        return ground_truth_root if source.is_file() else None
+
+    candidates: list[Path] = []
+    if source.is_dir():
+        relative_image = image_path.relative_to(source)
+        candidates.append(ground_truth_root / relative_image.with_suffix(".txt"))
+    candidates.append(ground_truth_root / f"{image_path.stem}.txt")
+    return next((path.resolve() for path in candidates if path.is_file()), None)
+
+
+def _load_ground_truth_boxes(
+    annotation_path: Path | None,
+    annotation_format: str,
+    image_width: int,
+    image_height: int,
+) -> list[tuple[int, float, float, float, float]]:
+    if annotation_path is None:
+        return []
+    if annotation_format == "yolo":
+        return parse_yolo_ground_truth(
+            annotation_path, image_width, image_height
+        )
+    if annotation_format == "nwpu":
+        boxes = []
+        for box in parse_nwpu_annotation(annotation_path):
+            if box.class_id not in range(1, 11):
+                raise ValueError(
+                    f"NWPU class ID must be 1-10 in {annotation_path}, "
+                    f"got {box.class_id}"
+                )
+            if not (
+                0 <= box.xmin < box.xmax <= image_width
+                and 0 <= box.ymin < box.ymax <= image_height
+            ):
+                raise ValueError(
+                    f"NWPU box is outside {image_width}x{image_height}: {box}"
+                )
+            boxes.append((
+                box.class_id - 1,
+                float(box.xmin),
+                float(box.ymin),
+                float(box.xmax),
+                float(box.ymax),
+            ))
+        return boxes
+    raise ValueError(f"Unsupported ground-truth format: {annotation_format}")
+
+
 def export_predictions(
     config: dict[str, Any],
     project_root: Path,
-    checkpoint: Path,
-    source: Path,
-    dataset_id: str,
-    source_split: str,
 ) -> Path:
     """Export structured predictions for an arbitrary local image source."""
     if config["detector"]["backend"] != "ultralytics":
         raise ValueError(
             "export_predictions currently supports the ultralytics backend"
         )
-    dataset_id = dataset_id.strip()
-    source_split = source_split.strip().lower()
-    if not dataset_id:
-        raise ValueError("dataset_id must not be empty")
-    if not source_split:
-        raise ValueError("source_split must not be empty")
-
-    checkpoint = checkpoint.resolve()
+    detector = config["detector"]
+    source_config = config["source"]
+    dataset_id = str(source_config["dataset_id"]).strip()
+    source_split = str(source_config.get("split") or "external").strip().lower()
+    allow_test = source_config.get("allow_test", False)
+    checkpoint = resolve_path(detector["checkpoint"], project_root)
     if not checkpoint.is_file():
         raise FileNotFoundError(f"Checkpoint not found: {checkpoint}")
 
-    source = resolve_path(source, project_root)
+    source = resolve_path(source_config["path"], project_root)
     source_images = discover_inference_images(source)
+
+    manifest_path: Path | None = None
+    manifest_lookup: dict[Path, tuple[str, Any]] = {}
+    manifest_value = source_config.get("manifest")
+    if manifest_value:
+        manifest_path = resolve_path(manifest_value, project_root)
+        resolved_dataset_root = resolve_path(source_config["dataset_root"], project_root)
+        manifest_splits = load_split_manifest(manifest_path, resolved_dataset_root)
+        for split_name, items in manifest_splits.items():
+            for item in items:
+                manifest_lookup[item.image_path.resolve()] = (split_name, item)
+
+    matched_manifest_images = sum(
+        image.resolve() in manifest_lookup for image in source_images
+    )
+    source_splits = {
+        manifest_lookup[image.resolve()][0]
+        for image in source_images
+        if image.resolve() in manifest_lookup
+    }
+    if (source_split == "test" or "test" in source_splits) and not allow_test:
+        raise ValueError(
+            "Test images require source.allow_test=true in the inference config"
+        )
+
+    ground_truth_config = config.get("ground_truth")
+    compare_ground_truth = ground_truth_config is not None
+    ground_truth_root: Path | None = None
+    annotation_format: str | None = None
+    if ground_truth_config is not None:
+        ground_truth_root = resolve_path(ground_truth_config["path"], project_root)
+        if not ground_truth_root.exists():
+            raise FileNotFoundError(
+                f"Ground-truth path not found: {ground_truth_root}"
+            )
+        if ground_truth_root.is_file() and len(source_images) != 1:
+            raise ValueError(
+                "A ground-truth file can only be used with one source image"
+            )
+        annotation_format = ground_truth_config["format"]
 
     inference = config["inference"]
     output_root = resolve_path(config["outputs"]["root"], project_root)
@@ -244,6 +339,8 @@ def export_predictions(
 
     image_records: list[InferenceImageRecord] = []
     detection_records: list[DetectionRecord] = []
+    ground_truth_records: list[GroundTruthRecord] = []
+    matched_ground_truth_files = 0
     source_indices = {
         path.resolve(): index for index, path in enumerate(source_images)
     }
@@ -258,6 +355,39 @@ def export_predictions(
         source_index = source_indices[source_path]
         image_id = f"{safe_dataset_id}_{source_index:06d}_{source_path.stem}"
         image_height, image_width = map(int, result.orig_shape)
+        manifest_entry = manifest_lookup.get(source_path)
+        image_split = manifest_entry[0] if manifest_entry else source_split
+        ground_truth_boxes: list[tuple[int, float, float, float, float]] = []
+        if compare_ground_truth:
+            annotation_path = _ground_truth_annotation_path(
+                source_path, source, ground_truth_root
+            )
+            if annotation_path is not None:
+                matched_ground_truth_files += 1
+            ground_truth_boxes = _load_ground_truth_boxes(
+                annotation_path,
+                annotation_format,
+                image_width,
+                image_height,
+            )
+            for ground_truth_index, ground_truth_box in enumerate(ground_truth_boxes):
+                class_id, xmin, ymin, xmax, ymax = ground_truth_box
+                if class_id not in result.names:
+                    raise ValueError(
+                        f"Ground-truth class {class_id} is not in model classes"
+                    )
+                ground_truth_records.append(GroundTruthRecord(
+                    ground_truth_id=(
+                        f"{image_id}_gt_{ground_truth_index:04d}"
+                    ),
+                    image_id=image_id,
+                    class_id=class_id,
+                    class_name=str(result.names[class_id]),
+                    xmin=xmin,
+                    ymin=ymin,
+                    xmax=xmax,
+                    ymax=ymax,
+                ))
         boxes = result.boxes
         coordinates = boxes.xyxy.cpu().tolist()
         class_ids = boxes.cls.cpu().tolist()
@@ -269,10 +399,13 @@ def export_predictions(
             image_id=image_id,
             dataset_id=dataset_id,
             source_image_path=str(source_path),
-            source_split=source_split,
+            source_split=image_split,
             image_width=image_width,
             image_height=image_height,
             prediction_count=len(coordinates),
+            ground_truth_count=(
+                len(ground_truth_boxes) if compare_ground_truth else None
+            ),
         ))
         for index, (box, class_value, confidence) in enumerate(
             zip(coordinates, class_ids, confidences, strict=True)
@@ -297,8 +430,19 @@ def export_predictions(
             ))
 
     run_directory = _ultralytics_save_dir(model, results[-1], "prediction")
+    comparison_records: list[ComparisonRecord] | None = None
+    if compare_ground_truth:
+        comparison_records = compare_predictions_to_ground_truth(
+            detection_records,
+            ground_truth_records,
+            iou_threshold=ground_truth_config.get("iou_threshold", 0.5),
+        )
     summary = write_inference_tables(
-        run_directory, image_records, detection_records
+        run_directory,
+        image_records,
+        detection_records,
+        ground_truths=ground_truth_records if compare_ground_truth else None,
+        comparisons=comparison_records,
     )
     save_resolved_config(config, run_directory / "resolved_config.yaml")
     metadata = collect_runtime_metadata(project_root)
@@ -308,6 +452,17 @@ def export_predictions(
         "source_split": source_split,
         "checkpoint": str(checkpoint),
         "source": str(source),
+        "manifest": str(manifest_path) if manifest_path else None,
+        "manifest_matched_images": matched_manifest_images,
+        "manifest_unmatched_images": len(source_images) - matched_manifest_images,
+        "compare_ground_truth": compare_ground_truth,
+        "ground_truth_format": annotation_format,
+        "ground_truth_path": str(ground_truth_root) if ground_truth_root else None,
+        "ground_truth_matched_files": matched_ground_truth_files,
+        "ground_truth_unmatched_images": (
+            len(source_images) - matched_ground_truth_files
+            if compare_ground_truth else None
+        ),
         "confidence": inference["confidence"],
         "iou": inference["iou"],
         **summary,

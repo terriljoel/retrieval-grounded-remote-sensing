@@ -4,8 +4,11 @@ import pytest
 
 from src.detection.inference import (
     DetectionRecord,
+    GroundTruthRecord,
     InferenceImageRecord,
+    compare_predictions_to_ground_truth,
     discover_inference_images,
+    parse_yolo_ground_truth,
     validate_inference_records,
     write_inference_tables,
 )
@@ -88,3 +91,37 @@ def test_discover_inference_images_supports_nested_external_dataset(tmp_path):
     discovered = discover_inference_images(tmp_path / "images")
 
     assert discovered == sorted([first.resolve(), second.resolve()])
+
+
+def test_compare_predictions_to_ground_truth_reports_simple_statuses():
+    detections = [
+        DetectionRecord("d1", "image", 0, "airplane", 0.9, 0, 0, 10, 10),
+        DetectionRecord("d2", "image", 9, "vehicle", 0.8, 20, 20, 30, 30),
+        DetectionRecord("d3", "image", 0, "airplane", 0.7, 40, 40, 50, 50),
+    ]
+    ground_truths = [
+        GroundTruthRecord("g1", "image", 0, "airplane", 0, 0, 10, 10),
+        GroundTruthRecord("g2", "image", 1, "ship", 20, 20, 30, 30),
+        GroundTruthRecord("g3", "image", 2, "storage_tank", 60, 60, 70, 70),
+    ]
+
+    comparisons = compare_predictions_to_ground_truth(detections, ground_truths)
+
+    assert {record.status for record in comparisons} == {
+        "true_positive", "class_error", "false_positive", "false_negative"
+    }
+    true_positive = next(
+        record for record in comparisons if record.status == "true_positive"
+    )
+    assert true_positive.detection_id == "d1"
+    assert true_positive.ground_truth_id == "g1"
+    assert true_positive.iou == 1.0
+
+
+def test_parse_yolo_ground_truth_converts_normalized_boxes(tmp_path):
+    annotation = tmp_path / "tile.txt"
+    annotation.write_text("2 0.5 0.5 0.2 0.4\n", encoding="utf-8")
+
+    boxes = parse_yolo_ground_truth(annotation, image_width=100, image_height=80)
+
+    assert boxes == [(2, 40.0, 24.0, 60.0, 56.0)]

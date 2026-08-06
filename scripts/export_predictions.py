@@ -15,47 +15,11 @@ def main() -> None:
         description="Export structured detector predictions for an image source."
     )
     parser.add_argument("--config", type=Path, required=True)
-    parser.add_argument("--checkpoint", type=Path, required=True)
-    parser.add_argument(
-        "--source",
-        type=Path,
-        required=True,
-        help="One image or a directory containing images.",
-    )
-    parser.add_argument(
-        "--dataset-id",
-        required=True,
-        help="Stable provenance name for the source dataset.",
-    )
-    parser.add_argument(
-        "--source-split",
-        help="Partition provenance, for example val, test, or external.",
-    )
-    parser.add_argument(
-        "--confirm-test",
-        action="store_true",
-        help="Required when exporting held-out test predictions.",
-    )
     args = parser.parse_args()
 
     project_root = find_project_root(Path(__file__).resolve())
     config = load_inference_config(args.config)
-    source_split = (
-        args.source_split or config["inference"]["default_source_split"]
-    ).strip().lower()
-    if source_split == "test" and not args.confirm_test:
-        parser.error(
-            "source-split=test requires --confirm-test to protect the held-out set"
-        )
-
-    run_directory = export_predictions(
-        config,
-        project_root,
-        args.checkpoint,
-        args.source,
-        args.dataset_id,
-        source_split,
-    )
+    run_directory = export_predictions(config, project_root)
     print(f"Inference export: {run_directory}")
 
 

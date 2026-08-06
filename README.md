@@ -78,24 +78,42 @@ rs-evaluate-detector \
   --confirm-test
 ```
 
-Export structured predictions independently from training. The source can be
-one image or any directory tree containing a new image dataset:
+Export structured predictions independently from training. Copy the example
+inference YAML, set its checkpoint and source paths, and run the job with that
+configuration alone:
 
 ```bash
-rs-export-predictions \
-  --config configs/inference/ultralytics_export.yaml \
-  --checkpoint /path/to/best.pt \
-  --source /path/to/new-dataset/images \
-  --dataset-id new_remote_sensing_dataset \
-  --source-split external
+rs-export-predictions --config configs/inference/ultralytics_export.yaml
 ```
 
 This writes `inference_images.csv`, including images with zero detections, and
-`detections.csv`, containing one row per predicted box. For the prepared NWPU
-validation set, pass its `images/val` directory with `--dataset-id nwpu_vhr10
---source-split val`. After the inference configuration is frozen, export the
-NWPU test queries with `--source-split test --confirm-test`. Test predictions
-are queries only and must not be added to the FAISS reference index.
+`detections.csv`, containing one row per predicted box. The `source.manifest`
+setting is optional and only enriches matching images with train/val/test
+provenance. A new dataset does not need to be split or converted to YOLO merely
+to run inference.
+
+Ground-truth comparison is also optional and independent of the manifest. Add
+a `ground_truth` mapping to the inference YAML to compare against YOLO labels:
+
+```yaml
+ground_truth:
+  format: yolo
+  path: /path/to/labels
+  iou_threshold: 0.50
+```
+
+Use `format: nwpu` for original NWPU annotation text files. Labels are matched
+to images by relative path and then filename stem. Missing label files are
+treated as background images. The export writes `ground_truth.csv` and
+`prediction_comparison.csv` with `true_positive`, `class_error`,
+`false_positive`, and `false_negative` records. Set `ground_truth: null` for
+prediction-only jobs.
+
+For the prepared NWPU validation set, configure `source.path` as its
+`images/val` directory and `source.split: val`. Test export remains protected:
+set `source.allow_test: true` explicitly after freezing the inference
+configuration. Test predictions are queries only and must not be added to the
+FAISS reference index.
 
 Predict arbitrary unlabeled images without annotation conversion:
 

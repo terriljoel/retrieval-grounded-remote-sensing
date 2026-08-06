@@ -3,9 +3,21 @@ run:
 
 detector:
   backend: ultralytics
+  checkpoint: /path/to/best.pt
+
+source:
+  path: /path/to/images
+  dataset_id: new_remote_sensing_dataset
+  split: external
+  manifest: null
+  dataset_root: null
+  allow_test: false
+
+# Set this section to null for prediction-only exports. When annotations are
+# available, use format: yolo or format: nwpu and point path to the label folder.
+ground_truth: null
 
 inference:
-  default_source_split: external
   imgsz: 640
   batch: 16
   confidence: 0.05
