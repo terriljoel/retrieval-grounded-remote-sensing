@@ -19,8 +19,9 @@ class FakeTensor:
 
 
 class FakeModel:
-    def __init__(self):
+    def __init__(self, synthetic_result_paths: bool = False):
         self.predictor = None
+        self.synthetic_result_paths = synthetic_result_paths
 
     def predict(self, **arguments):
         run_directory = Path(arguments["project"]) / arguments["name"]
@@ -35,7 +36,11 @@ class FakeModel:
                 conf=FakeTensor([0.9] if has_detection else []),
             )
             results.append(SimpleNamespace(
-                path=source,
+                path=(
+                    f"image{index}.jpg"
+                    if self.synthetic_result_paths
+                    else source
+                ),
                 orig_shape=(80, 100),
                 boxes=boxes,
                 names={0: "airplane"},
@@ -85,7 +90,11 @@ def test_export_predictions_accepts_external_directory(
         },
         "outputs": {"root": str(output_root)},
     }
-    monkeypatch.setattr(ultralytics_backend, "_load_yolo", lambda _: FakeModel())
+    monkeypatch.setattr(
+        ultralytics_backend,
+        "_load_yolo",
+        lambda _: FakeModel(synthetic_result_paths=True),
+    )
     monkeypatch.setattr(
         ultralytics_backend, "collect_runtime_metadata", lambda _: {}
     )
@@ -103,6 +112,10 @@ def test_export_predictions_accepts_external_directory(
     assert {row["dataset_id"] for row in image_rows} == {"external tiles"}
     assert [row["prediction_count"] for row in image_rows] == ["1", "0"]
     assert len({row["image_id"] for row in image_rows}) == 2
+    assert {row["source_image_path"] for row in image_rows} == {
+        str(first.resolve()),
+        str(second.resolve()),
+    }
     assert len(detection_rows) == 1
     assert detection_rows[0]["predicted_class_name"] == "airplane"
 

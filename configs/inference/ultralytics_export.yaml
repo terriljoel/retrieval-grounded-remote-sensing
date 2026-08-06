@@ -3,10 +3,10 @@ run:
 
 detector:
   backend: ultralytics
-  checkpoint: /path/to/best.pt
+  checkpoint: "${SHARED_RESOURCES_ROOT}/checkpoints/best.pt"
 
 source:
-  path: /path/to/images
+  path: "{SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
   dataset_id: new_remote_sensing_dataset
   split: external
   manifest: null
@@ -15,7 +15,10 @@ source:
 
 # Set this section to null for prediction-only exports. When annotations are
 # available, use format: yolo or format: nwpu and point path to the label folder.
-ground_truth: null
+ground_truth: 
+  format: nwpu
+  path: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset/ground truth"
+  iou_threshold: 0.5
 
 inference:
   imgsz: 640
@@ -30,4 +33,4 @@ inference:
   exist_ok: false
 
 outputs:
-  root: "${EXPERIMENT_OUTPUT_ROOT}/inference"
+  root: "${SHARED_RESOURCES_ROOT}/inference"

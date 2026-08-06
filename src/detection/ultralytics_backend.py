@@ -341,18 +341,10 @@ def export_predictions(
     detection_records: list[DetectionRecord] = []
     ground_truth_records: list[GroundTruthRecord] = []
     matched_ground_truth_files = 0
-    source_indices = {
-        path.resolve(): index for index, path in enumerate(source_images)
-    }
-    returned_sources: set[Path] = set()
-    for result in results:
-        source_path = Path(result.path).resolve()
-        if source_path not in source_indices:
-            raise RuntimeError(f"Ultralytics returned an unknown source: {source_path}")
-        if source_path in returned_sources:
-            raise RuntimeError(f"Ultralytics returned a source twice: {source_path}")
-        returned_sources.add(source_path)
-        source_index = source_indices[source_path]
+    for source_index, (source_path, result) in enumerate(
+        zip(source_images, results, strict=True)
+    ):
+        source_path = source_path.resolve()
         image_id = f"{safe_dataset_id}_{source_index:06d}_{source_path.stem}"
         image_height, image_width = map(int, result.orig_shape)
         manifest_entry = manifest_lookup.get(source_path)
