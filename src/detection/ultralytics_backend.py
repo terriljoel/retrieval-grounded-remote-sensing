@@ -196,8 +196,13 @@ def _ground_truth_annotation_path(
     image_path: Path,
     source: Path,
     ground_truth_root: Path,
+    annotation_format: str,
 ) -> Path | None:
     """Match an image to a label by relative path, then by filename stem."""
+    if annotation_format == "nwpu" and any(
+        part.casefold() == "negative image set" for part in image_path.parts
+    ):
+        return None
     if ground_truth_root.is_file():
         return ground_truth_root if source.is_file() else None
 
@@ -352,7 +357,10 @@ def export_predictions(
         ground_truth_boxes: list[tuple[int, float, float, float, float]] = []
         if compare_ground_truth:
             annotation_path = _ground_truth_annotation_path(
-                source_path, source, ground_truth_root
+                source_path,
+                source,
+                ground_truth_root,
+                annotation_format,
             )
             if annotation_path is not None:
                 matched_ground_truth_files += 1

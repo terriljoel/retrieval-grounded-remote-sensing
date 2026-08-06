@@ -48,6 +48,30 @@ class FakeModel:
         return results
 
 
+def test_nwpu_negative_image_does_not_reuse_positive_annotation(tmp_path):
+    source = tmp_path / "NWPU VHR-10 dataset"
+    negative = source / "negative image set" / "001.jpg"
+    positive = source / "positive image set" / "001.jpg"
+    labels = source / "ground truth"
+    negative.parent.mkdir(parents=True)
+    positive.parent.mkdir(parents=True)
+    labels.mkdir()
+    negative.touch()
+    positive.touch()
+    annotation = labels / "001.txt"
+    annotation.write_text("(1,2),(20,30),1\n", encoding="utf-8")
+
+    negative_annotation = ultralytics_backend._ground_truth_annotation_path(
+        negative, source, labels, "nwpu"
+    )
+    positive_annotation = ultralytics_backend._ground_truth_annotation_path(
+        positive, source, labels, "nwpu"
+    )
+
+    assert negative_annotation is None
+    assert positive_annotation == annotation.resolve()
+
+
 def test_export_predictions_accepts_external_directory(
     monkeypatch, tmp_path
 ):

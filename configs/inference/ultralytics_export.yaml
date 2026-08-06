@@ -6,7 +6,7 @@ detector:
   checkpoint: "${SHARED_RESOURCES_ROOT}/checkpoints/best.pt"
 
 source:
-  path: "{SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
+  path: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
   dataset_id: new_remote_sensing_dataset
   split: external
   manifest: null
