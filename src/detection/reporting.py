@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import importlib.metadata
 import json
+import os
 from pathlib import Path
 import platform
 import subprocess
@@ -46,6 +47,8 @@ def collect_runtime_metadata(project_root: Path) -> dict[str, Any]:
         "platform": platform.platform(),
         "packages": packages,
         "cuda": cuda,
+        "job_id": os.environ.get("RS_JOB_ID"),
+        "job_directory": os.environ.get("RS_JOB_DIRECTORY"),
     }
 
 

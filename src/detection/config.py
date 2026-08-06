@@ -9,7 +9,7 @@ import yaml
 
 
 ENVIRONMENT_VARIABLE = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
-REQUIRED_SECTIONS = {
+DETECTION_REQUIRED_SECTIONS = {
     "experiment", "data", "split", "export", "classes", "detector",
     "model", "training", "evaluation", "prediction", "outputs",
 }
@@ -37,7 +37,7 @@ def _expand_environment(value: Any) -> Any:
 
 
 def validate_detection_config(config: dict[str, Any]) -> None:
-    missing = REQUIRED_SECTIONS - set(config)
+    missing = DETECTION_REQUIRED_SECTIONS - set(config)
     if missing:
         raise ValueError(f"Missing configuration sections: {sorted(missing)}")
     if config["detector"].get("backend") != "ultralytics":
@@ -62,18 +62,23 @@ def validate_detection_config(config: dict[str, Any]) -> None:
         raise ValueError("evaluation.split must be train, val, or test")
 
 
-def load_detection_config(path: Path) -> dict[str, Any]:
+def load_yaml_config(path: Path) -> dict[str, Any]:
     path = path.resolve()
     if not path.is_file():
-        raise FileNotFoundError(f"Detection configuration not found: {path}")
+        raise FileNotFoundError(f"Configuration not found: {path}")
     with path.open(encoding="utf-8") as file:
         loaded = yaml.safe_load(file)
     if not isinstance(loaded, dict):
         raise ValueError(f"Configuration must be a YAML mapping: {path}")
 
     config = _expand_environment(loaded)
-    validate_detection_config(config)
     config["_config_path"] = str(path)
+    return config
+
+
+def load_detection_config(path: Path) -> dict[str, Any]:
+    config = load_yaml_config(path)
+    validate_detection_config(config)
     return config
 
 

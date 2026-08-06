@@ -17,6 +17,7 @@ dev = ["pytest"]
 rs-prepare-detector = "scripts.prepare_dataset:main"
 rs-train-detector = "scripts.train_detector:main"
 rs-evaluate-detector = "scripts.evaluate_detector:main"
+rs-export-predictions = "scripts.export_predictions:main"
 rs-predict-detector = "scripts.predict_detector:main"
 
 [tool.setuptools.dynamic]

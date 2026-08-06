@@ -2,9 +2,16 @@ from __future__ import annotations
 
 import csv
 from pathlib import Path
+import re
 from typing import Any
 
 from src.detection.config import resolve_path, save_resolved_config
+from src.detection.inference import (
+    DetectionRecord,
+    InferenceImageRecord,
+    discover_inference_images,
+    write_inference_tables,
+)
 from src.detection.reporting import collect_runtime_metadata, write_json
 
 
@@ -169,6 +176,143 @@ def evaluate_detector(
     metadata = collect_runtime_metadata(project_root)
     metadata.update({"stage": "evaluation", **overall})
     write_json(metadata, run_directory / "evaluation_metadata.json")
+    return run_directory
+
+
+def _safe_run_component(value: str) -> str:
+    cleaned = re.sub(r"[^A-Za-z0-9._-]+", "_", value).strip("._-")
+    if not cleaned:
+        raise ValueError(f"Value cannot form a safe output name: {value!r}")
+    return cleaned
+
+
+def export_predictions(
+    config: dict[str, Any],
+    project_root: Path,
+    checkpoint: Path,
+    source: Path,
+    dataset_id: str,
+    source_split: str,
+) -> Path:
+    """Export structured predictions for an arbitrary local image source."""
+    if config["detector"]["backend"] != "ultralytics":
+        raise ValueError(
+            "export_predictions currently supports the ultralytics backend"
+        )
+    dataset_id = dataset_id.strip()
+    source_split = source_split.strip().lower()
+    if not dataset_id:
+        raise ValueError("dataset_id must not be empty")
+    if not source_split:
+        raise ValueError("source_split must not be empty")
+
+    checkpoint = checkpoint.resolve()
+    if not checkpoint.is_file():
+        raise FileNotFoundError(f"Checkpoint not found: {checkpoint}")
+
+    source = resolve_path(source, project_root)
+    source_images = discover_inference_images(source)
+
+    inference = config["inference"]
+    output_root = resolve_path(config["outputs"]["root"], project_root)
+    safe_dataset_id = _safe_run_component(dataset_id)
+    safe_source_split = _safe_run_component(source_split)
+    run_name = (
+        f"{config['run']['name']}_{safe_dataset_id}_{safe_source_split}"
+    )
+    model = _load_yolo(checkpoint)
+    results = model.predict(
+        source=[str(path) for path in source_images],
+        imgsz=inference["imgsz"],
+        batch=inference["batch"],
+        conf=inference["confidence"],
+        iou=inference["iou"],
+        device=inference["device"],
+        save=inference["save_rendered_images"],
+        save_txt=inference["save_yolo_labels"],
+        save_conf=inference["save_confidence"],
+        verbose=inference["verbose"],
+        project=str(output_root),
+        name=run_name,
+        exist_ok=inference["exist_ok"],
+    )
+    if len(results) != len(source_images):
+        raise RuntimeError(
+            f"Ultralytics returned {len(results)} results for "
+            f"{len(source_images)} images"
+        )
+
+    image_records: list[InferenceImageRecord] = []
+    detection_records: list[DetectionRecord] = []
+    source_indices = {
+        path.resolve(): index for index, path in enumerate(source_images)
+    }
+    returned_sources: set[Path] = set()
+    for result in results:
+        source_path = Path(result.path).resolve()
+        if source_path not in source_indices:
+            raise RuntimeError(f"Ultralytics returned an unknown source: {source_path}")
+        if source_path in returned_sources:
+            raise RuntimeError(f"Ultralytics returned a source twice: {source_path}")
+        returned_sources.add(source_path)
+        source_index = source_indices[source_path]
+        image_id = f"{safe_dataset_id}_{source_index:06d}_{source_path.stem}"
+        image_height, image_width = map(int, result.orig_shape)
+        boxes = result.boxes
+        coordinates = boxes.xyxy.cpu().tolist()
+        class_ids = boxes.cls.cpu().tolist()
+        confidences = boxes.conf.cpu().tolist()
+        if not (len(coordinates) == len(class_ids) == len(confidences)):
+            raise RuntimeError(f"Incomplete Ultralytics result for {source_path}")
+
+        image_records.append(InferenceImageRecord(
+            image_id=image_id,
+            dataset_id=dataset_id,
+            source_image_path=str(source_path),
+            source_split=source_split,
+            image_width=image_width,
+            image_height=image_height,
+            prediction_count=len(coordinates),
+        ))
+        for index, (box, class_value, confidence) in enumerate(
+            zip(coordinates, class_ids, confidences, strict=True)
+        ):
+            xmin, ymin, xmax, ymax = map(float, box)
+            xmin = min(max(xmin, 0.0), image_width)
+            xmax = min(max(xmax, 0.0), image_width)
+            ymin = min(max(ymin, 0.0), image_height)
+            ymax = min(max(ymax, 0.0), image_height)
+            class_id = int(class_value)
+            class_name = result.names[class_id]
+            detection_records.append(DetectionRecord(
+                detection_id=f"{image_id}_det_{index:04d}",
+                image_id=image_id,
+                predicted_class_id=class_id,
+                predicted_class_name=str(class_name),
+                confidence=float(confidence),
+                xmin=xmin,
+                ymin=ymin,
+                xmax=xmax,
+                ymax=ymax,
+            ))
+
+    run_directory = _ultralytics_save_dir(model, results[-1], "prediction")
+    summary = write_inference_tables(
+        run_directory, image_records, detection_records
+    )
+    save_resolved_config(config, run_directory / "resolved_config.yaml")
+    metadata = collect_runtime_metadata(project_root)
+    metadata.update({
+        "stage": "inference_export",
+        "dataset_id": dataset_id,
+        "source_split": source_split,
+        "checkpoint": str(checkpoint),
+        "source": str(source),
+        "confidence": inference["confidence"],
+        "iou": inference["iou"],
+        **summary,
+    })
+    write_json(metadata, run_directory / "inference_metadata.json")
     return run_directory
 
 

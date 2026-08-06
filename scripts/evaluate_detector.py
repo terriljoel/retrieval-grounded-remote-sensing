@@ -5,9 +5,11 @@ from pathlib import Path
 
 from src.detection.config import load_detection_config
 from src.detection.ultralytics_backend import evaluate_detector
+from src.utils.job_logging import logged_cli
 from src.utils.paths import find_project_root
 
 
+@logged_cli("rs-evaluate-detector")
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate a detector checkpoint.")
     parser.add_argument("--config", type=Path, required=True)

@@ -78,6 +78,25 @@ rs-evaluate-detector \
   --confirm-test
 ```
 
+Export structured predictions independently from training. The source can be
+one image or any directory tree containing a new image dataset:
+
+```bash
+rs-export-predictions \
+  --config configs/inference/ultralytics_export.yaml \
+  --checkpoint /path/to/best.pt \
+  --source /path/to/new-dataset/images \
+  --dataset-id new_remote_sensing_dataset \
+  --source-split external
+```
+
+This writes `inference_images.csv`, including images with zero detections, and
+`detections.csv`, containing one row per predicted box. For the prepared NWPU
+validation set, pass its `images/val` directory with `--dataset-id nwpu_vhr10
+--source-split val`. After the inference configuration is frozen, export the
+NWPU test queries with `--source-split test --confirm-test`. Test predictions
+are queries only and must not be added to the FAISS reference index.
+
 Predict arbitrary unlabeled images without annotation conversion:
 
 ```bash
@@ -88,3 +107,21 @@ rs-predict-detector \
 ```
 
 The preparation command reuses a saved audit when available, reuses or creates the deterministic manifest, exports collision-safe YOLO filenames, records source provenance, and validates image, label, object, background, and coordinate contracts. Pass `--force` only when you deliberately want to rerun the audit and replace the manifest and export. Training does not launch test evaluation, and test evaluation requires the explicit confirmation flag.
+
+## Job logs
+
+Every `rs-*` CLI invocation is treated as a job. When `JOB_LOG_ROOT` is set,
+the complete console output is shown live and also persisted under:
+
+```text
+${JOB_LOG_ROOT}/<command>/<timestamp_job-id>/
+|-- run.log
+`-- job.json
+```
+
+`job.json` records the command, arguments, start and finish times, duration,
+status, exit code, working directory, Python version, and log path. The Colab
+bootstrap sets `JOB_LOG_ROOT` to
+`${EXPERIMENT_OUTPUT_ROOT}/job_logs`, which is stored in the shared Drive
+folder. Training, evaluation, and inference metadata also record the active
+job ID and job directory.

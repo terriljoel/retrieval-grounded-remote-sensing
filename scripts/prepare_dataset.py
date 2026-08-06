@@ -13,6 +13,7 @@ from src.data.splitting import SplitConfig, create_dataset_splits, save_split_ma
 from src.data.yolo import export_yolo_dataset, validate_yolo_dataset
 from src.detection.config import load_detection_config, resolve_path
 from src.utils.archive import extract_zip
+from src.utils.job_logging import logged_cli
 from src.utils.paths import find_project_root
 
 
@@ -51,6 +52,7 @@ def _clear_export(output_root: Path) -> None:
     shutil.rmtree(output_root)
 
 
+@logged_cli("rs-prepare-detector")
 def main() -> None:
     args = parse_args()
     project_root = find_project_root(Path(__file__).resolve())

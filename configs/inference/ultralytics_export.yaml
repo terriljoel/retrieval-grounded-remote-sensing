@@ -1,0 +1,21 @@
+run:
+  name: object_detection_inference
+
+detector:
+  backend: ultralytics
+
+inference:
+  default_source_split: external
+  imgsz: 640
+  batch: 16
+  confidence: 0.05
+  iou: 0.70
+  device: 0
+  save_rendered_images: true
+  save_yolo_labels: true
+  save_confidence: true
+  verbose: true
+  exist_ok: false
+
+outputs:
+  root: "${EXPERIMENT_OUTPUT_ROOT}/inference"
