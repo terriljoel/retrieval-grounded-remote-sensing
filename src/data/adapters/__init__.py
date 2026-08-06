@@ -1,0 +1,1 @@
+"""Raw dataset discovery adapters."""

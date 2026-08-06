@@ -1,0 +1,7 @@
+audit:
+  random_seed: 42
+  visualization_samples: 12
+  check_image_readability: true
+  check_bounding_boxes: true
+  check_missing_pairs: true
+  check_duplicate_images: true

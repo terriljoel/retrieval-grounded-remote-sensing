@@ -1,0 +1,36 @@
+run:
+  name: object_detection_inference
+
+detector:
+  backend: ultralytics
+  checkpoint: "${SHARED_RESOURCES_ROOT}/checkpoints/best.pt"
+
+source:
+  path: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
+  dataset_id: new_remote_sensing_dataset
+  split: external
+  manifest: null
+  dataset_root: null
+  allow_test: false
+
+# Set this section to null for prediction-only exports. When annotations are
+# available, use format: yolo or format: nwpu and point path to the label folder.
+ground_truth: 
+  format: nwpu
+  path: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset/ground truth"
+  iou_threshold: 0.5
+
+inference:
+  imgsz: 640
+  batch: 16
+  confidence: 0.05
+  iou: 0.70
+  device: 0
+  save_rendered_images: true
+  save_yolo_labels: true
+  save_confidence: true
+  verbose: true
+  exist_ok: false
+
+outputs:
+  root: "${SHARED_RESOURCES_ROOT}/inference"

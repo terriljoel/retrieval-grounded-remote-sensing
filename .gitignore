@@ -1,3 +1,8 @@
 .env
-*.pt
-*.zip
+shared_resources/*
+!shared_resources/.gitkeep
+*.pyc
+__pycache__/
+.pytest_cache/
+*.egg-info/
+.agents/
