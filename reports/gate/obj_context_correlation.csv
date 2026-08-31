@@ -1,0 +1,5 @@
+encoder,mean_paired_cosine,similarity_rank_correlation,redundant
+remoteclip_b32,0.7036,0.6652,False
+remoteclip_l14,0.7607,0.6097,False
+openclip_b32,0.7754,0.546,False
+dinov2_b14,0.5265,0.6082,False

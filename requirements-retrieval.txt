@@ -1,0 +1,10 @@
+# Retrieval / VLM half of the project. Deliberately NOT referenced by
+# pyproject.toml -- the root requirements.txt feeds the detector install path.
+#   python -m pip install -r requirements-retrieval.txt
+torch
+open-clip-torch
+huggingface-hub
+transformers
+matplotlib
+scikit-learn
+umap-learn

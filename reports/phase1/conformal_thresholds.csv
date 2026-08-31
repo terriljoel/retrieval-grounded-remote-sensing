@@ -1,0 +1,9 @@
+harm,alpha,delta,n_harmful_in_val,cal_threshold,cal_coverage,cal_empirical_rate,cal_bounded_rate,heldout_coverage,heldout_observed_rate,heldout_n_harmful,within_budget,full_val_threshold,full_val_coverage
+background_accept,0.01,0.1,174,0.000301,0.8975,0.0038,0.0085,0.8727,0.0039,3,True,0.000198,0.8952
+background_accept,0.05,0.1,174,1e-06,0.9499,0.0396,0.0497,0.9403,0.0527,44,False,1e-06,0.9417
+class_error,0.01,0.1,128,0.033444,0.6959,0.0033,0.0087,0.6678,0.0034,2,True,0.027445,0.6942
+class_error,0.05,0.1,128,0.003044,0.836,0.0381,0.0489,0.7962,0.0467,33,True,0.003044,0.816
+combined,0.01,0.1,1235,inf,0.0,0.0,1.0,0.0,0.0,0,True,inf,0.0
+combined,0.05,0.1,1235,inf,0.0,0.0,1.0,0.0,0.0,0,True,inf,0.0
+loose_box_accept,0.01,0.1,403,inf,0.0,0.0,1.0,0.0,0.0,0,True,inf,0.0
+loose_box_accept,0.05,0.1,403,inf,0.0,0.0,1.0,0.0,0.0,0,True,inf,0.0
