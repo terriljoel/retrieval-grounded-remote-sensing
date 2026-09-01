@@ -1,0 +1,5 @@
+baseline,aurc,risk_at_full_coverage,coverage_at_1%_fa,coverage_at_5%_fa
+B0_confidence,0.1299,0.3856,0.0291,0.1593
+B2_logreg,0.255,0.3856,0.0038,0.0038
+B2_real_fit,0.1343,0.3856,0.0051,0.2491
+B2_no_evidence_margin,0.2078,0.3856,0.0,0.0

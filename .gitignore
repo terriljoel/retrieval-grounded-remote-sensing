@@ -6,3 +6,43 @@ __pycache__/
 .pytest_cache/
 *.egg-info/
 .agents/
+
+# Retrieval gate test artifacts
+data/crops/
+data/embeddings/
+data/hrrsd/
+data/memory/
+
+# All local datasets and generated data
+data/
+
+# Local model checkpoints and downloaded models
+checkpoints/
+
+# Hugging Face / downloaded model caches
+models--*/
+**/models--*/
+.huggingface/
+huggingface/
+
+# Common model weight / checkpoint formats
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.pkl
+
+# Secrets — never commit. See .env.example for the variable names.
+.env
+.env.local
+
+# HRRSD dataset / embedded repository
+docs/shared_resources/datasets/raw/HRRSD/
+
+# Raw datasets
+/docs/shared_resources/datasets/raw/
+
+# Raw dataset archives
+/docs/shared_resources/datasets/archive/

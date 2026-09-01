@@ -1,0 +1,210 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=3.2cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{parskip}
+\usepackage{enumitem}
+
+% Long \texttt{} paths and identifiers cannot hyphenate; let TeX stretch the
+% interword space instead of running them into the margin.
+\sloppy
+\emergencystretch=3em
+
+\title{Retrieval + VLM Gate --- Setup and Run Guide}
+\author{Nishank Satish}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+This is a step-by-step guide to getting the retrieval half of the project
+running from a fresh clone. Follow the steps in order --- each one depends
+on the one before it. Nothing here needs you to understand embeddings or
+retrieval; for what the system actually does, see \texttt{RETRIEVAL\_README.md}
+in the project root instead.
+
+\section{What you need before starting}
+
+\begin{itemize}[nosep]
+  \item This repository, on the correct branch.
+  \item An NVIDIA API key (free) for the VLM step.
+  \item The \texttt{data} folder --- sent separately on the shared Google
+    Drive, not in git.
+  \item Python 3.10 or later, and \texttt{pip}.
+\end{itemize}
+
+\section{Step 1 --- Get the code}
+
+Clone the repository and switch to the branch with the retrieval work on
+it. \texttt{main} and \texttt{feat/object-detection-YOLO} do not have any
+of this --- it is all on its own branch:
+
+\begin{verbatim}
+git clone \
+  git@github.com:terriljoel/retrieval-grounded-remote-sensing.git
+cd retrieval-grounded-remote-sensing
+git checkout feat/retrieval-vlm-gate
+\end{verbatim}
+
+\section{Step 2 --- Python environment}
+
+Two requirements files, one for each half of the project:
+
+\begin{verbatim}
+pip install -r requirements.txt
+pip install -r requirements-retrieval.txt
+\end{verbatim}
+
+\section{Step 3 --- API key}
+
+The VLM step (the second AI model that reads uncertain detections) calls
+NVIDIA's hosted API. Get a free key at
+\texttt{https://build.nvidia.com} (any model page, then ``Get API Key''), then:
+
+\begin{verbatim}
+cp .env.example .env
+\end{verbatim}
+
+Open \texttt{.env} and fill in:
+
+\begin{verbatim}
+NIM_API_KEY=nvapi-...your key...
+NIM_MODEL=nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+\end{verbatim}
+
+The \texttt{NIM\_MODEL} line matters --- the code's built-in default model
+was retired by NVIDIA and will fail with an error if you skip this.
+
+\texttt{.env} is never read directly by the code and is never committed to
+git. Before running anything that calls the VLM, load it into your shell:
+
+\begin{verbatim}
+export NIM_API_KEY='nvapi-...'
+export NIM_MODEL='nvidia/nemotron-3-nano-omni-30b-a3b-reasoning'
+\end{verbatim}
+
+or, equivalently, \texttt{set -a; . ./.env; set +a}.
+
+\section{Step 4 --- Place the dataset}
+
+\textbf{The NWPU VHR-10 dataset} (satellite images with labelled objects)
+is the only raw dataset anything in this guide needs. It goes at:
+
+\begin{verbatim}
+docs/shared_resources/datasets/raw/NWPU VHR-10 dataset/
+    positive image set/
+    negative image set/
+    ground truth/
+\end{verbatim}
+
+These exact folder names matter --- the code reads this layout directly.
+Ask for this dataset if you were not sent it separately; nothing in the
+project runs without it.
+
+(HRRSD is a second dataset that shows up elsewhere in this repository, but
+nothing in this guide needs it --- it is used by one optional script that
+already ran and produced its output, and neither the demo app nor any of
+the measurement scripts in Step 6 touch it. Skip it.)
+
+\textbf{The \texttt{data} folder} you receive on the shared Drive replaces
+(or merges into) the project's own \texttt{data/} directory at the
+repository root:
+
+\begin{verbatim}
+data/
+    memory/       <- verified-case database. Required for the demo app.
+    crops/        <- cached crop images. Optional.
+    embeddings/   <- cached embeddings. Optional.
+\end{verbatim}
+
+Only \texttt{data/memory/} is strictly required (for the demo app in Step
+7). The others are caches --- every script rebuilds them automatically if
+they are missing, just more slowly on first run.
+
+\section{Step 5 --- Model weights}
+
+Nothing to do here. The RemoteCLIP encoder (about 2.3~GB) downloads itself
+automatically from Hugging Face the first time any script runs, as long as
+you have an internet connection. It is cached afterwards under
+\texttt{checkpoints/} and will not re-download.
+
+\section{Step 6 --- Run the measurement scripts}
+
+These reproduce every number in \texttt{reports/FINDINGS.md}. Each one is
+self-contained --- run from the repository root:
+
+\begin{verbatim}
+python3 -m scripts.run_gate_test     # does retrieval work at all?
+python3 -m scripts.run_baselines     # the two simple baselines
+python3 -m scripts.run_alpha_sweep   # tuning the crop fusion weight
+python3 -m scripts.run_open_set      # spotting an unseen class
+python3 -m scripts.run_label_noise   # robustness to bad labels
+python3 -m scripts.run_arm_ablation  # which crop views help
+python3 -m scripts.run_conformal     # calibrating the accept threshold
+python3 -m scripts.run_b3_vlm \
+    --scoring logprob --evidence none
+\end{verbatim}
+
+Each writes its results to \texttt{reports/gate/} or \texttt{reports/phase1/}
+and prints a summary to the terminal. The first run of each is slower
+(building crops and embeddings); later runs read from cache and are quick.
+
+\section{Step 7 --- The real detector export (optional, but needed for the demo)}
+
+Two things in this project need a real YOLO detection export, not just the
+dataset: the interactive demo app, and \texttt{scripts/run\_b0.py} (the
+real-vs-synthetic comparison). Place the export at:
+
+\begin{verbatim}
+data/detections/detections.csv
+data/detections/inference_images.csv   <- if your export has one
+\end{verbatim}
+
+If you do not have this file, ask for it, or generate your own by running
+the detector's own export step (see the main \texttt{README.md} for that
+half of the project).
+
+\section{Step 8 --- Run the demo app}
+
+\begin{verbatim}
+streamlit run app/gate_explorer.py
+\end{verbatim}
+
+Open the URL it prints. Pick an image, pick a detection, click ``Find
+similar cases,'' click ``Ask the VLM,'' and see the gate's verdict next to
+the ground truth. \texttt{docs/UI\_TEST\_CASES.md} has four specific cases
+worth clicking through, with what each one is supposed to show.
+
+\section{If something goes wrong}
+
+\begin{itemize}[nosep]
+  \item \textbf{A script says a file is not found under \texttt{docs/shared\_resources}} ---
+    the dataset is not in the right place; recheck Step 4's folder names exactly.
+  \item \textbf{The VLM step raises an error naming \texttt{NIM\_API\_KEY}} ---
+    the key is not loaded into your shell; see Step 3.
+  \item \textbf{The VLM step raises an HTTP error about a model} ---
+    \texttt{NIM\_MODEL} is not set, or is set to the retired default; see Step 3.
+  \item \textbf{The app says \texttt{detections.csv} is missing} --- see Step 7.
+  \item \textbf{Anything else} --- the error messages in this codebase are
+    written to say exactly what is missing and where it was expected; read
+    the message before asking, it usually says the fix directly.
+\end{itemize}
+
+\section{Where to read more}
+
+\begin{description}
+  \item[\texttt{RETRIEVAL\_README.md}] What this half of the project does,
+    the eight-step pipeline explained in plain English, and the headline
+    results.
+  \item[\texttt{reports/FINDINGS.md}] Every result from this project,
+    numbered, tagged by whether it is measured on real data or synthetic
+    proposals only.
+  \item[\texttt{reports/gate/GATE\_REPORT.md}] The first test of whether
+    retrieval works at all.
+  \item[\texttt{docs/UI\_TEST\_CASES.md}] Four worked examples for the demo
+    app, with what each one is supposed to show.
+  \item[\texttt{docs/STATE.md}] The full running log of decisions and
+    findings, if you want the complete history rather than the summary.
+\end{description}
+
+\end{document}

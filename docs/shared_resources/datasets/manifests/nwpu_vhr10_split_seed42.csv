@@ -1,0 +1,801 @@
+image_id,image_path,annotation_path,is_background,split,seed,train_ratio,val_ratio,test_ratio
+002,NWPU VHR-10 dataset\positive image set\002.jpg,NWPU VHR-10 dataset\ground truth\002.txt,False,test,42,0.7,0.15,0.15
+008,NWPU VHR-10 dataset\negative image set\008.jpg,,True,test,42,0.7,0.15,0.15
+014,NWPU VHR-10 dataset\positive image set\014.jpg,NWPU VHR-10 dataset\ground truth\014.txt,False,test,42,0.7,0.15,0.15
+015,NWPU VHR-10 dataset\positive image set\015.jpg,NWPU VHR-10 dataset\ground truth\015.txt,False,test,42,0.7,0.15,0.15
+016,NWPU VHR-10 dataset\negative image set\016.jpg,,True,test,42,0.7,0.15,0.15
+021,NWPU VHR-10 dataset\positive image set\021.jpg,NWPU VHR-10 dataset\ground truth\021.txt,False,test,42,0.7,0.15,0.15
+022,NWPU VHR-10 dataset\positive image set\022.jpg,NWPU VHR-10 dataset\ground truth\022.txt,False,test,42,0.7,0.15,0.15
+027,NWPU VHR-10 dataset\negative image set\027.jpg,,True,test,42,0.7,0.15,0.15
+033,NWPU VHR-10 dataset\negative image set\033.jpg,,True,test,42,0.7,0.15,0.15
+033,NWPU VHR-10 dataset\positive image set\033.jpg,NWPU VHR-10 dataset\ground truth\033.txt,False,test,42,0.7,0.15,0.15
+035,NWPU VHR-10 dataset\negative image set\035.jpg,,True,test,42,0.7,0.15,0.15
+035,NWPU VHR-10 dataset\positive image set\035.jpg,NWPU VHR-10 dataset\ground truth\035.txt,False,test,42,0.7,0.15,0.15
+036,NWPU VHR-10 dataset\positive image set\036.jpg,NWPU VHR-10 dataset\ground truth\036.txt,False,test,42,0.7,0.15,0.15
+049,NWPU VHR-10 dataset\negative image set\049.jpg,,True,test,42,0.7,0.15,0.15
+052,NWPU VHR-10 dataset\positive image set\052.jpg,NWPU VHR-10 dataset\ground truth\052.txt,False,test,42,0.7,0.15,0.15
+053,NWPU VHR-10 dataset\positive image set\053.jpg,NWPU VHR-10 dataset\ground truth\053.txt,False,test,42,0.7,0.15,0.15
+054,NWPU VHR-10 dataset\positive image set\054.jpg,NWPU VHR-10 dataset\ground truth\054.txt,False,test,42,0.7,0.15,0.15
+059,NWPU VHR-10 dataset\negative image set\059.jpg,,True,test,42,0.7,0.15,0.15
+059,NWPU VHR-10 dataset\positive image set\059.jpg,NWPU VHR-10 dataset\ground truth\059.txt,False,test,42,0.7,0.15,0.15
+060,NWPU VHR-10 dataset\negative image set\060.jpg,,True,test,42,0.7,0.15,0.15
+063,NWPU VHR-10 dataset\negative image set\063.jpg,,True,test,42,0.7,0.15,0.15
+065,NWPU VHR-10 dataset\positive image set\065.jpg,NWPU VHR-10 dataset\ground truth\065.txt,False,test,42,0.7,0.15,0.15
+081,NWPU VHR-10 dataset\positive image set\081.jpg,NWPU VHR-10 dataset\ground truth\081.txt,False,test,42,0.7,0.15,0.15
+082,NWPU VHR-10 dataset\negative image set\082.jpg,,True,test,42,0.7,0.15,0.15
+085,NWPU VHR-10 dataset\negative image set\085.jpg,,True,test,42,0.7,0.15,0.15
+086,NWPU VHR-10 dataset\negative image set\086.jpg,,True,test,42,0.7,0.15,0.15
+088,NWPU VHR-10 dataset\positive image set\088.jpg,NWPU VHR-10 dataset\ground truth\088.txt,False,test,42,0.7,0.15,0.15
+090,NWPU VHR-10 dataset\negative image set\090.jpg,,True,test,42,0.7,0.15,0.15
+092,NWPU VHR-10 dataset\negative image set\092.jpg,,True,test,42,0.7,0.15,0.15
+096,NWPU VHR-10 dataset\negative image set\096.jpg,,True,test,42,0.7,0.15,0.15
+096,NWPU VHR-10 dataset\positive image set\096.jpg,NWPU VHR-10 dataset\ground truth\096.txt,False,test,42,0.7,0.15,0.15
+100,NWPU VHR-10 dataset\positive image set\100.jpg,NWPU VHR-10 dataset\ground truth\100.txt,False,test,42,0.7,0.15,0.15
+103,NWPU VHR-10 dataset\positive image set\103.jpg,NWPU VHR-10 dataset\ground truth\103.txt,False,test,42,0.7,0.15,0.15
+111,NWPU VHR-10 dataset\negative image set\111.jpg,,True,test,42,0.7,0.15,0.15
+115,NWPU VHR-10 dataset\negative image set\115.jpg,,True,test,42,0.7,0.15,0.15
+116,NWPU VHR-10 dataset\positive image set\116.jpg,NWPU VHR-10 dataset\ground truth\116.txt,False,test,42,0.7,0.15,0.15
+120,NWPU VHR-10 dataset\negative image set\120.jpg,,True,test,42,0.7,0.15,0.15
+121,NWPU VHR-10 dataset\positive image set\121.jpg,NWPU VHR-10 dataset\ground truth\121.txt,False,test,42,0.7,0.15,0.15
+125,NWPU VHR-10 dataset\negative image set\125.jpg,,True,test,42,0.7,0.15,0.15
+127,NWPU VHR-10 dataset\negative image set\127.jpg,,True,test,42,0.7,0.15,0.15
+130,NWPU VHR-10 dataset\positive image set\130.jpg,NWPU VHR-10 dataset\ground truth\130.txt,False,test,42,0.7,0.15,0.15
+134,NWPU VHR-10 dataset\negative image set\134.jpg,,True,test,42,0.7,0.15,0.15
+136,NWPU VHR-10 dataset\negative image set\136.jpg,,True,test,42,0.7,0.15,0.15
+157,NWPU VHR-10 dataset\positive image set\157.jpg,NWPU VHR-10 dataset\ground truth\157.txt,False,test,42,0.7,0.15,0.15
+160,NWPU VHR-10 dataset\positive image set\160.jpg,NWPU VHR-10 dataset\ground truth\160.txt,False,test,42,0.7,0.15,0.15
+165,NWPU VHR-10 dataset\positive image set\165.jpg,NWPU VHR-10 dataset\ground truth\165.txt,False,test,42,0.7,0.15,0.15
+167,NWPU VHR-10 dataset\positive image set\167.jpg,NWPU VHR-10 dataset\ground truth\167.txt,False,test,42,0.7,0.15,0.15
+171,NWPU VHR-10 dataset\positive image set\171.jpg,NWPU VHR-10 dataset\ground truth\171.txt,False,test,42,0.7,0.15,0.15
+190,NWPU VHR-10 dataset\positive image set\190.jpg,NWPU VHR-10 dataset\ground truth\190.txt,False,test,42,0.7,0.15,0.15
+192,NWPU VHR-10 dataset\positive image set\192.jpg,NWPU VHR-10 dataset\ground truth\192.txt,False,test,42,0.7,0.15,0.15
+198,NWPU VHR-10 dataset\positive image set\198.jpg,NWPU VHR-10 dataset\ground truth\198.txt,False,test,42,0.7,0.15,0.15
+206,NWPU VHR-10 dataset\positive image set\206.jpg,NWPU VHR-10 dataset\ground truth\206.txt,False,test,42,0.7,0.15,0.15
+207,NWPU VHR-10 dataset\positive image set\207.jpg,NWPU VHR-10 dataset\ground truth\207.txt,False,test,42,0.7,0.15,0.15
+218,NWPU VHR-10 dataset\positive image set\218.jpg,NWPU VHR-10 dataset\ground truth\218.txt,False,test,42,0.7,0.15,0.15
+224,NWPU VHR-10 dataset\positive image set\224.jpg,NWPU VHR-10 dataset\ground truth\224.txt,False,test,42,0.7,0.15,0.15
+225,NWPU VHR-10 dataset\positive image set\225.jpg,NWPU VHR-10 dataset\ground truth\225.txt,False,test,42,0.7,0.15,0.15
+231,NWPU VHR-10 dataset\positive image set\231.jpg,NWPU VHR-10 dataset\ground truth\231.txt,False,test,42,0.7,0.15,0.15
+241,NWPU VHR-10 dataset\positive image set\241.jpg,NWPU VHR-10 dataset\ground truth\241.txt,False,test,42,0.7,0.15,0.15
+242,NWPU VHR-10 dataset\positive image set\242.jpg,NWPU VHR-10 dataset\ground truth\242.txt,False,test,42,0.7,0.15,0.15
+244,NWPU VHR-10 dataset\positive image set\244.jpg,NWPU VHR-10 dataset\ground truth\244.txt,False,test,42,0.7,0.15,0.15
+252,NWPU VHR-10 dataset\positive image set\252.jpg,NWPU VHR-10 dataset\ground truth\252.txt,False,test,42,0.7,0.15,0.15
+253,NWPU VHR-10 dataset\positive image set\253.jpg,NWPU VHR-10 dataset\ground truth\253.txt,False,test,42,0.7,0.15,0.15
+268,NWPU VHR-10 dataset\positive image set\268.jpg,NWPU VHR-10 dataset\ground truth\268.txt,False,test,42,0.7,0.15,0.15
+307,NWPU VHR-10 dataset\positive image set\307.jpg,NWPU VHR-10 dataset\ground truth\307.txt,False,test,42,0.7,0.15,0.15
+315,NWPU VHR-10 dataset\positive image set\315.jpg,NWPU VHR-10 dataset\ground truth\315.txt,False,test,42,0.7,0.15,0.15
+346,NWPU VHR-10 dataset\positive image set\346.jpg,NWPU VHR-10 dataset\ground truth\346.txt,False,test,42,0.7,0.15,0.15
+348,NWPU VHR-10 dataset\positive image set\348.jpg,NWPU VHR-10 dataset\ground truth\348.txt,False,test,42,0.7,0.15,0.15
+367,NWPU VHR-10 dataset\positive image set\367.jpg,NWPU VHR-10 dataset\ground truth\367.txt,False,test,42,0.7,0.15,0.15
+374,NWPU VHR-10 dataset\positive image set\374.jpg,NWPU VHR-10 dataset\ground truth\374.txt,False,test,42,0.7,0.15,0.15
+377,NWPU VHR-10 dataset\positive image set\377.jpg,NWPU VHR-10 dataset\ground truth\377.txt,False,test,42,0.7,0.15,0.15
+388,NWPU VHR-10 dataset\positive image set\388.jpg,NWPU VHR-10 dataset\ground truth\388.txt,False,test,42,0.7,0.15,0.15
+390,NWPU VHR-10 dataset\positive image set\390.jpg,NWPU VHR-10 dataset\ground truth\390.txt,False,test,42,0.7,0.15,0.15
+392,NWPU VHR-10 dataset\positive image set\392.jpg,NWPU VHR-10 dataset\ground truth\392.txt,False,test,42,0.7,0.15,0.15
+403,NWPU VHR-10 dataset\positive image set\403.jpg,NWPU VHR-10 dataset\ground truth\403.txt,False,test,42,0.7,0.15,0.15
+407,NWPU VHR-10 dataset\positive image set\407.jpg,NWPU VHR-10 dataset\ground truth\407.txt,False,test,42,0.7,0.15,0.15
+419,NWPU VHR-10 dataset\positive image set\419.jpg,NWPU VHR-10 dataset\ground truth\419.txt,False,test,42,0.7,0.15,0.15
+442,NWPU VHR-10 dataset\positive image set\442.jpg,NWPU VHR-10 dataset\ground truth\442.txt,False,test,42,0.7,0.15,0.15
+446,NWPU VHR-10 dataset\positive image set\446.jpg,NWPU VHR-10 dataset\ground truth\446.txt,False,test,42,0.7,0.15,0.15
+461,NWPU VHR-10 dataset\positive image set\461.jpg,NWPU VHR-10 dataset\ground truth\461.txt,False,test,42,0.7,0.15,0.15
+462,NWPU VHR-10 dataset\positive image set\462.jpg,NWPU VHR-10 dataset\ground truth\462.txt,False,test,42,0.7,0.15,0.15
+467,NWPU VHR-10 dataset\positive image set\467.jpg,NWPU VHR-10 dataset\ground truth\467.txt,False,test,42,0.7,0.15,0.15
+475,NWPU VHR-10 dataset\positive image set\475.jpg,NWPU VHR-10 dataset\ground truth\475.txt,False,test,42,0.7,0.15,0.15
+484,NWPU VHR-10 dataset\positive image set\484.jpg,NWPU VHR-10 dataset\ground truth\484.txt,False,test,42,0.7,0.15,0.15
+485,NWPU VHR-10 dataset\positive image set\485.jpg,NWPU VHR-10 dataset\ground truth\485.txt,False,test,42,0.7,0.15,0.15
+490,NWPU VHR-10 dataset\positive image set\490.jpg,NWPU VHR-10 dataset\ground truth\490.txt,False,test,42,0.7,0.15,0.15
+492,NWPU VHR-10 dataset\positive image set\492.jpg,NWPU VHR-10 dataset\ground truth\492.txt,False,test,42,0.7,0.15,0.15
+493,NWPU VHR-10 dataset\positive image set\493.jpg,NWPU VHR-10 dataset\ground truth\493.txt,False,test,42,0.7,0.15,0.15
+494,NWPU VHR-10 dataset\positive image set\494.jpg,NWPU VHR-10 dataset\ground truth\494.txt,False,test,42,0.7,0.15,0.15
+499,NWPU VHR-10 dataset\positive image set\499.jpg,NWPU VHR-10 dataset\ground truth\499.txt,False,test,42,0.7,0.15,0.15
+503,NWPU VHR-10 dataset\positive image set\503.jpg,NWPU VHR-10 dataset\ground truth\503.txt,False,test,42,0.7,0.15,0.15
+505,NWPU VHR-10 dataset\positive image set\505.jpg,NWPU VHR-10 dataset\ground truth\505.txt,False,test,42,0.7,0.15,0.15
+506,NWPU VHR-10 dataset\positive image set\506.jpg,NWPU VHR-10 dataset\ground truth\506.txt,False,test,42,0.7,0.15,0.15
+509,NWPU VHR-10 dataset\positive image set\509.jpg,NWPU VHR-10 dataset\ground truth\509.txt,False,test,42,0.7,0.15,0.15
+525,NWPU VHR-10 dataset\positive image set\525.jpg,NWPU VHR-10 dataset\ground truth\525.txt,False,test,42,0.7,0.15,0.15
+526,NWPU VHR-10 dataset\positive image set\526.jpg,NWPU VHR-10 dataset\ground truth\526.txt,False,test,42,0.7,0.15,0.15
+529,NWPU VHR-10 dataset\positive image set\529.jpg,NWPU VHR-10 dataset\ground truth\529.txt,False,test,42,0.7,0.15,0.15
+534,NWPU VHR-10 dataset\positive image set\534.jpg,NWPU VHR-10 dataset\ground truth\534.txt,False,test,42,0.7,0.15,0.15
+540,NWPU VHR-10 dataset\positive image set\540.jpg,NWPU VHR-10 dataset\ground truth\540.txt,False,test,42,0.7,0.15,0.15
+552,NWPU VHR-10 dataset\positive image set\552.jpg,NWPU VHR-10 dataset\ground truth\552.txt,False,test,42,0.7,0.15,0.15
+556,NWPU VHR-10 dataset\positive image set\556.jpg,NWPU VHR-10 dataset\ground truth\556.txt,False,test,42,0.7,0.15,0.15
+558,NWPU VHR-10 dataset\positive image set\558.jpg,NWPU VHR-10 dataset\ground truth\558.txt,False,test,42,0.7,0.15,0.15
+563,NWPU VHR-10 dataset\positive image set\563.jpg,NWPU VHR-10 dataset\ground truth\563.txt,False,test,42,0.7,0.15,0.15
+565,NWPU VHR-10 dataset\positive image set\565.jpg,NWPU VHR-10 dataset\ground truth\565.txt,False,test,42,0.7,0.15,0.15
+566,NWPU VHR-10 dataset\positive image set\566.jpg,NWPU VHR-10 dataset\ground truth\566.txt,False,test,42,0.7,0.15,0.15
+567,NWPU VHR-10 dataset\positive image set\567.jpg,NWPU VHR-10 dataset\ground truth\567.txt,False,test,42,0.7,0.15,0.15
+568,NWPU VHR-10 dataset\positive image set\568.jpg,NWPU VHR-10 dataset\ground truth\568.txt,False,test,42,0.7,0.15,0.15
+587,NWPU VHR-10 dataset\positive image set\587.jpg,NWPU VHR-10 dataset\ground truth\587.txt,False,test,42,0.7,0.15,0.15
+589,NWPU VHR-10 dataset\positive image set\589.jpg,NWPU VHR-10 dataset\ground truth\589.txt,False,test,42,0.7,0.15,0.15
+600,NWPU VHR-10 dataset\positive image set\600.jpg,NWPU VHR-10 dataset\ground truth\600.txt,False,test,42,0.7,0.15,0.15
+601,NWPU VHR-10 dataset\positive image set\601.jpg,NWPU VHR-10 dataset\ground truth\601.txt,False,test,42,0.7,0.15,0.15
+611,NWPU VHR-10 dataset\positive image set\611.jpg,NWPU VHR-10 dataset\ground truth\611.txt,False,test,42,0.7,0.15,0.15
+615,NWPU VHR-10 dataset\positive image set\615.jpg,NWPU VHR-10 dataset\ground truth\615.txt,False,test,42,0.7,0.15,0.15
+617,NWPU VHR-10 dataset\positive image set\617.jpg,NWPU VHR-10 dataset\ground truth\617.txt,False,test,42,0.7,0.15,0.15
+622,NWPU VHR-10 dataset\positive image set\622.jpg,NWPU VHR-10 dataset\ground truth\622.txt,False,test,42,0.7,0.15,0.15
+630,NWPU VHR-10 dataset\positive image set\630.jpg,NWPU VHR-10 dataset\ground truth\630.txt,False,test,42,0.7,0.15,0.15
+633,NWPU VHR-10 dataset\positive image set\633.jpg,NWPU VHR-10 dataset\ground truth\633.txt,False,test,42,0.7,0.15,0.15
+635,NWPU VHR-10 dataset\positive image set\635.jpg,NWPU VHR-10 dataset\ground truth\635.txt,False,test,42,0.7,0.15,0.15
+640,NWPU VHR-10 dataset\positive image set\640.jpg,NWPU VHR-10 dataset\ground truth\640.txt,False,test,42,0.7,0.15,0.15
+645,NWPU VHR-10 dataset\positive image set\645.jpg,NWPU VHR-10 dataset\ground truth\645.txt,False,test,42,0.7,0.15,0.15
+648,NWPU VHR-10 dataset\positive image set\648.jpg,NWPU VHR-10 dataset\ground truth\648.txt,False,test,42,0.7,0.15,0.15
+001,NWPU VHR-10 dataset\negative image set\001.jpg,,True,train,42,0.7,0.15,0.15
+001,NWPU VHR-10 dataset\positive image set\001.jpg,NWPU VHR-10 dataset\ground truth\001.txt,False,train,42,0.7,0.15,0.15
+002,NWPU VHR-10 dataset\negative image set\002.jpg,,True,train,42,0.7,0.15,0.15
+003,NWPU VHR-10 dataset\negative image set\003.jpg,,True,train,42,0.7,0.15,0.15
+003,NWPU VHR-10 dataset\positive image set\003.jpg,NWPU VHR-10 dataset\ground truth\003.txt,False,train,42,0.7,0.15,0.15
+004,NWPU VHR-10 dataset\positive image set\004.jpg,NWPU VHR-10 dataset\ground truth\004.txt,False,train,42,0.7,0.15,0.15
+004,NWPU VHR-10 dataset\negative image set\004.jpg,,True,train,42,0.7,0.15,0.15
+006,NWPU VHR-10 dataset\negative image set\006.jpg,,True,train,42,0.7,0.15,0.15
+006,NWPU VHR-10 dataset\positive image set\006.jpg,NWPU VHR-10 dataset\ground truth\006.txt,False,train,42,0.7,0.15,0.15
+007,NWPU VHR-10 dataset\positive image set\007.jpg,NWPU VHR-10 dataset\ground truth\007.txt,False,train,42,0.7,0.15,0.15
+007,NWPU VHR-10 dataset\negative image set\007.jpg,,True,train,42,0.7,0.15,0.15
+008,NWPU VHR-10 dataset\positive image set\008.jpg,NWPU VHR-10 dataset\ground truth\008.txt,False,train,42,0.7,0.15,0.15
+009,NWPU VHR-10 dataset\negative image set\009.jpg,,True,train,42,0.7,0.15,0.15
+009,NWPU VHR-10 dataset\positive image set\009.jpg,NWPU VHR-10 dataset\ground truth\009.txt,False,train,42,0.7,0.15,0.15
+010,NWPU VHR-10 dataset\positive image set\010.jpg,NWPU VHR-10 dataset\ground truth\010.txt,False,train,42,0.7,0.15,0.15
+011,NWPU VHR-10 dataset\positive image set\011.jpg,NWPU VHR-10 dataset\ground truth\011.txt,False,train,42,0.7,0.15,0.15
+012,NWPU VHR-10 dataset\positive image set\012.jpg,NWPU VHR-10 dataset\ground truth\012.txt,False,train,42,0.7,0.15,0.15
+012,NWPU VHR-10 dataset\negative image set\012.jpg,,True,train,42,0.7,0.15,0.15
+013,NWPU VHR-10 dataset\positive image set\013.jpg,NWPU VHR-10 dataset\ground truth\013.txt,False,train,42,0.7,0.15,0.15
+013,NWPU VHR-10 dataset\negative image set\013.jpg,,True,train,42,0.7,0.15,0.15
+014,NWPU VHR-10 dataset\negative image set\014.jpg,,True,train,42,0.7,0.15,0.15
+015,NWPU VHR-10 dataset\negative image set\015.jpg,,True,train,42,0.7,0.15,0.15
+016,NWPU VHR-10 dataset\positive image set\016.jpg,NWPU VHR-10 dataset\ground truth\016.txt,False,train,42,0.7,0.15,0.15
+017,NWPU VHR-10 dataset\negative image set\017.jpg,,True,train,42,0.7,0.15,0.15
+017,NWPU VHR-10 dataset\positive image set\017.jpg,NWPU VHR-10 dataset\ground truth\017.txt,False,train,42,0.7,0.15,0.15
+018,NWPU VHR-10 dataset\positive image set\018.jpg,NWPU VHR-10 dataset\ground truth\018.txt,False,train,42,0.7,0.15,0.15
+019,NWPU VHR-10 dataset\negative image set\019.jpg,,True,train,42,0.7,0.15,0.15
+019,NWPU VHR-10 dataset\positive image set\019.jpg,NWPU VHR-10 dataset\ground truth\019.txt,False,train,42,0.7,0.15,0.15
+020,NWPU VHR-10 dataset\negative image set\020.jpg,,True,train,42,0.7,0.15,0.15
+020,NWPU VHR-10 dataset\positive image set\020.jpg,NWPU VHR-10 dataset\ground truth\020.txt,False,train,42,0.7,0.15,0.15
+021,NWPU VHR-10 dataset\negative image set\021.jpg,,True,train,42,0.7,0.15,0.15
+022,NWPU VHR-10 dataset\negative image set\022.jpg,,True,train,42,0.7,0.15,0.15
+023,NWPU VHR-10 dataset\negative image set\023.jpg,,True,train,42,0.7,0.15,0.15
+023,NWPU VHR-10 dataset\positive image set\023.jpg,NWPU VHR-10 dataset\ground truth\023.txt,False,train,42,0.7,0.15,0.15
+024,NWPU VHR-10 dataset\negative image set\024.jpg,,True,train,42,0.7,0.15,0.15
+024,NWPU VHR-10 dataset\positive image set\024.jpg,NWPU VHR-10 dataset\ground truth\024.txt,False,train,42,0.7,0.15,0.15
+025,NWPU VHR-10 dataset\positive image set\025.jpg,NWPU VHR-10 dataset\ground truth\025.txt,False,train,42,0.7,0.15,0.15
+025,NWPU VHR-10 dataset\negative image set\025.jpg,,True,train,42,0.7,0.15,0.15
+026,NWPU VHR-10 dataset\positive image set\026.jpg,NWPU VHR-10 dataset\ground truth\026.txt,False,train,42,0.7,0.15,0.15
+027,NWPU VHR-10 dataset\positive image set\027.jpg,NWPU VHR-10 dataset\ground truth\027.txt,False,train,42,0.7,0.15,0.15
+029,NWPU VHR-10 dataset\negative image set\029.jpg,,True,train,42,0.7,0.15,0.15
+029,NWPU VHR-10 dataset\positive image set\029.jpg,NWPU VHR-10 dataset\ground truth\029.txt,False,train,42,0.7,0.15,0.15
+030,NWPU VHR-10 dataset\positive image set\030.jpg,NWPU VHR-10 dataset\ground truth\030.txt,False,train,42,0.7,0.15,0.15
+031,NWPU VHR-10 dataset\negative image set\031.jpg,,True,train,42,0.7,0.15,0.15
+031,NWPU VHR-10 dataset\positive image set\031.jpg,NWPU VHR-10 dataset\ground truth\031.txt,False,train,42,0.7,0.15,0.15
+032,NWPU VHR-10 dataset\negative image set\032.jpg,,True,train,42,0.7,0.15,0.15
+032,NWPU VHR-10 dataset\positive image set\032.jpg,NWPU VHR-10 dataset\ground truth\032.txt,False,train,42,0.7,0.15,0.15
+034,NWPU VHR-10 dataset\negative image set\034.jpg,,True,train,42,0.7,0.15,0.15
+034,NWPU VHR-10 dataset\positive image set\034.jpg,NWPU VHR-10 dataset\ground truth\034.txt,False,train,42,0.7,0.15,0.15
+036,NWPU VHR-10 dataset\negative image set\036.jpg,,True,train,42,0.7,0.15,0.15
+037,NWPU VHR-10 dataset\positive image set\037.jpg,NWPU VHR-10 dataset\ground truth\037.txt,False,train,42,0.7,0.15,0.15
+037,NWPU VHR-10 dataset\negative image set\037.jpg,,True,train,42,0.7,0.15,0.15
+038,NWPU VHR-10 dataset\positive image set\038.jpg,NWPU VHR-10 dataset\ground truth\038.txt,False,train,42,0.7,0.15,0.15
+038,NWPU VHR-10 dataset\negative image set\038.jpg,,True,train,42,0.7,0.15,0.15
+039,NWPU VHR-10 dataset\positive image set\039.jpg,NWPU VHR-10 dataset\ground truth\039.txt,False,train,42,0.7,0.15,0.15
+039,NWPU VHR-10 dataset\negative image set\039.jpg,,True,train,42,0.7,0.15,0.15
+040,NWPU VHR-10 dataset\positive image set\040.jpg,NWPU VHR-10 dataset\ground truth\040.txt,False,train,42,0.7,0.15,0.15
+040,NWPU VHR-10 dataset\negative image set\040.jpg,,True,train,42,0.7,0.15,0.15
+042,NWPU VHR-10 dataset\negative image set\042.jpg,,True,train,42,0.7,0.15,0.15
+042,NWPU VHR-10 dataset\positive image set\042.jpg,NWPU VHR-10 dataset\ground truth\042.txt,False,train,42,0.7,0.15,0.15
+043,NWPU VHR-10 dataset\positive image set\043.jpg,NWPU VHR-10 dataset\ground truth\043.txt,False,train,42,0.7,0.15,0.15
+043,NWPU VHR-10 dataset\negative image set\043.jpg,,True,train,42,0.7,0.15,0.15
+044,NWPU VHR-10 dataset\negative image set\044.jpg,,True,train,42,0.7,0.15,0.15
+044,NWPU VHR-10 dataset\positive image set\044.jpg,NWPU VHR-10 dataset\ground truth\044.txt,False,train,42,0.7,0.15,0.15
+045,NWPU VHR-10 dataset\negative image set\045.jpg,,True,train,42,0.7,0.15,0.15
+045,NWPU VHR-10 dataset\positive image set\045.jpg,NWPU VHR-10 dataset\ground truth\045.txt,False,train,42,0.7,0.15,0.15
+046,NWPU VHR-10 dataset\positive image set\046.jpg,NWPU VHR-10 dataset\ground truth\046.txt,False,train,42,0.7,0.15,0.15
+047,NWPU VHR-10 dataset\positive image set\047.jpg,NWPU VHR-10 dataset\ground truth\047.txt,False,train,42,0.7,0.15,0.15
+048,NWPU VHR-10 dataset\negative image set\048.jpg,,True,train,42,0.7,0.15,0.15
+049,NWPU VHR-10 dataset\positive image set\049.jpg,NWPU VHR-10 dataset\ground truth\049.txt,False,train,42,0.7,0.15,0.15
+050,NWPU VHR-10 dataset\negative image set\050.jpg,,True,train,42,0.7,0.15,0.15
+050,NWPU VHR-10 dataset\positive image set\050.jpg,NWPU VHR-10 dataset\ground truth\050.txt,False,train,42,0.7,0.15,0.15
+051,NWPU VHR-10 dataset\negative image set\051.jpg,,True,train,42,0.7,0.15,0.15
+051,NWPU VHR-10 dataset\positive image set\051.jpg,NWPU VHR-10 dataset\ground truth\051.txt,False,train,42,0.7,0.15,0.15
+052,NWPU VHR-10 dataset\negative image set\052.jpg,,True,train,42,0.7,0.15,0.15
+053,NWPU VHR-10 dataset\negative image set\053.jpg,,True,train,42,0.7,0.15,0.15
+054,NWPU VHR-10 dataset\negative image set\054.jpg,,True,train,42,0.7,0.15,0.15
+055,NWPU VHR-10 dataset\positive image set\055.jpg,NWPU VHR-10 dataset\ground truth\055.txt,False,train,42,0.7,0.15,0.15
+055,NWPU VHR-10 dataset\negative image set\055.jpg,,True,train,42,0.7,0.15,0.15
+056,NWPU VHR-10 dataset\positive image set\056.jpg,NWPU VHR-10 dataset\ground truth\056.txt,False,train,42,0.7,0.15,0.15
+057,NWPU VHR-10 dataset\positive image set\057.jpg,NWPU VHR-10 dataset\ground truth\057.txt,False,train,42,0.7,0.15,0.15
+057,NWPU VHR-10 dataset\negative image set\057.jpg,,True,train,42,0.7,0.15,0.15
+058,NWPU VHR-10 dataset\positive image set\058.jpg,NWPU VHR-10 dataset\ground truth\058.txt,False,train,42,0.7,0.15,0.15
+058,NWPU VHR-10 dataset\negative image set\058.jpg,,True,train,42,0.7,0.15,0.15
+060,NWPU VHR-10 dataset\positive image set\060.jpg,NWPU VHR-10 dataset\ground truth\060.txt,False,train,42,0.7,0.15,0.15
+061,NWPU VHR-10 dataset\negative image set\061.jpg,,True,train,42,0.7,0.15,0.15
+061,NWPU VHR-10 dataset\positive image set\061.jpg,NWPU VHR-10 dataset\ground truth\061.txt,False,train,42,0.7,0.15,0.15
+062,NWPU VHR-10 dataset\positive image set\062.jpg,NWPU VHR-10 dataset\ground truth\062.txt,False,train,42,0.7,0.15,0.15
+062,NWPU VHR-10 dataset\negative image set\062.jpg,,True,train,42,0.7,0.15,0.15
+064,NWPU VHR-10 dataset\negative image set\064.jpg,,True,train,42,0.7,0.15,0.15
+064,NWPU VHR-10 dataset\positive image set\064.jpg,NWPU VHR-10 dataset\ground truth\064.txt,False,train,42,0.7,0.15,0.15
+066,NWPU VHR-10 dataset\positive image set\066.jpg,NWPU VHR-10 dataset\ground truth\066.txt,False,train,42,0.7,0.15,0.15
+066,NWPU VHR-10 dataset\negative image set\066.jpg,,True,train,42,0.7,0.15,0.15
+067,NWPU VHR-10 dataset\positive image set\067.jpg,NWPU VHR-10 dataset\ground truth\067.txt,False,train,42,0.7,0.15,0.15
+067,NWPU VHR-10 dataset\negative image set\067.jpg,,True,train,42,0.7,0.15,0.15
+068,NWPU VHR-10 dataset\negative image set\068.jpg,,True,train,42,0.7,0.15,0.15
+068,NWPU VHR-10 dataset\positive image set\068.jpg,NWPU VHR-10 dataset\ground truth\068.txt,False,train,42,0.7,0.15,0.15
+069,NWPU VHR-10 dataset\positive image set\069.jpg,NWPU VHR-10 dataset\ground truth\069.txt,False,train,42,0.7,0.15,0.15
+069,NWPU VHR-10 dataset\negative image set\069.jpg,,True,train,42,0.7,0.15,0.15
+070,NWPU VHR-10 dataset\negative image set\070.jpg,,True,train,42,0.7,0.15,0.15
+070,NWPU VHR-10 dataset\positive image set\070.jpg,NWPU VHR-10 dataset\ground truth\070.txt,False,train,42,0.7,0.15,0.15
+071,NWPU VHR-10 dataset\negative image set\071.jpg,,True,train,42,0.7,0.15,0.15
+071,NWPU VHR-10 dataset\positive image set\071.jpg,NWPU VHR-10 dataset\ground truth\071.txt,False,train,42,0.7,0.15,0.15
+072,NWPU VHR-10 dataset\negative image set\072.jpg,,True,train,42,0.7,0.15,0.15
+073,NWPU VHR-10 dataset\negative image set\073.jpg,,True,train,42,0.7,0.15,0.15
+073,NWPU VHR-10 dataset\positive image set\073.jpg,NWPU VHR-10 dataset\ground truth\073.txt,False,train,42,0.7,0.15,0.15
+074,NWPU VHR-10 dataset\negative image set\074.jpg,,True,train,42,0.7,0.15,0.15
+074,NWPU VHR-10 dataset\positive image set\074.jpg,NWPU VHR-10 dataset\ground truth\074.txt,False,train,42,0.7,0.15,0.15
+075,NWPU VHR-10 dataset\positive image set\075.jpg,NWPU VHR-10 dataset\ground truth\075.txt,False,train,42,0.7,0.15,0.15
+075,NWPU VHR-10 dataset\negative image set\075.jpg,,True,train,42,0.7,0.15,0.15
+076,NWPU VHR-10 dataset\negative image set\076.jpg,,True,train,42,0.7,0.15,0.15
+076,NWPU VHR-10 dataset\positive image set\076.jpg,NWPU VHR-10 dataset\ground truth\076.txt,False,train,42,0.7,0.15,0.15
+077,NWPU VHR-10 dataset\positive image set\077.jpg,NWPU VHR-10 dataset\ground truth\077.txt,False,train,42,0.7,0.15,0.15
+078,NWPU VHR-10 dataset\negative image set\078.jpg,,True,train,42,0.7,0.15,0.15
+078,NWPU VHR-10 dataset\positive image set\078.jpg,NWPU VHR-10 dataset\ground truth\078.txt,False,train,42,0.7,0.15,0.15
+079,NWPU VHR-10 dataset\negative image set\079.jpg,,True,train,42,0.7,0.15,0.15
+079,NWPU VHR-10 dataset\positive image set\079.jpg,NWPU VHR-10 dataset\ground truth\079.txt,False,train,42,0.7,0.15,0.15
+080,NWPU VHR-10 dataset\negative image set\080.jpg,,True,train,42,0.7,0.15,0.15
+080,NWPU VHR-10 dataset\positive image set\080.jpg,NWPU VHR-10 dataset\ground truth\080.txt,False,train,42,0.7,0.15,0.15
+081,NWPU VHR-10 dataset\negative image set\081.jpg,,True,train,42,0.7,0.15,0.15
+082,NWPU VHR-10 dataset\positive image set\082.jpg,NWPU VHR-10 dataset\ground truth\082.txt,False,train,42,0.7,0.15,0.15
+083,NWPU VHR-10 dataset\positive image set\083.jpg,NWPU VHR-10 dataset\ground truth\083.txt,False,train,42,0.7,0.15,0.15
+083,NWPU VHR-10 dataset\negative image set\083.jpg,,True,train,42,0.7,0.15,0.15
+084,NWPU VHR-10 dataset\negative image set\084.jpg,,True,train,42,0.7,0.15,0.15
+084,NWPU VHR-10 dataset\positive image set\084.jpg,NWPU VHR-10 dataset\ground truth\084.txt,False,train,42,0.7,0.15,0.15
+085,NWPU VHR-10 dataset\positive image set\085.jpg,NWPU VHR-10 dataset\ground truth\085.txt,False,train,42,0.7,0.15,0.15
+087,NWPU VHR-10 dataset\positive image set\087.jpg,NWPU VHR-10 dataset\ground truth\087.txt,False,train,42,0.7,0.15,0.15
+087,NWPU VHR-10 dataset\negative image set\087.jpg,,True,train,42,0.7,0.15,0.15
+088,NWPU VHR-10 dataset\negative image set\088.jpg,,True,train,42,0.7,0.15,0.15
+089,NWPU VHR-10 dataset\positive image set\089.jpg,NWPU VHR-10 dataset\ground truth\089.txt,False,train,42,0.7,0.15,0.15
+090,NWPU VHR-10 dataset\positive image set\090.jpg,NWPU VHR-10 dataset\ground truth\090.txt,False,train,42,0.7,0.15,0.15
+091,NWPU VHR-10 dataset\positive image set\091.jpg,NWPU VHR-10 dataset\ground truth\091.txt,False,train,42,0.7,0.15,0.15
+091,NWPU VHR-10 dataset\negative image set\091.jpg,,True,train,42,0.7,0.15,0.15
+093,NWPU VHR-10 dataset\negative image set\093.jpg,,True,train,42,0.7,0.15,0.15
+093,NWPU VHR-10 dataset\positive image set\093.jpg,NWPU VHR-10 dataset\ground truth\093.txt,False,train,42,0.7,0.15,0.15
+094,NWPU VHR-10 dataset\positive image set\094.jpg,NWPU VHR-10 dataset\ground truth\094.txt,False,train,42,0.7,0.15,0.15
+094,NWPU VHR-10 dataset\negative image set\094.jpg,,True,train,42,0.7,0.15,0.15
+095,NWPU VHR-10 dataset\negative image set\095.jpg,,True,train,42,0.7,0.15,0.15
+095,NWPU VHR-10 dataset\positive image set\095.jpg,NWPU VHR-10 dataset\ground truth\095.txt,False,train,42,0.7,0.15,0.15
+097,NWPU VHR-10 dataset\positive image set\097.jpg,NWPU VHR-10 dataset\ground truth\097.txt,False,train,42,0.7,0.15,0.15
+097,NWPU VHR-10 dataset\negative image set\097.jpg,,True,train,42,0.7,0.15,0.15
+098,NWPU VHR-10 dataset\positive image set\098.jpg,NWPU VHR-10 dataset\ground truth\098.txt,False,train,42,0.7,0.15,0.15
+099,NWPU VHR-10 dataset\negative image set\099.jpg,,True,train,42,0.7,0.15,0.15
+100,NWPU VHR-10 dataset\negative image set\100.jpg,,True,train,42,0.7,0.15,0.15
+102,NWPU VHR-10 dataset\positive image set\102.jpg,NWPU VHR-10 dataset\ground truth\102.txt,False,train,42,0.7,0.15,0.15
+103,NWPU VHR-10 dataset\negative image set\103.jpg,,True,train,42,0.7,0.15,0.15
+104,NWPU VHR-10 dataset\positive image set\104.jpg,NWPU VHR-10 dataset\ground truth\104.txt,False,train,42,0.7,0.15,0.15
+104,NWPU VHR-10 dataset\negative image set\104.jpg,,True,train,42,0.7,0.15,0.15
+105,NWPU VHR-10 dataset\positive image set\105.jpg,NWPU VHR-10 dataset\ground truth\105.txt,False,train,42,0.7,0.15,0.15
+106,NWPU VHR-10 dataset\negative image set\106.jpg,,True,train,42,0.7,0.15,0.15
+107,NWPU VHR-10 dataset\negative image set\107.jpg,,True,train,42,0.7,0.15,0.15
+108,NWPU VHR-10 dataset\negative image set\108.jpg,,True,train,42,0.7,0.15,0.15
+108,NWPU VHR-10 dataset\positive image set\108.jpg,NWPU VHR-10 dataset\ground truth\108.txt,False,train,42,0.7,0.15,0.15
+109,NWPU VHR-10 dataset\positive image set\109.jpg,NWPU VHR-10 dataset\ground truth\109.txt,False,train,42,0.7,0.15,0.15
+110,NWPU VHR-10 dataset\positive image set\110.jpg,NWPU VHR-10 dataset\ground truth\110.txt,False,train,42,0.7,0.15,0.15
+110,NWPU VHR-10 dataset\negative image set\110.jpg,,True,train,42,0.7,0.15,0.15
+111,NWPU VHR-10 dataset\positive image set\111.jpg,NWPU VHR-10 dataset\ground truth\111.txt,False,train,42,0.7,0.15,0.15
+112,NWPU VHR-10 dataset\positive image set\112.jpg,NWPU VHR-10 dataset\ground truth\112.txt,False,train,42,0.7,0.15,0.15
+112,NWPU VHR-10 dataset\negative image set\112.jpg,,True,train,42,0.7,0.15,0.15
+113,NWPU VHR-10 dataset\negative image set\113.jpg,,True,train,42,0.7,0.15,0.15
+114,NWPU VHR-10 dataset\negative image set\114.jpg,,True,train,42,0.7,0.15,0.15
+114,NWPU VHR-10 dataset\positive image set\114.jpg,NWPU VHR-10 dataset\ground truth\114.txt,False,train,42,0.7,0.15,0.15
+115,NWPU VHR-10 dataset\positive image set\115.jpg,NWPU VHR-10 dataset\ground truth\115.txt,False,train,42,0.7,0.15,0.15
+116,NWPU VHR-10 dataset\negative image set\116.jpg,,True,train,42,0.7,0.15,0.15
+117,NWPU VHR-10 dataset\positive image set\117.jpg,NWPU VHR-10 dataset\ground truth\117.txt,False,train,42,0.7,0.15,0.15
+118,NWPU VHR-10 dataset\positive image set\118.jpg,NWPU VHR-10 dataset\ground truth\118.txt,False,train,42,0.7,0.15,0.15
+119,NWPU VHR-10 dataset\positive image set\119.jpg,NWPU VHR-10 dataset\ground truth\119.txt,False,train,42,0.7,0.15,0.15
+120,NWPU VHR-10 dataset\positive image set\120.jpg,NWPU VHR-10 dataset\ground truth\120.txt,False,train,42,0.7,0.15,0.15
+121,NWPU VHR-10 dataset\negative image set\121.jpg,,True,train,42,0.7,0.15,0.15
+123,NWPU VHR-10 dataset\negative image set\123.jpg,,True,train,42,0.7,0.15,0.15
+123,NWPU VHR-10 dataset\positive image set\123.jpg,NWPU VHR-10 dataset\ground truth\123.txt,False,train,42,0.7,0.15,0.15
+124,NWPU VHR-10 dataset\positive image set\124.jpg,NWPU VHR-10 dataset\ground truth\124.txt,False,train,42,0.7,0.15,0.15
+124,NWPU VHR-10 dataset\negative image set\124.jpg,,True,train,42,0.7,0.15,0.15
+125,NWPU VHR-10 dataset\positive image set\125.jpg,NWPU VHR-10 dataset\ground truth\125.txt,False,train,42,0.7,0.15,0.15
+126,NWPU VHR-10 dataset\negative image set\126.jpg,,True,train,42,0.7,0.15,0.15
+127,NWPU VHR-10 dataset\positive image set\127.jpg,NWPU VHR-10 dataset\ground truth\127.txt,False,train,42,0.7,0.15,0.15
+128,NWPU VHR-10 dataset\positive image set\128.jpg,NWPU VHR-10 dataset\ground truth\128.txt,False,train,42,0.7,0.15,0.15
+128,NWPU VHR-10 dataset\negative image set\128.jpg,,True,train,42,0.7,0.15,0.15
+129,NWPU VHR-10 dataset\negative image set\129.jpg,,True,train,42,0.7,0.15,0.15
+130,NWPU VHR-10 dataset\negative image set\130.jpg,,True,train,42,0.7,0.15,0.15
+131,NWPU VHR-10 dataset\negative image set\131.jpg,,True,train,42,0.7,0.15,0.15
+132,NWPU VHR-10 dataset\negative image set\132.jpg,,True,train,42,0.7,0.15,0.15
+132,NWPU VHR-10 dataset\positive image set\132.jpg,NWPU VHR-10 dataset\ground truth\132.txt,False,train,42,0.7,0.15,0.15
+133,NWPU VHR-10 dataset\negative image set\133.jpg,,True,train,42,0.7,0.15,0.15
+133,NWPU VHR-10 dataset\positive image set\133.jpg,NWPU VHR-10 dataset\ground truth\133.txt,False,train,42,0.7,0.15,0.15
+134,NWPU VHR-10 dataset\positive image set\134.jpg,NWPU VHR-10 dataset\ground truth\134.txt,False,train,42,0.7,0.15,0.15
+135,NWPU VHR-10 dataset\negative image set\135.jpg,,True,train,42,0.7,0.15,0.15
+136,NWPU VHR-10 dataset\positive image set\136.jpg,NWPU VHR-10 dataset\ground truth\136.txt,False,train,42,0.7,0.15,0.15
+137,NWPU VHR-10 dataset\negative image set\137.jpg,,True,train,42,0.7,0.15,0.15
+138,NWPU VHR-10 dataset\positive image set\138.jpg,NWPU VHR-10 dataset\ground truth\138.txt,False,train,42,0.7,0.15,0.15
+138,NWPU VHR-10 dataset\negative image set\138.jpg,,True,train,42,0.7,0.15,0.15
+139,NWPU VHR-10 dataset\negative image set\139.jpg,,True,train,42,0.7,0.15,0.15
+140,NWPU VHR-10 dataset\negative image set\140.jpg,,True,train,42,0.7,0.15,0.15
+140,NWPU VHR-10 dataset\positive image set\140.jpg,NWPU VHR-10 dataset\ground truth\140.txt,False,train,42,0.7,0.15,0.15
+141,NWPU VHR-10 dataset\positive image set\141.jpg,NWPU VHR-10 dataset\ground truth\141.txt,False,train,42,0.7,0.15,0.15
+141,NWPU VHR-10 dataset\negative image set\141.jpg,,True,train,42,0.7,0.15,0.15
+142,NWPU VHR-10 dataset\positive image set\142.jpg,NWPU VHR-10 dataset\ground truth\142.txt,False,train,42,0.7,0.15,0.15
+142,NWPU VHR-10 dataset\negative image set\142.jpg,,True,train,42,0.7,0.15,0.15
+143,NWPU VHR-10 dataset\negative image set\143.jpg,,True,train,42,0.7,0.15,0.15
+143,NWPU VHR-10 dataset\positive image set\143.jpg,NWPU VHR-10 dataset\ground truth\143.txt,False,train,42,0.7,0.15,0.15
+144,NWPU VHR-10 dataset\negative image set\144.jpg,,True,train,42,0.7,0.15,0.15
+144,NWPU VHR-10 dataset\positive image set\144.jpg,NWPU VHR-10 dataset\ground truth\144.txt,False,train,42,0.7,0.15,0.15
+145,NWPU VHR-10 dataset\positive image set\145.jpg,NWPU VHR-10 dataset\ground truth\145.txt,False,train,42,0.7,0.15,0.15
+145,NWPU VHR-10 dataset\negative image set\145.jpg,,True,train,42,0.7,0.15,0.15
+146,NWPU VHR-10 dataset\positive image set\146.jpg,NWPU VHR-10 dataset\ground truth\146.txt,False,train,42,0.7,0.15,0.15
+146,NWPU VHR-10 dataset\negative image set\146.jpg,,True,train,42,0.7,0.15,0.15
+147,NWPU VHR-10 dataset\positive image set\147.jpg,NWPU VHR-10 dataset\ground truth\147.txt,False,train,42,0.7,0.15,0.15
+147,NWPU VHR-10 dataset\negative image set\147.jpg,,True,train,42,0.7,0.15,0.15
+148,NWPU VHR-10 dataset\positive image set\148.jpg,NWPU VHR-10 dataset\ground truth\148.txt,False,train,42,0.7,0.15,0.15
+148,NWPU VHR-10 dataset\negative image set\148.jpg,,True,train,42,0.7,0.15,0.15
+149,NWPU VHR-10 dataset\positive image set\149.jpg,NWPU VHR-10 dataset\ground truth\149.txt,False,train,42,0.7,0.15,0.15
+149,NWPU VHR-10 dataset\negative image set\149.jpg,,True,train,42,0.7,0.15,0.15
+150,NWPU VHR-10 dataset\negative image set\150.jpg,,True,train,42,0.7,0.15,0.15
+150,NWPU VHR-10 dataset\positive image set\150.jpg,NWPU VHR-10 dataset\ground truth\150.txt,False,train,42,0.7,0.15,0.15
+151,NWPU VHR-10 dataset\positive image set\151.jpg,NWPU VHR-10 dataset\ground truth\151.txt,False,train,42,0.7,0.15,0.15
+153,NWPU VHR-10 dataset\positive image set\153.jpg,NWPU VHR-10 dataset\ground truth\153.txt,False,train,42,0.7,0.15,0.15
+154,NWPU VHR-10 dataset\positive image set\154.jpg,NWPU VHR-10 dataset\ground truth\154.txt,False,train,42,0.7,0.15,0.15
+155,NWPU VHR-10 dataset\positive image set\155.jpg,NWPU VHR-10 dataset\ground truth\155.txt,False,train,42,0.7,0.15,0.15
+156,NWPU VHR-10 dataset\positive image set\156.jpg,NWPU VHR-10 dataset\ground truth\156.txt,False,train,42,0.7,0.15,0.15
+158,NWPU VHR-10 dataset\positive image set\158.jpg,NWPU VHR-10 dataset\ground truth\158.txt,False,train,42,0.7,0.15,0.15
+159,NWPU VHR-10 dataset\positive image set\159.jpg,NWPU VHR-10 dataset\ground truth\159.txt,False,train,42,0.7,0.15,0.15
+163,NWPU VHR-10 dataset\positive image set\163.jpg,NWPU VHR-10 dataset\ground truth\163.txt,False,train,42,0.7,0.15,0.15
+164,NWPU VHR-10 dataset\positive image set\164.jpg,NWPU VHR-10 dataset\ground truth\164.txt,False,train,42,0.7,0.15,0.15
+166,NWPU VHR-10 dataset\positive image set\166.jpg,NWPU VHR-10 dataset\ground truth\166.txt,False,train,42,0.7,0.15,0.15
+168,NWPU VHR-10 dataset\positive image set\168.jpg,NWPU VHR-10 dataset\ground truth\168.txt,False,train,42,0.7,0.15,0.15
+169,NWPU VHR-10 dataset\positive image set\169.jpg,NWPU VHR-10 dataset\ground truth\169.txt,False,train,42,0.7,0.15,0.15
+170,NWPU VHR-10 dataset\positive image set\170.jpg,NWPU VHR-10 dataset\ground truth\170.txt,False,train,42,0.7,0.15,0.15
+173,NWPU VHR-10 dataset\positive image set\173.jpg,NWPU VHR-10 dataset\ground truth\173.txt,False,train,42,0.7,0.15,0.15
+174,NWPU VHR-10 dataset\positive image set\174.jpg,NWPU VHR-10 dataset\ground truth\174.txt,False,train,42,0.7,0.15,0.15
+175,NWPU VHR-10 dataset\positive image set\175.jpg,NWPU VHR-10 dataset\ground truth\175.txt,False,train,42,0.7,0.15,0.15
+176,NWPU VHR-10 dataset\positive image set\176.jpg,NWPU VHR-10 dataset\ground truth\176.txt,False,train,42,0.7,0.15,0.15
+177,NWPU VHR-10 dataset\positive image set\177.jpg,NWPU VHR-10 dataset\ground truth\177.txt,False,train,42,0.7,0.15,0.15
+178,NWPU VHR-10 dataset\positive image set\178.jpg,NWPU VHR-10 dataset\ground truth\178.txt,False,train,42,0.7,0.15,0.15
+179,NWPU VHR-10 dataset\positive image set\179.jpg,NWPU VHR-10 dataset\ground truth\179.txt,False,train,42,0.7,0.15,0.15
+181,NWPU VHR-10 dataset\positive image set\181.jpg,NWPU VHR-10 dataset\ground truth\181.txt,False,train,42,0.7,0.15,0.15
+182,NWPU VHR-10 dataset\positive image set\182.jpg,NWPU VHR-10 dataset\ground truth\182.txt,False,train,42,0.7,0.15,0.15
+183,NWPU VHR-10 dataset\positive image set\183.jpg,NWPU VHR-10 dataset\ground truth\183.txt,False,train,42,0.7,0.15,0.15
+184,NWPU VHR-10 dataset\positive image set\184.jpg,NWPU VHR-10 dataset\ground truth\184.txt,False,train,42,0.7,0.15,0.15
+185,NWPU VHR-10 dataset\positive image set\185.jpg,NWPU VHR-10 dataset\ground truth\185.txt,False,train,42,0.7,0.15,0.15
+186,NWPU VHR-10 dataset\positive image set\186.jpg,NWPU VHR-10 dataset\ground truth\186.txt,False,train,42,0.7,0.15,0.15
+189,NWPU VHR-10 dataset\positive image set\189.jpg,NWPU VHR-10 dataset\ground truth\189.txt,False,train,42,0.7,0.15,0.15
+191,NWPU VHR-10 dataset\positive image set\191.jpg,NWPU VHR-10 dataset\ground truth\191.txt,False,train,42,0.7,0.15,0.15
+193,NWPU VHR-10 dataset\positive image set\193.jpg,NWPU VHR-10 dataset\ground truth\193.txt,False,train,42,0.7,0.15,0.15
+194,NWPU VHR-10 dataset\positive image set\194.jpg,NWPU VHR-10 dataset\ground truth\194.txt,False,train,42,0.7,0.15,0.15
+195,NWPU VHR-10 dataset\positive image set\195.jpg,NWPU VHR-10 dataset\ground truth\195.txt,False,train,42,0.7,0.15,0.15
+196,NWPU VHR-10 dataset\positive image set\196.jpg,NWPU VHR-10 dataset\ground truth\196.txt,False,train,42,0.7,0.15,0.15
+197,NWPU VHR-10 dataset\positive image set\197.jpg,NWPU VHR-10 dataset\ground truth\197.txt,False,train,42,0.7,0.15,0.15
+199,NWPU VHR-10 dataset\positive image set\199.jpg,NWPU VHR-10 dataset\ground truth\199.txt,False,train,42,0.7,0.15,0.15
+200,NWPU VHR-10 dataset\positive image set\200.jpg,NWPU VHR-10 dataset\ground truth\200.txt,False,train,42,0.7,0.15,0.15
+203,NWPU VHR-10 dataset\positive image set\203.jpg,NWPU VHR-10 dataset\ground truth\203.txt,False,train,42,0.7,0.15,0.15
+204,NWPU VHR-10 dataset\positive image set\204.jpg,NWPU VHR-10 dataset\ground truth\204.txt,False,train,42,0.7,0.15,0.15
+205,NWPU VHR-10 dataset\positive image set\205.jpg,NWPU VHR-10 dataset\ground truth\205.txt,False,train,42,0.7,0.15,0.15
+208,NWPU VHR-10 dataset\positive image set\208.jpg,NWPU VHR-10 dataset\ground truth\208.txt,False,train,42,0.7,0.15,0.15
+209,NWPU VHR-10 dataset\positive image set\209.jpg,NWPU VHR-10 dataset\ground truth\209.txt,False,train,42,0.7,0.15,0.15
+210,NWPU VHR-10 dataset\positive image set\210.jpg,NWPU VHR-10 dataset\ground truth\210.txt,False,train,42,0.7,0.15,0.15
+211,NWPU VHR-10 dataset\positive image set\211.jpg,NWPU VHR-10 dataset\ground truth\211.txt,False,train,42,0.7,0.15,0.15
+212,NWPU VHR-10 dataset\positive image set\212.jpg,NWPU VHR-10 dataset\ground truth\212.txt,False,train,42,0.7,0.15,0.15
+213,NWPU VHR-10 dataset\positive image set\213.jpg,NWPU VHR-10 dataset\ground truth\213.txt,False,train,42,0.7,0.15,0.15
+214,NWPU VHR-10 dataset\positive image set\214.jpg,NWPU VHR-10 dataset\ground truth\214.txt,False,train,42,0.7,0.15,0.15
+216,NWPU VHR-10 dataset\positive image set\216.jpg,NWPU VHR-10 dataset\ground truth\216.txt,False,train,42,0.7,0.15,0.15
+219,NWPU VHR-10 dataset\positive image set\219.jpg,NWPU VHR-10 dataset\ground truth\219.txt,False,train,42,0.7,0.15,0.15
+221,NWPU VHR-10 dataset\positive image set\221.jpg,NWPU VHR-10 dataset\ground truth\221.txt,False,train,42,0.7,0.15,0.15
+222,NWPU VHR-10 dataset\positive image set\222.jpg,NWPU VHR-10 dataset\ground truth\222.txt,False,train,42,0.7,0.15,0.15
+223,NWPU VHR-10 dataset\positive image set\223.jpg,NWPU VHR-10 dataset\ground truth\223.txt,False,train,42,0.7,0.15,0.15
+226,NWPU VHR-10 dataset\positive image set\226.jpg,NWPU VHR-10 dataset\ground truth\226.txt,False,train,42,0.7,0.15,0.15
+227,NWPU VHR-10 dataset\positive image set\227.jpg,NWPU VHR-10 dataset\ground truth\227.txt,False,train,42,0.7,0.15,0.15
+228,NWPU VHR-10 dataset\positive image set\228.jpg,NWPU VHR-10 dataset\ground truth\228.txt,False,train,42,0.7,0.15,0.15
+229,NWPU VHR-10 dataset\positive image set\229.jpg,NWPU VHR-10 dataset\ground truth\229.txt,False,train,42,0.7,0.15,0.15
+230,NWPU VHR-10 dataset\positive image set\230.jpg,NWPU VHR-10 dataset\ground truth\230.txt,False,train,42,0.7,0.15,0.15
+232,NWPU VHR-10 dataset\positive image set\232.jpg,NWPU VHR-10 dataset\ground truth\232.txt,False,train,42,0.7,0.15,0.15
+235,NWPU VHR-10 dataset\positive image set\235.jpg,NWPU VHR-10 dataset\ground truth\235.txt,False,train,42,0.7,0.15,0.15
+236,NWPU VHR-10 dataset\positive image set\236.jpg,NWPU VHR-10 dataset\ground truth\236.txt,False,train,42,0.7,0.15,0.15
+237,NWPU VHR-10 dataset\positive image set\237.jpg,NWPU VHR-10 dataset\ground truth\237.txt,False,train,42,0.7,0.15,0.15
+238,NWPU VHR-10 dataset\positive image set\238.jpg,NWPU VHR-10 dataset\ground truth\238.txt,False,train,42,0.7,0.15,0.15
+239,NWPU VHR-10 dataset\positive image set\239.jpg,NWPU VHR-10 dataset\ground truth\239.txt,False,train,42,0.7,0.15,0.15
+240,NWPU VHR-10 dataset\positive image set\240.jpg,NWPU VHR-10 dataset\ground truth\240.txt,False,train,42,0.7,0.15,0.15
+245,NWPU VHR-10 dataset\positive image set\245.jpg,NWPU VHR-10 dataset\ground truth\245.txt,False,train,42,0.7,0.15,0.15
+246,NWPU VHR-10 dataset\positive image set\246.jpg,NWPU VHR-10 dataset\ground truth\246.txt,False,train,42,0.7,0.15,0.15
+247,NWPU VHR-10 dataset\positive image set\247.jpg,NWPU VHR-10 dataset\ground truth\247.txt,False,train,42,0.7,0.15,0.15
+248,NWPU VHR-10 dataset\positive image set\248.jpg,NWPU VHR-10 dataset\ground truth\248.txt,False,train,42,0.7,0.15,0.15
+249,NWPU VHR-10 dataset\positive image set\249.jpg,NWPU VHR-10 dataset\ground truth\249.txt,False,train,42,0.7,0.15,0.15
+250,NWPU VHR-10 dataset\positive image set\250.jpg,NWPU VHR-10 dataset\ground truth\250.txt,False,train,42,0.7,0.15,0.15
+251,NWPU VHR-10 dataset\positive image set\251.jpg,NWPU VHR-10 dataset\ground truth\251.txt,False,train,42,0.7,0.15,0.15
+254,NWPU VHR-10 dataset\positive image set\254.jpg,NWPU VHR-10 dataset\ground truth\254.txt,False,train,42,0.7,0.15,0.15
+255,NWPU VHR-10 dataset\positive image set\255.jpg,NWPU VHR-10 dataset\ground truth\255.txt,False,train,42,0.7,0.15,0.15
+256,NWPU VHR-10 dataset\positive image set\256.jpg,NWPU VHR-10 dataset\ground truth\256.txt,False,train,42,0.7,0.15,0.15
+257,NWPU VHR-10 dataset\positive image set\257.jpg,NWPU VHR-10 dataset\ground truth\257.txt,False,train,42,0.7,0.15,0.15
+258,NWPU VHR-10 dataset\positive image set\258.jpg,NWPU VHR-10 dataset\ground truth\258.txt,False,train,42,0.7,0.15,0.15
+260,NWPU VHR-10 dataset\positive image set\260.jpg,NWPU VHR-10 dataset\ground truth\260.txt,False,train,42,0.7,0.15,0.15
+261,NWPU VHR-10 dataset\positive image set\261.jpg,NWPU VHR-10 dataset\ground truth\261.txt,False,train,42,0.7,0.15,0.15
+262,NWPU VHR-10 dataset\positive image set\262.jpg,NWPU VHR-10 dataset\ground truth\262.txt,False,train,42,0.7,0.15,0.15
+263,NWPU VHR-10 dataset\positive image set\263.jpg,NWPU VHR-10 dataset\ground truth\263.txt,False,train,42,0.7,0.15,0.15
+264,NWPU VHR-10 dataset\positive image set\264.jpg,NWPU VHR-10 dataset\ground truth\264.txt,False,train,42,0.7,0.15,0.15
+265,NWPU VHR-10 dataset\positive image set\265.jpg,NWPU VHR-10 dataset\ground truth\265.txt,False,train,42,0.7,0.15,0.15
+266,NWPU VHR-10 dataset\positive image set\266.jpg,NWPU VHR-10 dataset\ground truth\266.txt,False,train,42,0.7,0.15,0.15
+267,NWPU VHR-10 dataset\positive image set\267.jpg,NWPU VHR-10 dataset\ground truth\267.txt,False,train,42,0.7,0.15,0.15
+269,NWPU VHR-10 dataset\positive image set\269.jpg,NWPU VHR-10 dataset\ground truth\269.txt,False,train,42,0.7,0.15,0.15
+272,NWPU VHR-10 dataset\positive image set\272.jpg,NWPU VHR-10 dataset\ground truth\272.txt,False,train,42,0.7,0.15,0.15
+273,NWPU VHR-10 dataset\positive image set\273.jpg,NWPU VHR-10 dataset\ground truth\273.txt,False,train,42,0.7,0.15,0.15
+275,NWPU VHR-10 dataset\positive image set\275.jpg,NWPU VHR-10 dataset\ground truth\275.txt,False,train,42,0.7,0.15,0.15
+276,NWPU VHR-10 dataset\positive image set\276.jpg,NWPU VHR-10 dataset\ground truth\276.txt,False,train,42,0.7,0.15,0.15
+278,NWPU VHR-10 dataset\positive image set\278.jpg,NWPU VHR-10 dataset\ground truth\278.txt,False,train,42,0.7,0.15,0.15
+279,NWPU VHR-10 dataset\positive image set\279.jpg,NWPU VHR-10 dataset\ground truth\279.txt,False,train,42,0.7,0.15,0.15
+280,NWPU VHR-10 dataset\positive image set\280.jpg,NWPU VHR-10 dataset\ground truth\280.txt,False,train,42,0.7,0.15,0.15
+281,NWPU VHR-10 dataset\positive image set\281.jpg,NWPU VHR-10 dataset\ground truth\281.txt,False,train,42,0.7,0.15,0.15
+282,NWPU VHR-10 dataset\positive image set\282.jpg,NWPU VHR-10 dataset\ground truth\282.txt,False,train,42,0.7,0.15,0.15
+284,NWPU VHR-10 dataset\positive image set\284.jpg,NWPU VHR-10 dataset\ground truth\284.txt,False,train,42,0.7,0.15,0.15
+285,NWPU VHR-10 dataset\positive image set\285.jpg,NWPU VHR-10 dataset\ground truth\285.txt,False,train,42,0.7,0.15,0.15
+286,NWPU VHR-10 dataset\positive image set\286.jpg,NWPU VHR-10 dataset\ground truth\286.txt,False,train,42,0.7,0.15,0.15
+287,NWPU VHR-10 dataset\positive image set\287.jpg,NWPU VHR-10 dataset\ground truth\287.txt,False,train,42,0.7,0.15,0.15
+288,NWPU VHR-10 dataset\positive image set\288.jpg,NWPU VHR-10 dataset\ground truth\288.txt,False,train,42,0.7,0.15,0.15
+290,NWPU VHR-10 dataset\positive image set\290.jpg,NWPU VHR-10 dataset\ground truth\290.txt,False,train,42,0.7,0.15,0.15
+291,NWPU VHR-10 dataset\positive image set\291.jpg,NWPU VHR-10 dataset\ground truth\291.txt,False,train,42,0.7,0.15,0.15
+292,NWPU VHR-10 dataset\positive image set\292.jpg,NWPU VHR-10 dataset\ground truth\292.txt,False,train,42,0.7,0.15,0.15
+293,NWPU VHR-10 dataset\positive image set\293.jpg,NWPU VHR-10 dataset\ground truth\293.txt,False,train,42,0.7,0.15,0.15
+294,NWPU VHR-10 dataset\positive image set\294.jpg,NWPU VHR-10 dataset\ground truth\294.txt,False,train,42,0.7,0.15,0.15
+297,NWPU VHR-10 dataset\positive image set\297.jpg,NWPU VHR-10 dataset\ground truth\297.txt,False,train,42,0.7,0.15,0.15
+298,NWPU VHR-10 dataset\positive image set\298.jpg,NWPU VHR-10 dataset\ground truth\298.txt,False,train,42,0.7,0.15,0.15
+299,NWPU VHR-10 dataset\positive image set\299.jpg,NWPU VHR-10 dataset\ground truth\299.txt,False,train,42,0.7,0.15,0.15
+300,NWPU VHR-10 dataset\positive image set\300.jpg,NWPU VHR-10 dataset\ground truth\300.txt,False,train,42,0.7,0.15,0.15
+301,NWPU VHR-10 dataset\positive image set\301.jpg,NWPU VHR-10 dataset\ground truth\301.txt,False,train,42,0.7,0.15,0.15
+302,NWPU VHR-10 dataset\positive image set\302.jpg,NWPU VHR-10 dataset\ground truth\302.txt,False,train,42,0.7,0.15,0.15
+303,NWPU VHR-10 dataset\positive image set\303.jpg,NWPU VHR-10 dataset\ground truth\303.txt,False,train,42,0.7,0.15,0.15
+304,NWPU VHR-10 dataset\positive image set\304.jpg,NWPU VHR-10 dataset\ground truth\304.txt,False,train,42,0.7,0.15,0.15
+305,NWPU VHR-10 dataset\positive image set\305.jpg,NWPU VHR-10 dataset\ground truth\305.txt,False,train,42,0.7,0.15,0.15
+306,NWPU VHR-10 dataset\positive image set\306.jpg,NWPU VHR-10 dataset\ground truth\306.txt,False,train,42,0.7,0.15,0.15
+308,NWPU VHR-10 dataset\positive image set\308.jpg,NWPU VHR-10 dataset\ground truth\308.txt,False,train,42,0.7,0.15,0.15
+310,NWPU VHR-10 dataset\positive image set\310.jpg,NWPU VHR-10 dataset\ground truth\310.txt,False,train,42,0.7,0.15,0.15
+311,NWPU VHR-10 dataset\positive image set\311.jpg,NWPU VHR-10 dataset\ground truth\311.txt,False,train,42,0.7,0.15,0.15
+312,NWPU VHR-10 dataset\positive image set\312.jpg,NWPU VHR-10 dataset\ground truth\312.txt,False,train,42,0.7,0.15,0.15
+313,NWPU VHR-10 dataset\positive image set\313.jpg,NWPU VHR-10 dataset\ground truth\313.txt,False,train,42,0.7,0.15,0.15
+317,NWPU VHR-10 dataset\positive image set\317.jpg,NWPU VHR-10 dataset\ground truth\317.txt,False,train,42,0.7,0.15,0.15
+319,NWPU VHR-10 dataset\positive image set\319.jpg,NWPU VHR-10 dataset\ground truth\319.txt,False,train,42,0.7,0.15,0.15
+320,NWPU VHR-10 dataset\positive image set\320.jpg,NWPU VHR-10 dataset\ground truth\320.txt,False,train,42,0.7,0.15,0.15
+321,NWPU VHR-10 dataset\positive image set\321.jpg,NWPU VHR-10 dataset\ground truth\321.txt,False,train,42,0.7,0.15,0.15
+322,NWPU VHR-10 dataset\positive image set\322.jpg,NWPU VHR-10 dataset\ground truth\322.txt,False,train,42,0.7,0.15,0.15
+323,NWPU VHR-10 dataset\positive image set\323.jpg,NWPU VHR-10 dataset\ground truth\323.txt,False,train,42,0.7,0.15,0.15
+324,NWPU VHR-10 dataset\positive image set\324.jpg,NWPU VHR-10 dataset\ground truth\324.txt,False,train,42,0.7,0.15,0.15
+325,NWPU VHR-10 dataset\positive image set\325.jpg,NWPU VHR-10 dataset\ground truth\325.txt,False,train,42,0.7,0.15,0.15
+326,NWPU VHR-10 dataset\positive image set\326.jpg,NWPU VHR-10 dataset\ground truth\326.txt,False,train,42,0.7,0.15,0.15
+327,NWPU VHR-10 dataset\positive image set\327.jpg,NWPU VHR-10 dataset\ground truth\327.txt,False,train,42,0.7,0.15,0.15
+328,NWPU VHR-10 dataset\positive image set\328.jpg,NWPU VHR-10 dataset\ground truth\328.txt,False,train,42,0.7,0.15,0.15
+329,NWPU VHR-10 dataset\positive image set\329.jpg,NWPU VHR-10 dataset\ground truth\329.txt,False,train,42,0.7,0.15,0.15
+330,NWPU VHR-10 dataset\positive image set\330.jpg,NWPU VHR-10 dataset\ground truth\330.txt,False,train,42,0.7,0.15,0.15
+332,NWPU VHR-10 dataset\positive image set\332.jpg,NWPU VHR-10 dataset\ground truth\332.txt,False,train,42,0.7,0.15,0.15
+333,NWPU VHR-10 dataset\positive image set\333.jpg,NWPU VHR-10 dataset\ground truth\333.txt,False,train,42,0.7,0.15,0.15
+334,NWPU VHR-10 dataset\positive image set\334.jpg,NWPU VHR-10 dataset\ground truth\334.txt,False,train,42,0.7,0.15,0.15
+335,NWPU VHR-10 dataset\positive image set\335.jpg,NWPU VHR-10 dataset\ground truth\335.txt,False,train,42,0.7,0.15,0.15
+336,NWPU VHR-10 dataset\positive image set\336.jpg,NWPU VHR-10 dataset\ground truth\336.txt,False,train,42,0.7,0.15,0.15
+337,NWPU VHR-10 dataset\positive image set\337.jpg,NWPU VHR-10 dataset\ground truth\337.txt,False,train,42,0.7,0.15,0.15
+339,NWPU VHR-10 dataset\positive image set\339.jpg,NWPU VHR-10 dataset\ground truth\339.txt,False,train,42,0.7,0.15,0.15
+341,NWPU VHR-10 dataset\positive image set\341.jpg,NWPU VHR-10 dataset\ground truth\341.txt,False,train,42,0.7,0.15,0.15
+342,NWPU VHR-10 dataset\positive image set\342.jpg,NWPU VHR-10 dataset\ground truth\342.txt,False,train,42,0.7,0.15,0.15
+345,NWPU VHR-10 dataset\positive image set\345.jpg,NWPU VHR-10 dataset\ground truth\345.txt,False,train,42,0.7,0.15,0.15
+347,NWPU VHR-10 dataset\positive image set\347.jpg,NWPU VHR-10 dataset\ground truth\347.txt,False,train,42,0.7,0.15,0.15
+349,NWPU VHR-10 dataset\positive image set\349.jpg,NWPU VHR-10 dataset\ground truth\349.txt,False,train,42,0.7,0.15,0.15
+350,NWPU VHR-10 dataset\positive image set\350.jpg,NWPU VHR-10 dataset\ground truth\350.txt,False,train,42,0.7,0.15,0.15
+351,NWPU VHR-10 dataset\positive image set\351.jpg,NWPU VHR-10 dataset\ground truth\351.txt,False,train,42,0.7,0.15,0.15
+352,NWPU VHR-10 dataset\positive image set\352.jpg,NWPU VHR-10 dataset\ground truth\352.txt,False,train,42,0.7,0.15,0.15
+353,NWPU VHR-10 dataset\positive image set\353.jpg,NWPU VHR-10 dataset\ground truth\353.txt,False,train,42,0.7,0.15,0.15
+354,NWPU VHR-10 dataset\positive image set\354.jpg,NWPU VHR-10 dataset\ground truth\354.txt,False,train,42,0.7,0.15,0.15
+355,NWPU VHR-10 dataset\positive image set\355.jpg,NWPU VHR-10 dataset\ground truth\355.txt,False,train,42,0.7,0.15,0.15
+356,NWPU VHR-10 dataset\positive image set\356.jpg,NWPU VHR-10 dataset\ground truth\356.txt,False,train,42,0.7,0.15,0.15
+357,NWPU VHR-10 dataset\positive image set\357.jpg,NWPU VHR-10 dataset\ground truth\357.txt,False,train,42,0.7,0.15,0.15
+358,NWPU VHR-10 dataset\positive image set\358.jpg,NWPU VHR-10 dataset\ground truth\358.txt,False,train,42,0.7,0.15,0.15
+360,NWPU VHR-10 dataset\positive image set\360.jpg,NWPU VHR-10 dataset\ground truth\360.txt,False,train,42,0.7,0.15,0.15
+361,NWPU VHR-10 dataset\positive image set\361.jpg,NWPU VHR-10 dataset\ground truth\361.txt,False,train,42,0.7,0.15,0.15
+362,NWPU VHR-10 dataset\positive image set\362.jpg,NWPU VHR-10 dataset\ground truth\362.txt,False,train,42,0.7,0.15,0.15
+363,NWPU VHR-10 dataset\positive image set\363.jpg,NWPU VHR-10 dataset\ground truth\363.txt,False,train,42,0.7,0.15,0.15
+364,NWPU VHR-10 dataset\positive image set\364.jpg,NWPU VHR-10 dataset\ground truth\364.txt,False,train,42,0.7,0.15,0.15
+365,NWPU VHR-10 dataset\positive image set\365.jpg,NWPU VHR-10 dataset\ground truth\365.txt,False,train,42,0.7,0.15,0.15
+366,NWPU VHR-10 dataset\positive image set\366.jpg,NWPU VHR-10 dataset\ground truth\366.txt,False,train,42,0.7,0.15,0.15
+368,NWPU VHR-10 dataset\positive image set\368.jpg,NWPU VHR-10 dataset\ground truth\368.txt,False,train,42,0.7,0.15,0.15
+369,NWPU VHR-10 dataset\positive image set\369.jpg,NWPU VHR-10 dataset\ground truth\369.txt,False,train,42,0.7,0.15,0.15
+370,NWPU VHR-10 dataset\positive image set\370.jpg,NWPU VHR-10 dataset\ground truth\370.txt,False,train,42,0.7,0.15,0.15
+371,NWPU VHR-10 dataset\positive image set\371.jpg,NWPU VHR-10 dataset\ground truth\371.txt,False,train,42,0.7,0.15,0.15
+372,NWPU VHR-10 dataset\positive image set\372.jpg,NWPU VHR-10 dataset\ground truth\372.txt,False,train,42,0.7,0.15,0.15
+375,NWPU VHR-10 dataset\positive image set\375.jpg,NWPU VHR-10 dataset\ground truth\375.txt,False,train,42,0.7,0.15,0.15
+376,NWPU VHR-10 dataset\positive image set\376.jpg,NWPU VHR-10 dataset\ground truth\376.txt,False,train,42,0.7,0.15,0.15
+378,NWPU VHR-10 dataset\positive image set\378.jpg,NWPU VHR-10 dataset\ground truth\378.txt,False,train,42,0.7,0.15,0.15
+381,NWPU VHR-10 dataset\positive image set\381.jpg,NWPU VHR-10 dataset\ground truth\381.txt,False,train,42,0.7,0.15,0.15
+382,NWPU VHR-10 dataset\positive image set\382.jpg,NWPU VHR-10 dataset\ground truth\382.txt,False,train,42,0.7,0.15,0.15
+383,NWPU VHR-10 dataset\positive image set\383.jpg,NWPU VHR-10 dataset\ground truth\383.txt,False,train,42,0.7,0.15,0.15
+384,NWPU VHR-10 dataset\positive image set\384.jpg,NWPU VHR-10 dataset\ground truth\384.txt,False,train,42,0.7,0.15,0.15
+389,NWPU VHR-10 dataset\positive image set\389.jpg,NWPU VHR-10 dataset\ground truth\389.txt,False,train,42,0.7,0.15,0.15
+391,NWPU VHR-10 dataset\positive image set\391.jpg,NWPU VHR-10 dataset\ground truth\391.txt,False,train,42,0.7,0.15,0.15
+394,NWPU VHR-10 dataset\positive image set\394.jpg,NWPU VHR-10 dataset\ground truth\394.txt,False,train,42,0.7,0.15,0.15
+395,NWPU VHR-10 dataset\positive image set\395.jpg,NWPU VHR-10 dataset\ground truth\395.txt,False,train,42,0.7,0.15,0.15
+396,NWPU VHR-10 dataset\positive image set\396.jpg,NWPU VHR-10 dataset\ground truth\396.txt,False,train,42,0.7,0.15,0.15
+397,NWPU VHR-10 dataset\positive image set\397.jpg,NWPU VHR-10 dataset\ground truth\397.txt,False,train,42,0.7,0.15,0.15
+399,NWPU VHR-10 dataset\positive image set\399.jpg,NWPU VHR-10 dataset\ground truth\399.txt,False,train,42,0.7,0.15,0.15
+400,NWPU VHR-10 dataset\positive image set\400.jpg,NWPU VHR-10 dataset\ground truth\400.txt,False,train,42,0.7,0.15,0.15
+401,NWPU VHR-10 dataset\positive image set\401.jpg,NWPU VHR-10 dataset\ground truth\401.txt,False,train,42,0.7,0.15,0.15
+404,NWPU VHR-10 dataset\positive image set\404.jpg,NWPU VHR-10 dataset\ground truth\404.txt,False,train,42,0.7,0.15,0.15
+405,NWPU VHR-10 dataset\positive image set\405.jpg,NWPU VHR-10 dataset\ground truth\405.txt,False,train,42,0.7,0.15,0.15
+406,NWPU VHR-10 dataset\positive image set\406.jpg,NWPU VHR-10 dataset\ground truth\406.txt,False,train,42,0.7,0.15,0.15
+408,NWPU VHR-10 dataset\positive image set\408.jpg,NWPU VHR-10 dataset\ground truth\408.txt,False,train,42,0.7,0.15,0.15
+409,NWPU VHR-10 dataset\positive image set\409.jpg,NWPU VHR-10 dataset\ground truth\409.txt,False,train,42,0.7,0.15,0.15
+410,NWPU VHR-10 dataset\positive image set\410.jpg,NWPU VHR-10 dataset\ground truth\410.txt,False,train,42,0.7,0.15,0.15
+412,NWPU VHR-10 dataset\positive image set\412.jpg,NWPU VHR-10 dataset\ground truth\412.txt,False,train,42,0.7,0.15,0.15
+413,NWPU VHR-10 dataset\positive image set\413.jpg,NWPU VHR-10 dataset\ground truth\413.txt,False,train,42,0.7,0.15,0.15
+415,NWPU VHR-10 dataset\positive image set\415.jpg,NWPU VHR-10 dataset\ground truth\415.txt,False,train,42,0.7,0.15,0.15
+416,NWPU VHR-10 dataset\positive image set\416.jpg,NWPU VHR-10 dataset\ground truth\416.txt,False,train,42,0.7,0.15,0.15
+417,NWPU VHR-10 dataset\positive image set\417.jpg,NWPU VHR-10 dataset\ground truth\417.txt,False,train,42,0.7,0.15,0.15
+418,NWPU VHR-10 dataset\positive image set\418.jpg,NWPU VHR-10 dataset\ground truth\418.txt,False,train,42,0.7,0.15,0.15
+420,NWPU VHR-10 dataset\positive image set\420.jpg,NWPU VHR-10 dataset\ground truth\420.txt,False,train,42,0.7,0.15,0.15
+421,NWPU VHR-10 dataset\positive image set\421.jpg,NWPU VHR-10 dataset\ground truth\421.txt,False,train,42,0.7,0.15,0.15
+422,NWPU VHR-10 dataset\positive image set\422.jpg,NWPU VHR-10 dataset\ground truth\422.txt,False,train,42,0.7,0.15,0.15
+423,NWPU VHR-10 dataset\positive image set\423.jpg,NWPU VHR-10 dataset\ground truth\423.txt,False,train,42,0.7,0.15,0.15
+424,NWPU VHR-10 dataset\positive image set\424.jpg,NWPU VHR-10 dataset\ground truth\424.txt,False,train,42,0.7,0.15,0.15
+425,NWPU VHR-10 dataset\positive image set\425.jpg,NWPU VHR-10 dataset\ground truth\425.txt,False,train,42,0.7,0.15,0.15
+426,NWPU VHR-10 dataset\positive image set\426.jpg,NWPU VHR-10 dataset\ground truth\426.txt,False,train,42,0.7,0.15,0.15
+427,NWPU VHR-10 dataset\positive image set\427.jpg,NWPU VHR-10 dataset\ground truth\427.txt,False,train,42,0.7,0.15,0.15
+429,NWPU VHR-10 dataset\positive image set\429.jpg,NWPU VHR-10 dataset\ground truth\429.txt,False,train,42,0.7,0.15,0.15
+430,NWPU VHR-10 dataset\positive image set\430.jpg,NWPU VHR-10 dataset\ground truth\430.txt,False,train,42,0.7,0.15,0.15
+431,NWPU VHR-10 dataset\positive image set\431.jpg,NWPU VHR-10 dataset\ground truth\431.txt,False,train,42,0.7,0.15,0.15
+432,NWPU VHR-10 dataset\positive image set\432.jpg,NWPU VHR-10 dataset\ground truth\432.txt,False,train,42,0.7,0.15,0.15
+433,NWPU VHR-10 dataset\positive image set\433.jpg,NWPU VHR-10 dataset\ground truth\433.txt,False,train,42,0.7,0.15,0.15
+434,NWPU VHR-10 dataset\positive image set\434.jpg,NWPU VHR-10 dataset\ground truth\434.txt,False,train,42,0.7,0.15,0.15
+435,NWPU VHR-10 dataset\positive image set\435.jpg,NWPU VHR-10 dataset\ground truth\435.txt,False,train,42,0.7,0.15,0.15
+437,NWPU VHR-10 dataset\positive image set\437.jpg,NWPU VHR-10 dataset\ground truth\437.txt,False,train,42,0.7,0.15,0.15
+438,NWPU VHR-10 dataset\positive image set\438.jpg,NWPU VHR-10 dataset\ground truth\438.txt,False,train,42,0.7,0.15,0.15
+439,NWPU VHR-10 dataset\positive image set\439.jpg,NWPU VHR-10 dataset\ground truth\439.txt,False,train,42,0.7,0.15,0.15
+441,NWPU VHR-10 dataset\positive image set\441.jpg,NWPU VHR-10 dataset\ground truth\441.txt,False,train,42,0.7,0.15,0.15
+443,NWPU VHR-10 dataset\positive image set\443.jpg,NWPU VHR-10 dataset\ground truth\443.txt,False,train,42,0.7,0.15,0.15
+444,NWPU VHR-10 dataset\positive image set\444.jpg,NWPU VHR-10 dataset\ground truth\444.txt,False,train,42,0.7,0.15,0.15
+445,NWPU VHR-10 dataset\positive image set\445.jpg,NWPU VHR-10 dataset\ground truth\445.txt,False,train,42,0.7,0.15,0.15
+447,NWPU VHR-10 dataset\positive image set\447.jpg,NWPU VHR-10 dataset\ground truth\447.txt,False,train,42,0.7,0.15,0.15
+448,NWPU VHR-10 dataset\positive image set\448.jpg,NWPU VHR-10 dataset\ground truth\448.txt,False,train,42,0.7,0.15,0.15
+449,NWPU VHR-10 dataset\positive image set\449.jpg,NWPU VHR-10 dataset\ground truth\449.txt,False,train,42,0.7,0.15,0.15
+450,NWPU VHR-10 dataset\positive image set\450.jpg,NWPU VHR-10 dataset\ground truth\450.txt,False,train,42,0.7,0.15,0.15
+451,NWPU VHR-10 dataset\positive image set\451.jpg,NWPU VHR-10 dataset\ground truth\451.txt,False,train,42,0.7,0.15,0.15
+452,NWPU VHR-10 dataset\positive image set\452.jpg,NWPU VHR-10 dataset\ground truth\452.txt,False,train,42,0.7,0.15,0.15
+453,NWPU VHR-10 dataset\positive image set\453.jpg,NWPU VHR-10 dataset\ground truth\453.txt,False,train,42,0.7,0.15,0.15
+454,NWPU VHR-10 dataset\positive image set\454.jpg,NWPU VHR-10 dataset\ground truth\454.txt,False,train,42,0.7,0.15,0.15
+457,NWPU VHR-10 dataset\positive image set\457.jpg,NWPU VHR-10 dataset\ground truth\457.txt,False,train,42,0.7,0.15,0.15
+458,NWPU VHR-10 dataset\positive image set\458.jpg,NWPU VHR-10 dataset\ground truth\458.txt,False,train,42,0.7,0.15,0.15
+464,NWPU VHR-10 dataset\positive image set\464.jpg,NWPU VHR-10 dataset\ground truth\464.txt,False,train,42,0.7,0.15,0.15
+465,NWPU VHR-10 dataset\positive image set\465.jpg,NWPU VHR-10 dataset\ground truth\465.txt,False,train,42,0.7,0.15,0.15
+466,NWPU VHR-10 dataset\positive image set\466.jpg,NWPU VHR-10 dataset\ground truth\466.txt,False,train,42,0.7,0.15,0.15
+469,NWPU VHR-10 dataset\positive image set\469.jpg,NWPU VHR-10 dataset\ground truth\469.txt,False,train,42,0.7,0.15,0.15
+470,NWPU VHR-10 dataset\positive image set\470.jpg,NWPU VHR-10 dataset\ground truth\470.txt,False,train,42,0.7,0.15,0.15
+471,NWPU VHR-10 dataset\positive image set\471.jpg,NWPU VHR-10 dataset\ground truth\471.txt,False,train,42,0.7,0.15,0.15
+478,NWPU VHR-10 dataset\positive image set\478.jpg,NWPU VHR-10 dataset\ground truth\478.txt,False,train,42,0.7,0.15,0.15
+479,NWPU VHR-10 dataset\positive image set\479.jpg,NWPU VHR-10 dataset\ground truth\479.txt,False,train,42,0.7,0.15,0.15
+480,NWPU VHR-10 dataset\positive image set\480.jpg,NWPU VHR-10 dataset\ground truth\480.txt,False,train,42,0.7,0.15,0.15
+481,NWPU VHR-10 dataset\positive image set\481.jpg,NWPU VHR-10 dataset\ground truth\481.txt,False,train,42,0.7,0.15,0.15
+482,NWPU VHR-10 dataset\positive image set\482.jpg,NWPU VHR-10 dataset\ground truth\482.txt,False,train,42,0.7,0.15,0.15
+483,NWPU VHR-10 dataset\positive image set\483.jpg,NWPU VHR-10 dataset\ground truth\483.txt,False,train,42,0.7,0.15,0.15
+486,NWPU VHR-10 dataset\positive image set\486.jpg,NWPU VHR-10 dataset\ground truth\486.txt,False,train,42,0.7,0.15,0.15
+487,NWPU VHR-10 dataset\positive image set\487.jpg,NWPU VHR-10 dataset\ground truth\487.txt,False,train,42,0.7,0.15,0.15
+488,NWPU VHR-10 dataset\positive image set\488.jpg,NWPU VHR-10 dataset\ground truth\488.txt,False,train,42,0.7,0.15,0.15
+489,NWPU VHR-10 dataset\positive image set\489.jpg,NWPU VHR-10 dataset\ground truth\489.txt,False,train,42,0.7,0.15,0.15
+491,NWPU VHR-10 dataset\positive image set\491.jpg,NWPU VHR-10 dataset\ground truth\491.txt,False,train,42,0.7,0.15,0.15
+495,NWPU VHR-10 dataset\positive image set\495.jpg,NWPU VHR-10 dataset\ground truth\495.txt,False,train,42,0.7,0.15,0.15
+496,NWPU VHR-10 dataset\positive image set\496.jpg,NWPU VHR-10 dataset\ground truth\496.txt,False,train,42,0.7,0.15,0.15
+498,NWPU VHR-10 dataset\positive image set\498.jpg,NWPU VHR-10 dataset\ground truth\498.txt,False,train,42,0.7,0.15,0.15
+500,NWPU VHR-10 dataset\positive image set\500.jpg,NWPU VHR-10 dataset\ground truth\500.txt,False,train,42,0.7,0.15,0.15
+501,NWPU VHR-10 dataset\positive image set\501.jpg,NWPU VHR-10 dataset\ground truth\501.txt,False,train,42,0.7,0.15,0.15
+502,NWPU VHR-10 dataset\positive image set\502.jpg,NWPU VHR-10 dataset\ground truth\502.txt,False,train,42,0.7,0.15,0.15
+504,NWPU VHR-10 dataset\positive image set\504.jpg,NWPU VHR-10 dataset\ground truth\504.txt,False,train,42,0.7,0.15,0.15
+507,NWPU VHR-10 dataset\positive image set\507.jpg,NWPU VHR-10 dataset\ground truth\507.txt,False,train,42,0.7,0.15,0.15
+508,NWPU VHR-10 dataset\positive image set\508.jpg,NWPU VHR-10 dataset\ground truth\508.txt,False,train,42,0.7,0.15,0.15
+510,NWPU VHR-10 dataset\positive image set\510.jpg,NWPU VHR-10 dataset\ground truth\510.txt,False,train,42,0.7,0.15,0.15
+512,NWPU VHR-10 dataset\positive image set\512.jpg,NWPU VHR-10 dataset\ground truth\512.txt,False,train,42,0.7,0.15,0.15
+515,NWPU VHR-10 dataset\positive image set\515.jpg,NWPU VHR-10 dataset\ground truth\515.txt,False,train,42,0.7,0.15,0.15
+516,NWPU VHR-10 dataset\positive image set\516.jpg,NWPU VHR-10 dataset\ground truth\516.txt,False,train,42,0.7,0.15,0.15
+517,NWPU VHR-10 dataset\positive image set\517.jpg,NWPU VHR-10 dataset\ground truth\517.txt,False,train,42,0.7,0.15,0.15
+518,NWPU VHR-10 dataset\positive image set\518.jpg,NWPU VHR-10 dataset\ground truth\518.txt,False,train,42,0.7,0.15,0.15
+520,NWPU VHR-10 dataset\positive image set\520.jpg,NWPU VHR-10 dataset\ground truth\520.txt,False,train,42,0.7,0.15,0.15
+522,NWPU VHR-10 dataset\positive image set\522.jpg,NWPU VHR-10 dataset\ground truth\522.txt,False,train,42,0.7,0.15,0.15
+523,NWPU VHR-10 dataset\positive image set\523.jpg,NWPU VHR-10 dataset\ground truth\523.txt,False,train,42,0.7,0.15,0.15
+524,NWPU VHR-10 dataset\positive image set\524.jpg,NWPU VHR-10 dataset\ground truth\524.txt,False,train,42,0.7,0.15,0.15
+527,NWPU VHR-10 dataset\positive image set\527.jpg,NWPU VHR-10 dataset\ground truth\527.txt,False,train,42,0.7,0.15,0.15
+528,NWPU VHR-10 dataset\positive image set\528.jpg,NWPU VHR-10 dataset\ground truth\528.txt,False,train,42,0.7,0.15,0.15
+530,NWPU VHR-10 dataset\positive image set\530.jpg,NWPU VHR-10 dataset\ground truth\530.txt,False,train,42,0.7,0.15,0.15
+531,NWPU VHR-10 dataset\positive image set\531.jpg,NWPU VHR-10 dataset\ground truth\531.txt,False,train,42,0.7,0.15,0.15
+533,NWPU VHR-10 dataset\positive image set\533.jpg,NWPU VHR-10 dataset\ground truth\533.txt,False,train,42,0.7,0.15,0.15
+535,NWPU VHR-10 dataset\positive image set\535.jpg,NWPU VHR-10 dataset\ground truth\535.txt,False,train,42,0.7,0.15,0.15
+536,NWPU VHR-10 dataset\positive image set\536.jpg,NWPU VHR-10 dataset\ground truth\536.txt,False,train,42,0.7,0.15,0.15
+537,NWPU VHR-10 dataset\positive image set\537.jpg,NWPU VHR-10 dataset\ground truth\537.txt,False,train,42,0.7,0.15,0.15
+538,NWPU VHR-10 dataset\positive image set\538.jpg,NWPU VHR-10 dataset\ground truth\538.txt,False,train,42,0.7,0.15,0.15
+539,NWPU VHR-10 dataset\positive image set\539.jpg,NWPU VHR-10 dataset\ground truth\539.txt,False,train,42,0.7,0.15,0.15
+541,NWPU VHR-10 dataset\positive image set\541.jpg,NWPU VHR-10 dataset\ground truth\541.txt,False,train,42,0.7,0.15,0.15
+542,NWPU VHR-10 dataset\positive image set\542.jpg,NWPU VHR-10 dataset\ground truth\542.txt,False,train,42,0.7,0.15,0.15
+543,NWPU VHR-10 dataset\positive image set\543.jpg,NWPU VHR-10 dataset\ground truth\543.txt,False,train,42,0.7,0.15,0.15
+546,NWPU VHR-10 dataset\positive image set\546.jpg,NWPU VHR-10 dataset\ground truth\546.txt,False,train,42,0.7,0.15,0.15
+547,NWPU VHR-10 dataset\positive image set\547.jpg,NWPU VHR-10 dataset\ground truth\547.txt,False,train,42,0.7,0.15,0.15
+548,NWPU VHR-10 dataset\positive image set\548.jpg,NWPU VHR-10 dataset\ground truth\548.txt,False,train,42,0.7,0.15,0.15
+549,NWPU VHR-10 dataset\positive image set\549.jpg,NWPU VHR-10 dataset\ground truth\549.txt,False,train,42,0.7,0.15,0.15
+551,NWPU VHR-10 dataset\positive image set\551.jpg,NWPU VHR-10 dataset\ground truth\551.txt,False,train,42,0.7,0.15,0.15
+553,NWPU VHR-10 dataset\positive image set\553.jpg,NWPU VHR-10 dataset\ground truth\553.txt,False,train,42,0.7,0.15,0.15
+554,NWPU VHR-10 dataset\positive image set\554.jpg,NWPU VHR-10 dataset\ground truth\554.txt,False,train,42,0.7,0.15,0.15
+555,NWPU VHR-10 dataset\positive image set\555.jpg,NWPU VHR-10 dataset\ground truth\555.txt,False,train,42,0.7,0.15,0.15
+557,NWPU VHR-10 dataset\positive image set\557.jpg,NWPU VHR-10 dataset\ground truth\557.txt,False,train,42,0.7,0.15,0.15
+559,NWPU VHR-10 dataset\positive image set\559.jpg,NWPU VHR-10 dataset\ground truth\559.txt,False,train,42,0.7,0.15,0.15
+560,NWPU VHR-10 dataset\positive image set\560.jpg,NWPU VHR-10 dataset\ground truth\560.txt,False,train,42,0.7,0.15,0.15
+564,NWPU VHR-10 dataset\positive image set\564.jpg,NWPU VHR-10 dataset\ground truth\564.txt,False,train,42,0.7,0.15,0.15
+569,NWPU VHR-10 dataset\positive image set\569.jpg,NWPU VHR-10 dataset\ground truth\569.txt,False,train,42,0.7,0.15,0.15
+570,NWPU VHR-10 dataset\positive image set\570.jpg,NWPU VHR-10 dataset\ground truth\570.txt,False,train,42,0.7,0.15,0.15
+571,NWPU VHR-10 dataset\positive image set\571.jpg,NWPU VHR-10 dataset\ground truth\571.txt,False,train,42,0.7,0.15,0.15
+572,NWPU VHR-10 dataset\positive image set\572.jpg,NWPU VHR-10 dataset\ground truth\572.txt,False,train,42,0.7,0.15,0.15
+574,NWPU VHR-10 dataset\positive image set\574.jpg,NWPU VHR-10 dataset\ground truth\574.txt,False,train,42,0.7,0.15,0.15
+575,NWPU VHR-10 dataset\positive image set\575.jpg,NWPU VHR-10 dataset\ground truth\575.txt,False,train,42,0.7,0.15,0.15
+576,NWPU VHR-10 dataset\positive image set\576.jpg,NWPU VHR-10 dataset\ground truth\576.txt,False,train,42,0.7,0.15,0.15
+579,NWPU VHR-10 dataset\positive image set\579.jpg,NWPU VHR-10 dataset\ground truth\579.txt,False,train,42,0.7,0.15,0.15
+580,NWPU VHR-10 dataset\positive image set\580.jpg,NWPU VHR-10 dataset\ground truth\580.txt,False,train,42,0.7,0.15,0.15
+581,NWPU VHR-10 dataset\positive image set\581.jpg,NWPU VHR-10 dataset\ground truth\581.txt,False,train,42,0.7,0.15,0.15
+582,NWPU VHR-10 dataset\positive image set\582.jpg,NWPU VHR-10 dataset\ground truth\582.txt,False,train,42,0.7,0.15,0.15
+583,NWPU VHR-10 dataset\positive image set\583.jpg,NWPU VHR-10 dataset\ground truth\583.txt,False,train,42,0.7,0.15,0.15
+584,NWPU VHR-10 dataset\positive image set\584.jpg,NWPU VHR-10 dataset\ground truth\584.txt,False,train,42,0.7,0.15,0.15
+585,NWPU VHR-10 dataset\positive image set\585.jpg,NWPU VHR-10 dataset\ground truth\585.txt,False,train,42,0.7,0.15,0.15
+586,NWPU VHR-10 dataset\positive image set\586.jpg,NWPU VHR-10 dataset\ground truth\586.txt,False,train,42,0.7,0.15,0.15
+588,NWPU VHR-10 dataset\positive image set\588.jpg,NWPU VHR-10 dataset\ground truth\588.txt,False,train,42,0.7,0.15,0.15
+590,NWPU VHR-10 dataset\positive image set\590.jpg,NWPU VHR-10 dataset\ground truth\590.txt,False,train,42,0.7,0.15,0.15
+591,NWPU VHR-10 dataset\positive image set\591.jpg,NWPU VHR-10 dataset\ground truth\591.txt,False,train,42,0.7,0.15,0.15
+593,NWPU VHR-10 dataset\positive image set\593.jpg,NWPU VHR-10 dataset\ground truth\593.txt,False,train,42,0.7,0.15,0.15
+594,NWPU VHR-10 dataset\positive image set\594.jpg,NWPU VHR-10 dataset\ground truth\594.txt,False,train,42,0.7,0.15,0.15
+595,NWPU VHR-10 dataset\positive image set\595.jpg,NWPU VHR-10 dataset\ground truth\595.txt,False,train,42,0.7,0.15,0.15
+596,NWPU VHR-10 dataset\positive image set\596.jpg,NWPU VHR-10 dataset\ground truth\596.txt,False,train,42,0.7,0.15,0.15
+597,NWPU VHR-10 dataset\positive image set\597.jpg,NWPU VHR-10 dataset\ground truth\597.txt,False,train,42,0.7,0.15,0.15
+598,NWPU VHR-10 dataset\positive image set\598.jpg,NWPU VHR-10 dataset\ground truth\598.txt,False,train,42,0.7,0.15,0.15
+599,NWPU VHR-10 dataset\positive image set\599.jpg,NWPU VHR-10 dataset\ground truth\599.txt,False,train,42,0.7,0.15,0.15
+602,NWPU VHR-10 dataset\positive image set\602.jpg,NWPU VHR-10 dataset\ground truth\602.txt,False,train,42,0.7,0.15,0.15
+603,NWPU VHR-10 dataset\positive image set\603.jpg,NWPU VHR-10 dataset\ground truth\603.txt,False,train,42,0.7,0.15,0.15
+604,NWPU VHR-10 dataset\positive image set\604.jpg,NWPU VHR-10 dataset\ground truth\604.txt,False,train,42,0.7,0.15,0.15
+605,NWPU VHR-10 dataset\positive image set\605.jpg,NWPU VHR-10 dataset\ground truth\605.txt,False,train,42,0.7,0.15,0.15
+606,NWPU VHR-10 dataset\positive image set\606.jpg,NWPU VHR-10 dataset\ground truth\606.txt,False,train,42,0.7,0.15,0.15
+608,NWPU VHR-10 dataset\positive image set\608.jpg,NWPU VHR-10 dataset\ground truth\608.txt,False,train,42,0.7,0.15,0.15
+609,NWPU VHR-10 dataset\positive image set\609.jpg,NWPU VHR-10 dataset\ground truth\609.txt,False,train,42,0.7,0.15,0.15
+610,NWPU VHR-10 dataset\positive image set\610.jpg,NWPU VHR-10 dataset\ground truth\610.txt,False,train,42,0.7,0.15,0.15
+612,NWPU VHR-10 dataset\positive image set\612.jpg,NWPU VHR-10 dataset\ground truth\612.txt,False,train,42,0.7,0.15,0.15
+613,NWPU VHR-10 dataset\positive image set\613.jpg,NWPU VHR-10 dataset\ground truth\613.txt,False,train,42,0.7,0.15,0.15
+614,NWPU VHR-10 dataset\positive image set\614.jpg,NWPU VHR-10 dataset\ground truth\614.txt,False,train,42,0.7,0.15,0.15
+616,NWPU VHR-10 dataset\positive image set\616.jpg,NWPU VHR-10 dataset\ground truth\616.txt,False,train,42,0.7,0.15,0.15
+619,NWPU VHR-10 dataset\positive image set\619.jpg,NWPU VHR-10 dataset\ground truth\619.txt,False,train,42,0.7,0.15,0.15
+620,NWPU VHR-10 dataset\positive image set\620.jpg,NWPU VHR-10 dataset\ground truth\620.txt,False,train,42,0.7,0.15,0.15
+621,NWPU VHR-10 dataset\positive image set\621.jpg,NWPU VHR-10 dataset\ground truth\621.txt,False,train,42,0.7,0.15,0.15
+623,NWPU VHR-10 dataset\positive image set\623.jpg,NWPU VHR-10 dataset\ground truth\623.txt,False,train,42,0.7,0.15,0.15
+624,NWPU VHR-10 dataset\positive image set\624.jpg,NWPU VHR-10 dataset\ground truth\624.txt,False,train,42,0.7,0.15,0.15
+625,NWPU VHR-10 dataset\positive image set\625.jpg,NWPU VHR-10 dataset\ground truth\625.txt,False,train,42,0.7,0.15,0.15
+626,NWPU VHR-10 dataset\positive image set\626.jpg,NWPU VHR-10 dataset\ground truth\626.txt,False,train,42,0.7,0.15,0.15
+627,NWPU VHR-10 dataset\positive image set\627.jpg,NWPU VHR-10 dataset\ground truth\627.txt,False,train,42,0.7,0.15,0.15
+628,NWPU VHR-10 dataset\positive image set\628.jpg,NWPU VHR-10 dataset\ground truth\628.txt,False,train,42,0.7,0.15,0.15
+629,NWPU VHR-10 dataset\positive image set\629.jpg,NWPU VHR-10 dataset\ground truth\629.txt,False,train,42,0.7,0.15,0.15
+631,NWPU VHR-10 dataset\positive image set\631.jpg,NWPU VHR-10 dataset\ground truth\631.txt,False,train,42,0.7,0.15,0.15
+632,NWPU VHR-10 dataset\positive image set\632.jpg,NWPU VHR-10 dataset\ground truth\632.txt,False,train,42,0.7,0.15,0.15
+634,NWPU VHR-10 dataset\positive image set\634.jpg,NWPU VHR-10 dataset\ground truth\634.txt,False,train,42,0.7,0.15,0.15
+636,NWPU VHR-10 dataset\positive image set\636.jpg,NWPU VHR-10 dataset\ground truth\636.txt,False,train,42,0.7,0.15,0.15
+637,NWPU VHR-10 dataset\positive image set\637.jpg,NWPU VHR-10 dataset\ground truth\637.txt,False,train,42,0.7,0.15,0.15
+638,NWPU VHR-10 dataset\positive image set\638.jpg,NWPU VHR-10 dataset\ground truth\638.txt,False,train,42,0.7,0.15,0.15
+639,NWPU VHR-10 dataset\positive image set\639.jpg,NWPU VHR-10 dataset\ground truth\639.txt,False,train,42,0.7,0.15,0.15
+641,NWPU VHR-10 dataset\positive image set\641.jpg,NWPU VHR-10 dataset\ground truth\641.txt,False,train,42,0.7,0.15,0.15
+642,NWPU VHR-10 dataset\positive image set\642.jpg,NWPU VHR-10 dataset\ground truth\642.txt,False,train,42,0.7,0.15,0.15
+643,NWPU VHR-10 dataset\positive image set\643.jpg,NWPU VHR-10 dataset\ground truth\643.txt,False,train,42,0.7,0.15,0.15
+644,NWPU VHR-10 dataset\positive image set\644.jpg,NWPU VHR-10 dataset\ground truth\644.txt,False,train,42,0.7,0.15,0.15
+646,NWPU VHR-10 dataset\positive image set\646.jpg,NWPU VHR-10 dataset\ground truth\646.txt,False,train,42,0.7,0.15,0.15
+647,NWPU VHR-10 dataset\positive image set\647.jpg,NWPU VHR-10 dataset\ground truth\647.txt,False,train,42,0.7,0.15,0.15
+649,NWPU VHR-10 dataset\positive image set\649.jpg,NWPU VHR-10 dataset\ground truth\649.txt,False,train,42,0.7,0.15,0.15
+650,NWPU VHR-10 dataset\positive image set\650.jpg,NWPU VHR-10 dataset\ground truth\650.txt,False,train,42,0.7,0.15,0.15
+005,NWPU VHR-10 dataset\positive image set\005.jpg,NWPU VHR-10 dataset\ground truth\005.txt,False,val,42,0.7,0.15,0.15
+005,NWPU VHR-10 dataset\negative image set\005.jpg,,True,val,42,0.7,0.15,0.15
+010,NWPU VHR-10 dataset\negative image set\010.jpg,,True,val,42,0.7,0.15,0.15
+011,NWPU VHR-10 dataset\negative image set\011.jpg,,True,val,42,0.7,0.15,0.15
+018,NWPU VHR-10 dataset\negative image set\018.jpg,,True,val,42,0.7,0.15,0.15
+026,NWPU VHR-10 dataset\negative image set\026.jpg,,True,val,42,0.7,0.15,0.15
+028,NWPU VHR-10 dataset\negative image set\028.jpg,,True,val,42,0.7,0.15,0.15
+028,NWPU VHR-10 dataset\positive image set\028.jpg,NWPU VHR-10 dataset\ground truth\028.txt,False,val,42,0.7,0.15,0.15
+030,NWPU VHR-10 dataset\negative image set\030.jpg,,True,val,42,0.7,0.15,0.15
+041,NWPU VHR-10 dataset\positive image set\041.jpg,NWPU VHR-10 dataset\ground truth\041.txt,False,val,42,0.7,0.15,0.15
+041,NWPU VHR-10 dataset\negative image set\041.jpg,,True,val,42,0.7,0.15,0.15
+046,NWPU VHR-10 dataset\negative image set\046.jpg,,True,val,42,0.7,0.15,0.15
+047,NWPU VHR-10 dataset\negative image set\047.jpg,,True,val,42,0.7,0.15,0.15
+048,NWPU VHR-10 dataset\positive image set\048.jpg,NWPU VHR-10 dataset\ground truth\048.txt,False,val,42,0.7,0.15,0.15
+056,NWPU VHR-10 dataset\negative image set\056.jpg,,True,val,42,0.7,0.15,0.15
+063,NWPU VHR-10 dataset\positive image set\063.jpg,NWPU VHR-10 dataset\ground truth\063.txt,False,val,42,0.7,0.15,0.15
+065,NWPU VHR-10 dataset\negative image set\065.jpg,,True,val,42,0.7,0.15,0.15
+072,NWPU VHR-10 dataset\positive image set\072.jpg,NWPU VHR-10 dataset\ground truth\072.txt,False,val,42,0.7,0.15,0.15
+077,NWPU VHR-10 dataset\negative image set\077.jpg,,True,val,42,0.7,0.15,0.15
+086,NWPU VHR-10 dataset\positive image set\086.jpg,NWPU VHR-10 dataset\ground truth\086.txt,False,val,42,0.7,0.15,0.15
+089,NWPU VHR-10 dataset\negative image set\089.jpg,,True,val,42,0.7,0.15,0.15
+092,NWPU VHR-10 dataset\positive image set\092.jpg,NWPU VHR-10 dataset\ground truth\092.txt,False,val,42,0.7,0.15,0.15
+098,NWPU VHR-10 dataset\negative image set\098.jpg,,True,val,42,0.7,0.15,0.15
+099,NWPU VHR-10 dataset\positive image set\099.jpg,NWPU VHR-10 dataset\ground truth\099.txt,False,val,42,0.7,0.15,0.15
+101,NWPU VHR-10 dataset\negative image set\101.jpg,,True,val,42,0.7,0.15,0.15
+101,NWPU VHR-10 dataset\positive image set\101.jpg,NWPU VHR-10 dataset\ground truth\101.txt,False,val,42,0.7,0.15,0.15
+102,NWPU VHR-10 dataset\negative image set\102.jpg,,True,val,42,0.7,0.15,0.15
+105,NWPU VHR-10 dataset\negative image set\105.jpg,,True,val,42,0.7,0.15,0.15
+106,NWPU VHR-10 dataset\positive image set\106.jpg,NWPU VHR-10 dataset\ground truth\106.txt,False,val,42,0.7,0.15,0.15
+107,NWPU VHR-10 dataset\positive image set\107.jpg,NWPU VHR-10 dataset\ground truth\107.txt,False,val,42,0.7,0.15,0.15
+109,NWPU VHR-10 dataset\negative image set\109.jpg,,True,val,42,0.7,0.15,0.15
+113,NWPU VHR-10 dataset\positive image set\113.jpg,NWPU VHR-10 dataset\ground truth\113.txt,False,val,42,0.7,0.15,0.15
+117,NWPU VHR-10 dataset\negative image set\117.jpg,,True,val,42,0.7,0.15,0.15
+118,NWPU VHR-10 dataset\negative image set\118.jpg,,True,val,42,0.7,0.15,0.15
+119,NWPU VHR-10 dataset\negative image set\119.jpg,,True,val,42,0.7,0.15,0.15
+122,NWPU VHR-10 dataset\negative image set\122.jpg,,True,val,42,0.7,0.15,0.15
+122,NWPU VHR-10 dataset\positive image set\122.jpg,NWPU VHR-10 dataset\ground truth\122.txt,False,val,42,0.7,0.15,0.15
+126,NWPU VHR-10 dataset\positive image set\126.jpg,NWPU VHR-10 dataset\ground truth\126.txt,False,val,42,0.7,0.15,0.15
+129,NWPU VHR-10 dataset\positive image set\129.jpg,NWPU VHR-10 dataset\ground truth\129.txt,False,val,42,0.7,0.15,0.15
+131,NWPU VHR-10 dataset\positive image set\131.jpg,NWPU VHR-10 dataset\ground truth\131.txt,False,val,42,0.7,0.15,0.15
+135,NWPU VHR-10 dataset\positive image set\135.jpg,NWPU VHR-10 dataset\ground truth\135.txt,False,val,42,0.7,0.15,0.15
+137,NWPU VHR-10 dataset\positive image set\137.jpg,NWPU VHR-10 dataset\ground truth\137.txt,False,val,42,0.7,0.15,0.15
+139,NWPU VHR-10 dataset\positive image set\139.jpg,NWPU VHR-10 dataset\ground truth\139.txt,False,val,42,0.7,0.15,0.15
+152,NWPU VHR-10 dataset\positive image set\152.jpg,NWPU VHR-10 dataset\ground truth\152.txt,False,val,42,0.7,0.15,0.15
+161,NWPU VHR-10 dataset\positive image set\161.jpg,NWPU VHR-10 dataset\ground truth\161.txt,False,val,42,0.7,0.15,0.15
+162,NWPU VHR-10 dataset\positive image set\162.jpg,NWPU VHR-10 dataset\ground truth\162.txt,False,val,42,0.7,0.15,0.15
+172,NWPU VHR-10 dataset\positive image set\172.jpg,NWPU VHR-10 dataset\ground truth\172.txt,False,val,42,0.7,0.15,0.15
+180,NWPU VHR-10 dataset\positive image set\180.jpg,NWPU VHR-10 dataset\ground truth\180.txt,False,val,42,0.7,0.15,0.15
+187,NWPU VHR-10 dataset\positive image set\187.jpg,NWPU VHR-10 dataset\ground truth\187.txt,False,val,42,0.7,0.15,0.15
+188,NWPU VHR-10 dataset\positive image set\188.jpg,NWPU VHR-10 dataset\ground truth\188.txt,False,val,42,0.7,0.15,0.15
+201,NWPU VHR-10 dataset\positive image set\201.jpg,NWPU VHR-10 dataset\ground truth\201.txt,False,val,42,0.7,0.15,0.15
+202,NWPU VHR-10 dataset\positive image set\202.jpg,NWPU VHR-10 dataset\ground truth\202.txt,False,val,42,0.7,0.15,0.15
+215,NWPU VHR-10 dataset\positive image set\215.jpg,NWPU VHR-10 dataset\ground truth\215.txt,False,val,42,0.7,0.15,0.15
+217,NWPU VHR-10 dataset\positive image set\217.jpg,NWPU VHR-10 dataset\ground truth\217.txt,False,val,42,0.7,0.15,0.15
+220,NWPU VHR-10 dataset\positive image set\220.jpg,NWPU VHR-10 dataset\ground truth\220.txt,False,val,42,0.7,0.15,0.15
+233,NWPU VHR-10 dataset\positive image set\233.jpg,NWPU VHR-10 dataset\ground truth\233.txt,False,val,42,0.7,0.15,0.15
+234,NWPU VHR-10 dataset\positive image set\234.jpg,NWPU VHR-10 dataset\ground truth\234.txt,False,val,42,0.7,0.15,0.15
+243,NWPU VHR-10 dataset\positive image set\243.jpg,NWPU VHR-10 dataset\ground truth\243.txt,False,val,42,0.7,0.15,0.15
+259,NWPU VHR-10 dataset\positive image set\259.jpg,NWPU VHR-10 dataset\ground truth\259.txt,False,val,42,0.7,0.15,0.15
+270,NWPU VHR-10 dataset\positive image set\270.jpg,NWPU VHR-10 dataset\ground truth\270.txt,False,val,42,0.7,0.15,0.15
+271,NWPU VHR-10 dataset\positive image set\271.jpg,NWPU VHR-10 dataset\ground truth\271.txt,False,val,42,0.7,0.15,0.15
+274,NWPU VHR-10 dataset\positive image set\274.jpg,NWPU VHR-10 dataset\ground truth\274.txt,False,val,42,0.7,0.15,0.15
+277,NWPU VHR-10 dataset\positive image set\277.jpg,NWPU VHR-10 dataset\ground truth\277.txt,False,val,42,0.7,0.15,0.15
+283,NWPU VHR-10 dataset\positive image set\283.jpg,NWPU VHR-10 dataset\ground truth\283.txt,False,val,42,0.7,0.15,0.15
+289,NWPU VHR-10 dataset\positive image set\289.jpg,NWPU VHR-10 dataset\ground truth\289.txt,False,val,42,0.7,0.15,0.15
+295,NWPU VHR-10 dataset\positive image set\295.jpg,NWPU VHR-10 dataset\ground truth\295.txt,False,val,42,0.7,0.15,0.15
+296,NWPU VHR-10 dataset\positive image set\296.jpg,NWPU VHR-10 dataset\ground truth\296.txt,False,val,42,0.7,0.15,0.15
+309,NWPU VHR-10 dataset\positive image set\309.jpg,NWPU VHR-10 dataset\ground truth\309.txt,False,val,42,0.7,0.15,0.15
+314,NWPU VHR-10 dataset\positive image set\314.jpg,NWPU VHR-10 dataset\ground truth\314.txt,False,val,42,0.7,0.15,0.15
+316,NWPU VHR-10 dataset\positive image set\316.jpg,NWPU VHR-10 dataset\ground truth\316.txt,False,val,42,0.7,0.15,0.15
+318,NWPU VHR-10 dataset\positive image set\318.jpg,NWPU VHR-10 dataset\ground truth\318.txt,False,val,42,0.7,0.15,0.15
+331,NWPU VHR-10 dataset\positive image set\331.jpg,NWPU VHR-10 dataset\ground truth\331.txt,False,val,42,0.7,0.15,0.15
+338,NWPU VHR-10 dataset\positive image set\338.jpg,NWPU VHR-10 dataset\ground truth\338.txt,False,val,42,0.7,0.15,0.15
+340,NWPU VHR-10 dataset\positive image set\340.jpg,NWPU VHR-10 dataset\ground truth\340.txt,False,val,42,0.7,0.15,0.15
+343,NWPU VHR-10 dataset\positive image set\343.jpg,NWPU VHR-10 dataset\ground truth\343.txt,False,val,42,0.7,0.15,0.15
+344,NWPU VHR-10 dataset\positive image set\344.jpg,NWPU VHR-10 dataset\ground truth\344.txt,False,val,42,0.7,0.15,0.15
+359,NWPU VHR-10 dataset\positive image set\359.jpg,NWPU VHR-10 dataset\ground truth\359.txt,False,val,42,0.7,0.15,0.15
+373,NWPU VHR-10 dataset\positive image set\373.jpg,NWPU VHR-10 dataset\ground truth\373.txt,False,val,42,0.7,0.15,0.15
+379,NWPU VHR-10 dataset\positive image set\379.jpg,NWPU VHR-10 dataset\ground truth\379.txt,False,val,42,0.7,0.15,0.15
+380,NWPU VHR-10 dataset\positive image set\380.jpg,NWPU VHR-10 dataset\ground truth\380.txt,False,val,42,0.7,0.15,0.15
+385,NWPU VHR-10 dataset\positive image set\385.jpg,NWPU VHR-10 dataset\ground truth\385.txt,False,val,42,0.7,0.15,0.15
+386,NWPU VHR-10 dataset\positive image set\386.jpg,NWPU VHR-10 dataset\ground truth\386.txt,False,val,42,0.7,0.15,0.15
+387,NWPU VHR-10 dataset\positive image set\387.jpg,NWPU VHR-10 dataset\ground truth\387.txt,False,val,42,0.7,0.15,0.15
+393,NWPU VHR-10 dataset\positive image set\393.jpg,NWPU VHR-10 dataset\ground truth\393.txt,False,val,42,0.7,0.15,0.15
+398,NWPU VHR-10 dataset\positive image set\398.jpg,NWPU VHR-10 dataset\ground truth\398.txt,False,val,42,0.7,0.15,0.15
+402,NWPU VHR-10 dataset\positive image set\402.jpg,NWPU VHR-10 dataset\ground truth\402.txt,False,val,42,0.7,0.15,0.15
+411,NWPU VHR-10 dataset\positive image set\411.jpg,NWPU VHR-10 dataset\ground truth\411.txt,False,val,42,0.7,0.15,0.15
+414,NWPU VHR-10 dataset\positive image set\414.jpg,NWPU VHR-10 dataset\ground truth\414.txt,False,val,42,0.7,0.15,0.15
+428,NWPU VHR-10 dataset\positive image set\428.jpg,NWPU VHR-10 dataset\ground truth\428.txt,False,val,42,0.7,0.15,0.15
+436,NWPU VHR-10 dataset\positive image set\436.jpg,NWPU VHR-10 dataset\ground truth\436.txt,False,val,42,0.7,0.15,0.15
+440,NWPU VHR-10 dataset\positive image set\440.jpg,NWPU VHR-10 dataset\ground truth\440.txt,False,val,42,0.7,0.15,0.15
+455,NWPU VHR-10 dataset\positive image set\455.jpg,NWPU VHR-10 dataset\ground truth\455.txt,False,val,42,0.7,0.15,0.15
+456,NWPU VHR-10 dataset\positive image set\456.jpg,NWPU VHR-10 dataset\ground truth\456.txt,False,val,42,0.7,0.15,0.15
+459,NWPU VHR-10 dataset\positive image set\459.jpg,NWPU VHR-10 dataset\ground truth\459.txt,False,val,42,0.7,0.15,0.15
+460,NWPU VHR-10 dataset\positive image set\460.jpg,NWPU VHR-10 dataset\ground truth\460.txt,False,val,42,0.7,0.15,0.15
+463,NWPU VHR-10 dataset\positive image set\463.jpg,NWPU VHR-10 dataset\ground truth\463.txt,False,val,42,0.7,0.15,0.15
+468,NWPU VHR-10 dataset\positive image set\468.jpg,NWPU VHR-10 dataset\ground truth\468.txt,False,val,42,0.7,0.15,0.15
+472,NWPU VHR-10 dataset\positive image set\472.jpg,NWPU VHR-10 dataset\ground truth\472.txt,False,val,42,0.7,0.15,0.15
+473,NWPU VHR-10 dataset\positive image set\473.jpg,NWPU VHR-10 dataset\ground truth\473.txt,False,val,42,0.7,0.15,0.15
+474,NWPU VHR-10 dataset\positive image set\474.jpg,NWPU VHR-10 dataset\ground truth\474.txt,False,val,42,0.7,0.15,0.15
+476,NWPU VHR-10 dataset\positive image set\476.jpg,NWPU VHR-10 dataset\ground truth\476.txt,False,val,42,0.7,0.15,0.15
+477,NWPU VHR-10 dataset\positive image set\477.jpg,NWPU VHR-10 dataset\ground truth\477.txt,False,val,42,0.7,0.15,0.15
+497,NWPU VHR-10 dataset\positive image set\497.jpg,NWPU VHR-10 dataset\ground truth\497.txt,False,val,42,0.7,0.15,0.15
+511,NWPU VHR-10 dataset\positive image set\511.jpg,NWPU VHR-10 dataset\ground truth\511.txt,False,val,42,0.7,0.15,0.15
+513,NWPU VHR-10 dataset\positive image set\513.jpg,NWPU VHR-10 dataset\ground truth\513.txt,False,val,42,0.7,0.15,0.15
+514,NWPU VHR-10 dataset\positive image set\514.jpg,NWPU VHR-10 dataset\ground truth\514.txt,False,val,42,0.7,0.15,0.15
+519,NWPU VHR-10 dataset\positive image set\519.jpg,NWPU VHR-10 dataset\ground truth\519.txt,False,val,42,0.7,0.15,0.15
+521,NWPU VHR-10 dataset\positive image set\521.jpg,NWPU VHR-10 dataset\ground truth\521.txt,False,val,42,0.7,0.15,0.15
+532,NWPU VHR-10 dataset\positive image set\532.jpg,NWPU VHR-10 dataset\ground truth\532.txt,False,val,42,0.7,0.15,0.15
+544,NWPU VHR-10 dataset\positive image set\544.jpg,NWPU VHR-10 dataset\ground truth\544.txt,False,val,42,0.7,0.15,0.15
+545,NWPU VHR-10 dataset\positive image set\545.jpg,NWPU VHR-10 dataset\ground truth\545.txt,False,val,42,0.7,0.15,0.15
+550,NWPU VHR-10 dataset\positive image set\550.jpg,NWPU VHR-10 dataset\ground truth\550.txt,False,val,42,0.7,0.15,0.15
+561,NWPU VHR-10 dataset\positive image set\561.jpg,NWPU VHR-10 dataset\ground truth\561.txt,False,val,42,0.7,0.15,0.15
+562,NWPU VHR-10 dataset\positive image set\562.jpg,NWPU VHR-10 dataset\ground truth\562.txt,False,val,42,0.7,0.15,0.15
+573,NWPU VHR-10 dataset\positive image set\573.jpg,NWPU VHR-10 dataset\ground truth\573.txt,False,val,42,0.7,0.15,0.15
+577,NWPU VHR-10 dataset\positive image set\577.jpg,NWPU VHR-10 dataset\ground truth\577.txt,False,val,42,0.7,0.15,0.15
+578,NWPU VHR-10 dataset\positive image set\578.jpg,NWPU VHR-10 dataset\ground truth\578.txt,False,val,42,0.7,0.15,0.15
+592,NWPU VHR-10 dataset\positive image set\592.jpg,NWPU VHR-10 dataset\ground truth\592.txt,False,val,42,0.7,0.15,0.15
+607,NWPU VHR-10 dataset\positive image set\607.jpg,NWPU VHR-10 dataset\ground truth\607.txt,False,val,42,0.7,0.15,0.15
+618,NWPU VHR-10 dataset\positive image set\618.jpg,NWPU VHR-10 dataset\ground truth\618.txt,False,val,42,0.7,0.15,0.15

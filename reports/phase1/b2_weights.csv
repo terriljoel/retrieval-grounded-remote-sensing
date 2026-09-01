@@ -1,0 +1,12 @@
+feature,weight
+agreement_at_k__local,2.6122
+agreement_at_k__local_tight,-0.7438
+class_margin__local,-0.7024
+class_margin__local_tight,0.6123
+evidence_margin__local,1.4017
+evidence_margin__local_tight,1.9554
+log_area,0.2329
+sensor_is_cir,-0.0233
+sim_at_1__local,0.6688
+sim_at_1__local_tight,-0.2376
+upsample_factor,0.5378

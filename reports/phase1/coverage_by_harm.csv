@@ -1,0 +1,16 @@
+baseline,harm,n_harmful,aurc,coverage_at_1%,coverage_at_5%
+B1_knn_vote,combined,1235,0.4691,0.0028,0.0028
+B1_knn_vote,class_error,128,0.0791,0.0113,0.0725
+B1_knn_vote,background_accept,174,0.0207,0.6665,0.782
+B1_knn_vote,localisation_accept,530,0.1266,0.0674,0.2961
+B1_knn_vote,loose_box_accept,403,0.2427,0.0028,0.0028
+B2_logreg,combined,1235,0.4249,0.0023,0.0023
+B2_logreg,class_error,128,0.0163,0.7169,0.8273
+B2_logreg,background_accept,174,0.0055,0.9009,0.9485
+B2_logreg,localisation_accept,530,0.1555,0.0674,0.2344
+B2_logreg,loose_box_accept,403,0.2475,0.0023,0.0023
+random_floor,combined,1235,0.6979,0.0,0.0
+random_floor,class_error,128,0.0687,0.034,0.0572
+random_floor,background_accept,174,0.0962,0.0006,0.0006
+random_floor,localisation_accept,530,0.2989,0.0017,0.0017
+random_floor,loose_box_accept,403,0.2342,0.0,0.0

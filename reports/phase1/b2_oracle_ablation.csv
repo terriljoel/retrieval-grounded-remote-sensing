@@ -1,0 +1,4 @@
+removed,n_remaining,aurc,coverage_at_1%_fa,coverage_at_5%_fa
+reject_localisation,1236,0.3091,0.0032,0.0032
+reject_background,1592,0.3966,0.0025,0.0025
+relabel,1638,0.4042,0.0024,0.0024
