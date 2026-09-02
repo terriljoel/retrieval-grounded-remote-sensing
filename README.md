@@ -126,6 +126,46 @@ rs-predict-detector \
 
 The preparation command reuses a saved audit when available, reuses or creates the deterministic manifest, exports collision-safe YOLO filenames, records source provenance, and validates image, label, object, background, and coordinate contracts. Pass `--force` only when you deliberately want to rerun the audit and replace the manifest and export. Training does not launch test evaluation, and test evaluation requires the explicit confirmation flag.
 
+## Single-image annotation assistant
+
+The first annotation prototype accepts one uploaded image, runs a configured
+YOLO checkpoint, retrieves verified object and context evidence from the
+persisted LanceDB artifact, optionally asks NVIDIA NIM for a grounded VLM
+assessment, and saves the human-approved annotations as JSON and YOLO labels.
+The Batch mode is visible in the application but intentionally deferred until
+the single-image workflow is validated.
+
+Install the additional UI, RemoteCLIP, and LanceDB dependencies:
+
+```bash
+python -m pip install -e ".[annotation]"
+```
+
+Set the same shared-resources root used by the Colab bootstrap. VLM assistance
+also requires an NVIDIA NIM API key; detection and retrieval work without it:
+
+```bash
+export SHARED_RESOURCES_ROOT="/content/drive/Othercomputers/My laptop/shared_resources"
+export NIM_API_KEY="nvapi-..."
+```
+
+The default configuration discovers the newest versioned LanceDB artifact
+under `${SHARED_RESOURCES_ROOT}/embeddings`. For a reproducible run, replace
+`retrieval.database_path: null` in
+`configs/annotation/single_image.yaml` with the exact artifact's `lancedb`
+directory.
+
+Launch the application from the repository root:
+
+```bash
+streamlit run app/annotation_assistant.py -- \
+  --config configs/annotation/single_image.yaml
+```
+
+Human-approved sessions are written below
+`${SHARED_RESOURCES_ROOT}/annotations/single_image`. Detector predictions do
+not enter the verified LanceDB evidence table automatically.
+
 ## Job logs
 
 Every `rs-*` CLI invocation is treated as a job. When `JOB_LOG_ROOT` is set,

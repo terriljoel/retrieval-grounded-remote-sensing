@@ -1,0 +1,60 @@
+app:
+  title: Remote-Sensing Annotation Assistant
+
+classes:
+  - airplane
+  - ship
+  - storage_tank
+  - baseball_diamond
+  - tennis_court
+  - basketball_court
+  - ground_track_field
+  - harbor
+  - bridge
+  - vehicle
+
+detector:
+  backend: ultralytics
+  models:
+    yolo_baseline: "${SHARED_RESOURCES_ROOT}/checkpoints/best.pt"
+  default_model: yolo_baseline
+  confidence: 0.25
+  iou: 0.70
+  image_size: 640
+  # null lets Ultralytics select CUDA in Colab and CPU locally.
+  device: null
+
+embedding:
+  model_name: ViT-B-32
+  repository: chendelong/RemoteCLIP
+  filename: RemoteCLIP-ViT-B-32.pt
+  dimension: 512
+  context_margin: 0.25
+  cache_dir: "${SHARED_RESOURCES_ROOT}/model_cache/huggingface"
+  device: null
+
+retrieval:
+  # Set database_path for one exact artifact. When null, the newest versioned
+  # artifact containing a lancedb directory is selected and shown on save.
+  database_path: null
+  artifact_root: "${SHARED_RESOURCES_ROOT}/embeddings"
+  artifact: latest
+  table: remoteclip_embeddings
+  # dataset_image_path values in the persisted table are relative to this
+  # raw root and already include the NWPU VHR-10 dataset directory name.
+  dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
+  evidence_splits: [train]
+  top_k: 5
+  candidate_limit: 100
+
+vlm:
+  enabled: true
+  provider: nvidia_nim
+  model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+  base_url: https://integrate.api.nvidia.com/v1
+  api_key_variable: NIM_API_KEY
+  timeout: 120
+  cache_root: "${SHARED_RESOURCES_ROOT}/vlm_cache"
+
+annotations:
+  output_root: "${SHARED_RESOURCES_ROOT}/annotations/single_image"
