@@ -8,7 +8,10 @@ Run from the repository root:
 from __future__ import annotations
 
 import argparse
+import copy
+import csv
 import hashlib
+import json
 import os
 import sys
 from dataclasses import replace
@@ -28,6 +31,12 @@ from src.annotation.models import AnnotationRecord, Box, DetectionSuggestion
 from src.annotation.policy import evaluate_acceptance_policy
 from src.annotation.service import DetectionEvidence, retrieve_detection_evidence
 from src.annotation.storage import save_annotation_session
+from src.evaluation.assistance import run_assistance_experiment
+from src.evaluation.config import (
+    load_assistance_experiment_config,
+    resolve_experiment_path,
+    validate_assistance_experiment_config,
+)
 from src.retrieval.lancedb_store import LanceDbEvidenceStore, find_latest_database
 from src.retrieval.remoteclip import RemoteClipEncoder
 from src.vlm.nim import NvidiaNimClient, VlmAssessment
@@ -46,6 +55,20 @@ def parse_config_path() -> Path:
     )
     arguments, _ = parser.parse_known_args()
     path = Path(arguments.config)
+    return path if path.is_absolute() else PROJECT_ROOT / path
+
+
+def parse_batch_config_path() -> Path:
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        "--batch-config",
+        default=os.environ.get(
+            "ASSISTANCE_EXPERIMENT_CONFIG",
+            "configs/evaluation/vlm_comparison.yaml",
+        ),
+    )
+    arguments, _ = parser.parse_known_args()
+    path = Path(arguments.batch_config)
     return path if path.is_absolute() else PROJECT_ROOT / path
 
 
@@ -642,6 +665,140 @@ def single_image_mode(config: dict) -> None:
         st.success(f"Saved to {st.session_state['saved_directory']}")
 
 
+def _read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def _read_csv_rows(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8", newline="") as file:
+        return list(csv.DictReader(file))
+
+
+def render_batch_results(output_directory: Path) -> None:
+    st.subheader("Saved experiment results")
+    st.caption(str(output_directory))
+    summary_path = output_directory / "summary.json"
+    results_path = output_directory / "case_results.jsonl"
+    if summary_path.is_file():
+        summary = _read_json(summary_path)
+        columns = st.columns(4)
+        columns[0].metric("Selected", summary["selected_cases"])
+        columns[1].metric("Completed", summary["completed_cases"])
+        columns[2].metric("Failed", summary["failed_cases"])
+        columns[3].metric(
+            "Excluded false negatives", summary["excluded_false_negatives"]
+        )
+        st.caption(f"Case distribution: {summary['status_counts']}")
+    elif results_path.is_file():
+        latest = {}
+        for line in results_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                record = json.loads(line)
+                latest[record["case_id"]] = record
+        completed = sum(
+            record.get("run_status") == "completed" for record in latest.values()
+        )
+        failed = sum(
+            record.get("run_status") == "failed" for record in latest.values()
+        )
+        st.write(f"Saved cases: {len(latest)} · completed: {completed} · failed: {failed}")
+    else:
+        st.info("No saved batch run exists for this experiment name yet.")
+
+    metrics_path = output_directory / "metrics.csv"
+    if metrics_path.is_file():
+        st.subheader("Comparison metrics")
+        rows = _read_csv_rows(metrics_path)
+        st.dataframe(rows, use_container_width=True, hide_index=True)
+        st.download_button(
+            "Download metrics CSV",
+            data=metrics_path.read_bytes(),
+            file_name="metrics.csv",
+            mime="text/csv",
+        )
+
+
+def batch_experiment_mode() -> None:
+    st.header("Batch comparison experiment")
+    st.write(
+        "Run the detector, retrieval, query-only VLM, retrieval-grounded VLM, "
+        "and acceptance-policy variants on the same ground-truth-linked cases."
+    )
+    config_path = parse_batch_config_path()
+    st.caption(f"Configuration: {config_path}")
+    try:
+        base_config = load_assistance_experiment_config(config_path)
+    except Exception as error:
+        st.error(f"Batch configuration error: {error}")
+        st.code(
+            "export INFERENCE_EXPORT_ROOT=/path/to/inference_export\n"
+            "export SHARED_RESOURCES_ROOT=/path/to/shared_resources"
+        )
+        return
+
+    configured_maximum = base_config["cases"].get("maximum_per_status")
+    available_variants = (
+        "detector_only",
+        "detector_retrieval",
+        "query_only_vlm",
+        "retrieval_grounded_vlm",
+        "configured_policy",
+    )
+    with st.form("batch_experiment_controls"):
+        maximum = st.number_input(
+            "Maximum cases per ground-truth status (0 = all)",
+            min_value=0,
+            value=int(configured_maximum or 0),
+            step=1,
+        )
+        variants = st.multiselect(
+            "Comparison variants",
+            available_variants,
+            default=base_config["execution"]["variants"],
+        )
+        save_montages = st.checkbox(
+            "Save the exact VLM input montages",
+            value=bool(base_config["execution"].get("save_montages", True)),
+        )
+        submitted = st.form_submit_button(
+            "Run or resume batch experiment", type="primary"
+        )
+
+    runtime_config = copy.deepcopy(base_config)
+    runtime_config["cases"]["maximum_per_status"] = int(maximum) or None
+    runtime_config["execution"]["variants"] = list(variants)
+    runtime_config["execution"]["save_montages"] = save_montages
+    output_directory = (
+        resolve_experiment_path(
+            runtime_config["experiment"]["output_root"], PROJECT_ROOT
+        ) / runtime_config["experiment"]["name"]
+    ).resolve()
+    estimated_cases = (
+        "all eligible"
+        if maximum == 0 else f"up to {maximum * len(runtime_config['cases']['statuses'])}"
+    )
+    vlm_variants = sum("vlm" in variant for variant in variants)
+    st.info(
+        f"This run selects {estimated_cases} cases and makes up to "
+        f"{vlm_variants} VLM call(s) per case. Completed cases are skipped."
+    )
+
+    if submitted:
+        try:
+            validate_assistance_experiment_config(runtime_config)
+            with st.spinner(
+                "Running the comparison. Results are saved after every case; "
+                "this page will update when the run finishes."
+            ):
+                run_assistance_experiment(runtime_config, PROJECT_ROOT)
+            st.success("Batch comparison completed.")
+        except Exception as error:
+            st.error(f"Batch run stopped: {error}")
+            st.info("Completed cases were preserved. Correct the error and resume.")
+
+    render_batch_results(output_directory)
+
+
 def main() -> None:
     st.set_page_config(page_title="Remote-Sensing Annotation Assistant", layout="wide")
     local_shared_resources = PROJECT_ROOT / "shared_resources"
@@ -657,11 +814,7 @@ def main() -> None:
     st.title(config["app"]["title"])
     mode = st.sidebar.radio("Annotation mode", ("Single image", "Batch"))
     if mode == "Batch":
-        st.header("Batch annotation")
-        st.info(
-            "Batch mode is intentionally deferred. It will reuse the validated "
-            "single-image detection, retrieval, VLM, and save services."
-        )
+        batch_experiment_mode()
         return
     single_image_mode(config)
 

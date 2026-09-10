@@ -169,9 +169,10 @@ not enter the verified LanceDB evidence table automatically.
 ## Batch assistance comparison
 
 Use the batch runner for the reproducible experiment; Streamlit remains the
-interactive demonstration. First export detector predictions with ground-truth
-comparison enabled. Set `INFERENCE_EXPORT_ROOT` to the resulting directory,
-then run:
+interactive control and results view. The Streamlit sidebar's **Batch** mode
+configures and runs this same reusable experiment service. First export detector
+predictions with ground-truth comparison enabled. Set `INFERENCE_EXPORT_ROOT`
+to the resulting directory, then run either the app or the CLI:
 
 ```bash
 export INFERENCE_EXPORT_ROOT="/path/to/object_detection_inference_run"

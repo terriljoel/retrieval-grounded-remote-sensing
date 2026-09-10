@@ -200,6 +200,19 @@ def _latest_records(path: Path) -> dict[str, dict[str, Any]]:
     return latest
 
 
+def _record_has_variants(record: dict[str, Any], variants: set[str]) -> bool:
+    required_fields = {
+        "detector_retrieval": "retrieval",
+        "query_only_vlm": "query_only_vlm",
+        "retrieval_grounded_vlm": "retrieval_grounded_vlm",
+        "configured_policy": "configured_policy",
+    }
+    return all(
+        variant == "detector_only" or required_fields[variant] in record
+        for variant in variants
+    )
+
+
 def _metric(
     rows: list[dict[str, Any]], variant: str, name: str, predicate
 ) -> dict[str, Any]:
@@ -466,6 +479,7 @@ def run_assistance_experiment(
     completed_ids = {
         case_id for case_id, row in existing.items()
         if row.get("run_status") == "completed"
+        and _record_has_variants(row, set(execution["variants"]))
     }
 
     variants = set(execution["variants"])
