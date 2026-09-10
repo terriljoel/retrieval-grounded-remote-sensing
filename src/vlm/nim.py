@@ -10,7 +10,6 @@ import time
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from math import ceil
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -41,25 +40,49 @@ def encode_image(image: Image.Image, quality: int = 90) -> str:
 
 
 def grounded_montage(
+    query_image: Image.Image,
     query_crop: Image.Image,
+    detection: DetectionSuggestion,
     evidence: list[EvidenceRecord],
+    evidence_images: list[Image.Image],
     crops: list[Image.Image],
-    tile_size: int = 224,
+    tile_size: int = 288,
 ) -> Image.Image:
-    if not evidence or len(evidence) != len(crops):
-        raise ValueError("Evidence records and crops must be non-empty and aligned")
-    columns = 3
+    if not (len(evidence) == len(evidence_images) == len(crops)):
+        raise ValueError("Evidence records, full images, and crops must be aligned")
+
+    def boxed(image: Image.Image, box, label: str, colour: str) -> Image.Image:
+        rendered = image.convert("RGB").copy()
+        draw = ImageDraw.Draw(rendered)
+        width = max(3, round(min(rendered.size) / 180))
+        coordinates = box.as_list()
+        draw.rectangle(coordinates, outline=colour, width=width)
+        x, y = coordinates[:2]
+        text_box = draw.textbbox((x, y), label)
+        draw.rectangle(text_box, fill=colour)
+        draw.text((x, y), label, fill="black")
+        return rendered
+
+    columns = 2
     label_height = 32
-    tiles = [("Q: detector crop", query_crop)] + [
+    tiles = [
         (
-            f"E{index}: {record.class_name} ({record.cosine_similarity:.3f})",
-            crop,
-        )
-        for index, (record, crop) in enumerate(
-            zip(evidence, crops, strict=True), start=1
-        )
+            "Q full: proposed box",
+            boxed(query_image, detection.box, detection.class_name, "#00d4ff"),
+        ),
+        ("Q crop: proposed object", query_crop),
     ]
-    rows = ceil(len(tiles) / columns)
+    for index, (record, source_image, crop) in enumerate(
+        zip(evidence, evidence_images, crops, strict=True), start=1
+    ):
+        tiles.extend([
+            (
+                f"E{index} full: verified {record.class_name}",
+                boxed(source_image, record.box, record.class_name, "#2ec4b6"),
+            ),
+            (f"E{index} crop: cosine {record.cosine_similarity:.3f}", crop),
+        ])
+    rows = len(tiles) // columns
     canvas = Image.new(
         "RGB",
         (tile_size * columns, (tile_size + label_height) * rows),
@@ -83,6 +106,7 @@ def build_prompt(
     detection: DetectionSuggestion,
     evidence: list[EvidenceRecord],
     classes: Iterable[str],
+    mode: str,
 ) -> str:
     evidence_lines = "\n".join(
         f"E{index}: verified {record.class_name}, cosine similarity "
@@ -90,21 +114,39 @@ def build_prompt(
         for index, record in enumerate(evidence, start=1)
     )
     readable_classes = ", ".join(name.replace("_", " ") for name in classes)
+    if mode == "query_only":
+        panel_description = (
+            "Q full is the complete query image with the proposed box marked. "
+            "Q crop is the corresponding tight object crop. No retrieved evidence "
+            "is supplied in this diagnostic condition."
+        )
+        evidence_section = "Retrieved evidence: none"
+    elif mode == "retrieval_grounded":
+        panel_description = (
+            "Q full is the complete query image with the proposed box marked and "
+            "Q crop is its tight crop. Each E row contains a retrieved verified "
+            "example: its complete source image with the verified box marked, then "
+            "the corresponding object crop."
+        )
+        evidence_section = f"Retrieved evidence:\n{evidence_lines}"
+    else:
+        raise ValueError(f"Unknown VLM assessment mode: {mode}")
+
     return f"""You assist a human annotating aerial imagery.
 
-The supplied image is a labelled panel. Q is the detector crop under review.
-E1, E2, and so on are retrieved, human-verified examples.
+{panel_description}
 
 Detector suggestion: {detection.class_name.replace('_', ' ')}
 Detector confidence: {detection.confidence:.4f}
 Allowed classes: {readable_classes}
 
-Retrieved evidence:
-{evidence_lines}
+{evidence_section}
 
-Assess whether the detector class is supported by the visible query crop and
-the retrieved evidence. Similarity is supporting evidence, not proof. Do not
-claim to see information outside the supplied images. Return only JSON:
+First judge the proposed object using both its local appearance and the full
+query-scene context. When evidence is supplied, use it only as supporting
+context: similarity is not proof and retrieved examples can reinforce a wrong
+detector prediction. Do not claim to see information outside the supplied
+images. Return only JSON:
 {{
   "decision": "accept" | "correct" | "human_review",
   "suggested_class": "one allowed class or null",
@@ -182,16 +224,36 @@ class NvidiaNimClient:
     def assess(
         self,
         *,
+        query_image: Image.Image,
         query_crop: Image.Image,
         detection: DetectionSuggestion,
-        evidence: list[EvidenceRecord],
-        evidence_crops: list[Image.Image],
         classes: Iterable[str],
+        mode: str,
+        evidence: list[EvidenceRecord] | None = None,
+        evidence_images: list[Image.Image] | None = None,
+        evidence_crops: list[Image.Image] | None = None,
     ) -> VlmAssessment:
-        if not evidence:
-            raise ValueError("Retrieve evidence before asking the VLM")
-        prompt = build_prompt(detection, evidence, classes)
-        montage = grounded_montage(query_crop, evidence, evidence_crops)
+        selected_evidence = list(evidence or [])
+        selected_images = list(evidence_images or [])
+        selected_crops = list(evidence_crops or [])
+        if mode == "query_only":
+            selected_evidence = []
+            selected_images = []
+            selected_crops = []
+        elif mode == "retrieval_grounded" and not selected_evidence:
+            raise ValueError("Retrieved evidence is required in grounded mode")
+        elif mode != "retrieval_grounded":
+            raise ValueError(f"Unknown VLM assessment mode: {mode}")
+
+        prompt = build_prompt(detection, selected_evidence, classes, mode)
+        montage = grounded_montage(
+            query_image,
+            query_crop,
+            detection,
+            selected_evidence,
+            selected_images,
+            selected_crops,
+        )
         body = {
             "model": self.model,
             "messages": [{

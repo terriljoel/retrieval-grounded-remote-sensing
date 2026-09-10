@@ -164,8 +164,13 @@ class LanceDbEvidenceStore:
         return results
 
     @staticmethod
-    def evidence_crop(record: EvidenceRecord) -> Image.Image:
+    def evidence_image(record: EvidenceRecord) -> Image.Image:
+        """Load the complete source image for a retrieved evidence record."""
         with Image.open(record.source_path) as opened:
-            image = opened.convert("RGB")
+            return opened.convert("RGB")
+
+    @staticmethod
+    def evidence_crop(record: EvidenceRecord) -> Image.Image:
+        image = LanceDbEvidenceStore.evidence_image(record)
         margin = record.context_margin if record.crop_type == "context" else 0.0
         return crop_image(image, record.box, margin_fraction=margin)

@@ -49,12 +49,24 @@ retrieval:
 
 vlm:
   enabled: true
+  # The UI can run query-only, retrieval-grounded, or both for comparison.
+  default_mode: retrieval_grounded
+  # Limit full evidence scenes sent to the VLM while retrieval still displays top_k.
+  max_evidence: 3
   provider: nvidia_nim
   model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
   base_url: https://integrate.api.nvidia.com/v1
   api_key_variable: NIM_API_KEY
   timeout: 120
   cache_root: "${SHARED_RESOURCES_ROOT}/vlm_cache"
+
+# A final "accept" recommendation is made only when every gate passes. The
+# VLM's raw response is preserved separately for later evaluation.
+decision_policy:
+  detector_min_confidence: 0.80
+  retrieval_min_cosine_similarity: 0.90
+  retrieval_min_supporting_neighbors: 3
+  vlm_min_confidence: 0.85
 
 annotations:
   output_root: "${SHARED_RESOURCES_ROOT}/annotations/single_image"

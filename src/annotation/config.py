@@ -14,6 +14,7 @@ REQUIRED_SECTIONS = {
     "embedding",
     "retrieval",
     "vlm",
+    "decision_policy",
     "annotations",
 }
 
@@ -49,6 +50,30 @@ def validate_annotation_config(config: dict[str, Any]) -> None:
         raise ValueError("retrieval.evidence_splits must not be empty")
     if int(retrieval.get("top_k", 0)) <= 0:
         raise ValueError("retrieval.top_k must be positive")
+
+    vlm = config["vlm"]
+    allowed_modes = {"query_only", "retrieval_grounded", "compare"}
+    if vlm.get("default_mode", "retrieval_grounded") not in allowed_modes:
+        raise ValueError(f"vlm.default_mode must be one of {sorted(allowed_modes)}")
+    max_evidence = int(vlm.get("max_evidence", retrieval["top_k"]))
+    if not 1 <= max_evidence <= int(retrieval["top_k"]):
+        raise ValueError("vlm.max_evidence must be between 1 and retrieval.top_k")
+
+    policy = config["decision_policy"]
+    for key in (
+        "detector_min_confidence",
+        "retrieval_min_cosine_similarity",
+        "vlm_min_confidence",
+    ):
+        value = float(policy.get(key, -1.0))
+        if not 0.0 <= value <= 1.0:
+            raise ValueError(f"decision_policy.{key} must be between 0 and 1")
+    required_neighbors = int(policy.get("retrieval_min_supporting_neighbors", 0))
+    if not 1 <= required_neighbors <= int(retrieval["top_k"]):
+        raise ValueError(
+            "decision_policy.retrieval_min_supporting_neighbors must be between "
+            "1 and retrieval.top_k"
+        )
 
     if float(config["embedding"].get("context_margin", -1.0)) < 0.0:
         raise ValueError("embedding.context_margin must be non-negative")

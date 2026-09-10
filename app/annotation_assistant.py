@@ -25,6 +25,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.annotation.config import load_annotation_config, resolve_runtime_path
 from src.annotation.detector import UltralyticsDetector
 from src.annotation.models import AnnotationRecord, Box, DetectionSuggestion
+from src.annotation.policy import evaluate_acceptance_policy
 from src.annotation.service import DetectionEvidence, retrieve_detection_evidence
 from src.annotation.storage import save_annotation_session
 from src.retrieval.lancedb_store import LanceDbEvidenceStore, find_latest_database
@@ -119,7 +120,7 @@ def reset_image_state(image_key: str) -> None:
         "rejected_detection_ids",
         "evidence",
         "evidence_key",
-        "vlm_assessment",
+        "vlm_assessments",
         "vlm_key",
         "review_records",
         "saved_directory",
@@ -246,6 +247,29 @@ def evidence_summary(record) -> dict:
         "crop_type": record.crop_type,
         "cosine_similarity": record.cosine_similarity,
     }
+
+
+def assessment_summary(model: str, assessment: VlmAssessment) -> dict:
+    return {
+        "model": model,
+        "decision": assessment.decision,
+        "suggested_class": assessment.suggested_class,
+        "confidence": assessment.confidence,
+        "observations": assessment.observations,
+        "uncertainty": assessment.uncertainty,
+        "evidence_ids": list(assessment.evidence_ids),
+        "raw_response": assessment.raw_response,
+    }
+
+
+def render_assessment(title: str, assessment: VlmAssessment) -> None:
+    st.subheader(title)
+    st.write(f"**Recommendation:** {assessment.decision}")
+    st.write(f"**Suggested class:** {assessment.suggested_class or 'none'}")
+    if assessment.confidence is not None:
+        st.write(f"**Reported confidence:** {assessment.confidence:.3f}")
+    st.write(f"**Observation:** {assessment.observations}")
+    st.write(f"**Uncertainty:** {assessment.uncertainty}")
 
 
 def single_image_mode(config: dict) -> None:
@@ -396,7 +420,7 @@ def single_image_mode(config: dict) -> None:
                         candidate_limit=int(retrieval["candidate_limit"]),
                     )
                     st.session_state["evidence_key"] = evidence_identity(review)
-                    st.session_state.pop("vlm_assessment", None)
+                    st.session_state.pop("vlm_assessments", None)
                     retrieved = st.session_state["evidence"]
                     reviews = dict(st.session_state["review_records"])
                     review_record = dict(reviews.get(selected.detection_id, {}))
@@ -433,7 +457,32 @@ def single_image_mode(config: dict) -> None:
 
             vlm_config = config["vlm"]
             if vlm_config.get("enabled", True):
-                if st.button("Ask VLM for grounded assistance"):
+                mode_labels = {
+                    "Query only": "query_only",
+                    "Query + retrieved evidence": "retrieval_grounded",
+                    "Compare both": "compare",
+                }
+                configured_mode = vlm_config.get(
+                    "default_mode", "retrieval_grounded"
+                )
+                default_label = next(
+                    label for label, value in mode_labels.items()
+                    if value == configured_mode
+                )
+                selected_label = st.radio(
+                    "VLM input",
+                    tuple(mode_labels),
+                    index=tuple(mode_labels).index(default_label),
+                    horizontal=True,
+                    key=f"vlm_mode_{review.detection_id}",
+                )
+                selected_mode = mode_labels[selected_label]
+                max_evidence = int(
+                    vlm_config.get("max_evidence", len(evidence.object_cases))
+                )
+                vlm_evidence = evidence.object_cases[:max_evidence]
+                vlm_crops = object_crops[:max_evidence]
+                if st.button("Run VLM assessment"):
                     client = NvidiaNimClient(
                         model=vlm_config["model"],
                         cache_root=resolve_runtime_path(
@@ -443,47 +492,82 @@ def single_image_mode(config: dict) -> None:
                         api_key_variable=vlm_config["api_key_variable"],
                         timeout=float(vlm_config["timeout"]),
                     )
-                    with st.spinner("Requesting a grounded VLM assessment..."):
-                        st.session_state["vlm_assessment"] = client.assess(
-                            query_crop=evidence.object_crop,
-                            detection=review,
-                            evidence=evidence.object_cases,
-                            evidence_crops=object_crops,
-                            classes=classes,
-                        )
+                    requested_modes = (
+                        ("query_only", "retrieval_grounded")
+                        if selected_mode == "compare"
+                        else (selected_mode,)
+                    )
+                    with st.spinner("Requesting VLM assessment..."):
+                        evidence_images = [
+                            store.evidence_image(record) for record in vlm_evidence
+                        ]
+                        assessments = {}
+                        for mode in requested_modes:
+                            assessments[mode] = client.assess(
+                                query_image=image,
+                                query_crop=evidence.object_crop,
+                                detection=review,
+                                classes=classes,
+                                mode=mode,
+                                evidence=vlm_evidence,
+                                evidence_images=evidence_images,
+                                evidence_crops=vlm_crops,
+                            )
+                        st.session_state["vlm_assessments"] = assessments
                         st.session_state["vlm_key"] = evidence_identity(review)
-                        assessment = st.session_state["vlm_assessment"]
                         reviews = dict(st.session_state["review_records"])
                         review_record = dict(reviews.get(selected.detection_id, {}))
                         review_record["vlm"] = {
-                            "model": vlm_config["model"],
-                            "decision": assessment.decision,
-                            "suggested_class": assessment.suggested_class,
-                            "confidence": assessment.confidence,
-                            "observations": assessment.observations,
-                            "uncertainty": assessment.uncertainty,
-                            "evidence_ids": list(assessment.evidence_ids),
-                            "raw_response": assessment.raw_response,
+                            mode: assessment_summary(vlm_config["model"], assessment)
+                            for mode, assessment in assessments.items()
                         }
+                        grounded = assessments.get("retrieval_grounded")
+                        if grounded is not None:
+                            policy_result = evaluate_acceptance_policy(
+                                detection=review,
+                                evidence=vlm_evidence,
+                                assessment=grounded,
+                                settings=config["decision_policy"],
+                            )
+                            review_record["decision_policy"] = policy_result.to_dict()
                         reviews[selected.detection_id] = review_record
                         st.session_state["review_records"] = reviews
 
-                assessment: VlmAssessment | None = st.session_state.get(
-                    "vlm_assessment"
+                assessments: dict[str, VlmAssessment] | None = st.session_state.get(
+                    "vlm_assessments"
                 )
                 if (
-                    assessment is not None
+                    assessments
                     and st.session_state.get("vlm_key") == evidence_identity(review)
                 ):
-                    st.subheader("VLM assistance")
-                    st.write(f"**Recommendation:** {assessment.decision}")
-                    st.write(f"**Suggested class:** {assessment.suggested_class or 'none'}")
-                    if assessment.confidence is not None:
-                        st.write(f"**Reported confidence:** {assessment.confidence:.3f}")
-                    st.write(f"**Observation:** {assessment.observations}")
-                    st.write(f"**Uncertainty:** {assessment.uncertainty}")
+                    columns = st.columns(len(assessments))
+                    for column, (mode, assessment) in zip(
+                        columns, assessments.items(), strict=True
+                    ):
+                        with column:
+                            title = (
+                                "Query only"
+                                if mode == "query_only"
+                                else "Retrieval-grounded"
+                            )
+                            render_assessment(title, assessment)
+                            if mode == "retrieval_grounded":
+                                policy_result = evaluate_acceptance_policy(
+                                    detection=review,
+                                    evidence=vlm_evidence,
+                                    assessment=assessment,
+                                    settings=config["decision_policy"],
+                                )
+                                st.write(
+                                    "**Configured policy recommendation:** "
+                                    f"{policy_result.recommendation}"
+                                )
+                                for reason in policy_result.reasons:
+                                    st.caption(f"Gate not passed: {reason}")
                     st.caption(
-                        "The VLM recommendation is evidence for the annotator, not the final label."
+                        "Both variants see the boxed full query image and tight crop. "
+                        "Only the grounded variant sees boxed full evidence images and "
+                        "their crops. The human annotator still makes the final decision."
                     )
 
     with st.expander("Add a missed object manually"):
