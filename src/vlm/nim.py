@@ -142,11 +142,30 @@ Allowed classes: {readable_classes}
 
 {evidence_section}
 
-First judge the proposed object using both its local appearance and the full
-query-scene context. When evidence is supplied, use it only as supporting
-context: similarity is not proof and retrieved examples can reinforce a wrong
-detector prediction. Do not claim to see information outside the supplied
-images. Return only JSON:
+Follow this decision order strictly:
+1. Inspect Q full first. Identify the global scene type and the structures
+   surrounding the marked box.
+2. Decide whether that global scene is compatible with the proposed class.
+3. Inspect Q crop and decide whether its local visual features independently
+   support the proposed class.
+4. Only after steps 1-3, inspect any retrieved evidence. Use retrieval to
+   corroborate the query, never to override contradictory query context.
+
+An "accept" decision is permitted only when BOTH Q full context and Q crop
+support the detector class. If the crop resembles the class but the global
+scene contradicts it, return "human_review" (or "correct" only when another
+allowed class is clearly visible). If retrieval supports the detector but the
+query itself does not, return "human_review". A high cosine similarity is not
+proof of identity. Retrieved examples can reinforce a wrong prediction.
+
+Do not invent repeated instances in Q full, and do not call surrounding objects
+similar examples unless they are visibly so. The correct object may be outside
+the allowed class list; in that case return "human_review" with
+"suggested_class": null. In "observations", explicitly report three items:
+"Global context: ...; Local object: ...; Evidence consistency: ...". State any
+conflict between the global context, local crop, detector, and retrieval in
+"uncertainty". Do not claim to see information outside the supplied images.
+Return only JSON:
 {{
   "decision": "accept" | "correct" | "human_review",
   "suggested_class": "one allowed class or null",

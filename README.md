@@ -166,6 +166,32 @@ Human-approved sessions are written below
 `${SHARED_RESOURCES_ROOT}/annotations/single_image`. Detector predictions do
 not enter the verified LanceDB evidence table automatically.
 
+## Batch assistance comparison
+
+Use the batch runner for the reproducible experiment; Streamlit remains the
+interactive demonstration. First export detector predictions with ground-truth
+comparison enabled. Set `INFERENCE_EXPORT_ROOT` to the resulting directory,
+then run:
+
+```bash
+export INFERENCE_EXPORT_ROOT="/path/to/object_detection_inference_run"
+rs-run-assistance-experiment \
+  --config configs/evaluation/vlm_comparison.yaml
+```
+
+The default configuration takes an equal seeded sample of test true positives,
+false positives, and class errors. It runs detector-only, detector plus
+retrieval, query-only VLM, retrieval-grounded VLM, and configured-policy
+variants on the same detections. Start with `maximum_per_status: 5`; freeze the
+prompt and settings before increasing the sample.
+
+Each completed case is appended immediately to `case_results.jsonl`. Rerunning
+with `resume: true` skips completed cases and retries failed ones. The run also
+saves the resolved configuration, runtime versions, exact prompts, evidence
+metadata, raw VLM responses, input montages, `metrics.csv`, `metrics.json`, and
+`summary.json`. False negatives remain in detector evaluation but are excluded
+from this per-detection experiment because they have no proposed box to review.
+
 ## Job logs
 
 Every `rs-*` CLI invocation is treated as a job. When `JOB_LOG_ROOT` is set,

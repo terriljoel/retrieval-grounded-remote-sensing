@@ -1,0 +1,76 @@
+experiment:
+  name: nwpu_vlm_comparison_seed42
+  output_root: "${SHARED_RESOURCES_ROOT}/experiment_outputs/assistance_comparisons"
+
+cases:
+  # Directory produced by rs-export-predictions. It must contain all four CSV
+  # tables, including ground truth and prediction_comparison.csv.
+  inference_directory: "${INFERENCE_EXPORT_ROOT}"
+  # Used only if source_image_path stored in inference_images.csv is no longer
+  # valid (for example, after moving from one Colab session to another).
+  image_root: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
+  splits: [test]
+  statuses: [true_positive, false_positive, class_error]
+  # Begin with 5 for a smoke test. Freeze the prompt, then increase to 25 or
+  # set null to process every eligible detection.
+  maximum_per_status: 5
+  seed: 42
+
+classes:
+  - airplane
+  - ship
+  - storage_tank
+  - baseball_diamond
+  - tennis_court
+  - basketball_court
+  - ground_track_field
+  - harbor
+  - bridge
+  - vehicle
+
+embedding:
+  model_name: ViT-B-32
+  repository: chendelong/RemoteCLIP
+  filename: RemoteCLIP-ViT-B-32.pt
+  dimension: 512
+  context_margin: 0.25
+  cache_dir: "${SHARED_RESOURCES_ROOT}/model_cache/huggingface"
+  device: null
+
+retrieval:
+  database_path: null
+  artifact_root: "${SHARED_RESOURCES_ROOT}/embeddings"
+  artifact: latest
+  table: remoteclip_embeddings
+  dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
+  # Do not use test examples as evidence for test queries.
+  evidence_splits: [train]
+  top_k: 5
+  candidate_limit: 100
+
+vlm:
+  enabled: true
+  provider: nvidia_nim
+  model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+  base_url: https://integrate.api.nvidia.com/v1
+  api_key_variable: NIM_API_KEY
+  timeout: 120
+  cache_root: "${SHARED_RESOURCES_ROOT}/vlm_cache"
+  max_evidence: 3
+
+decision_policy:
+  detector_min_confidence: 0.80
+  retrieval_min_cosine_similarity: 0.90
+  retrieval_min_supporting_neighbors: 3
+  vlm_min_confidence: 0.85
+
+execution:
+  variants:
+    - detector_only
+    - detector_retrieval
+    - query_only_vlm
+    - retrieval_grounded_vlm
+    - configured_policy
+  # Completed cases are skipped; failed cases are retried on the next run.
+  resume: true
+  save_montages: true
