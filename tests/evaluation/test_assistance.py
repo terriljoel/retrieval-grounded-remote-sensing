@@ -4,7 +4,9 @@ import csv
 import json
 
 from PIL import Image
+import pytest
 
+import src.evaluation.assistance as assistance_module
 from src.evaluation.assistance import (
     assessment_is_correct,
     load_assistance_cases,
@@ -99,3 +101,30 @@ def test_metrics_keep_variants_separate(tmp_path):
     assert indexed[("retrieval_grounded_vlm", "verification_accuracy")]["value"] == 0.0
     assert indexed[("retrieval_grounded_vlm", "false_accept_rate")]["value"] == 1.0
     assert json.loads((tmp_path / "metrics.json").read_text(encoding="utf-8"))
+
+
+def test_experiment_failure_is_written_to_local_log(monkeypatch, tmp_path):
+    config = {
+        "experiment": {"name": "traceable", "output_root": str(tmp_path)},
+        "cases": {
+            "inference_directory": "/missing/export",
+            "image_root": "/missing/images",
+            "splits": ["val"],
+            "statuses": ["false_positive"],
+            "maximum_per_status": 1,
+        },
+        "execution": {"variants": ["detector_only"]},
+    }
+
+    def fail(_config, _project_root):
+        raise ValueError("diagnostic failure")
+
+    monkeypatch.setattr(assistance_module, "_run_assistance_experiment", fail)
+    with pytest.raises(ValueError, match="diagnostic failure"):
+        assistance_module.run_assistance_experiment(config, tmp_path)
+
+    log = (tmp_path / "traceable" / "experiment.log").read_text(encoding="utf-8")
+    assert "inference_directory=/missing/export" in log
+    assert "splits=['val']" in log
+    assert "RUN FAILED" in log
+    assert "ValueError: diagnostic failure" in log

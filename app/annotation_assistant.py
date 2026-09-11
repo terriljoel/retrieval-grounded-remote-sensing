@@ -31,10 +31,12 @@ from src.annotation.models import AnnotationRecord, Box, DetectionSuggestion
 from src.annotation.policy import evaluate_acceptance_policy
 from src.annotation.service import DetectionEvidence, retrieve_detection_evidence
 from src.annotation.storage import save_annotation_session
-from src.evaluation.assistance import run_assistance_experiment
+from src.evaluation.assistance import (
+    experiment_output_directory,
+    run_assistance_experiment,
+)
 from src.evaluation.config import (
     load_assistance_experiment_config,
-    resolve_experiment_path,
     validate_assistance_experiment_config,
 )
 from src.retrieval.lancedb_store import LanceDbEvidenceStore, find_latest_database
@@ -679,6 +681,12 @@ def render_batch_results(output_directory: Path) -> None:
     st.caption(str(output_directory))
     summary_path = output_directory / "summary.json"
     results_path = output_directory / "case_results.jsonl"
+    latest = {}
+    if results_path.is_file():
+        for line in results_path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                record = json.loads(line)
+                latest[record["case_id"]] = record
     if summary_path.is_file():
         summary = _read_json(summary_path)
         columns = st.columns(4)
@@ -689,12 +697,7 @@ def render_batch_results(output_directory: Path) -> None:
             "Excluded false negatives", summary["excluded_false_negatives"]
         )
         st.caption(f"Case distribution: {summary['status_counts']}")
-    elif results_path.is_file():
-        latest = {}
-        for line in results_path.read_text(encoding="utf-8").splitlines():
-            if line.strip():
-                record = json.loads(line)
-                latest[record["case_id"]] = record
+    elif latest:
         completed = sum(
             record.get("run_status") == "completed" for record in latest.values()
         )
@@ -704,6 +707,19 @@ def render_batch_results(output_directory: Path) -> None:
         st.write(f"Saved cases: {len(latest)} · completed: {completed} · failed: {failed}")
     else:
         st.info("No saved batch run exists for this experiment name yet.")
+
+    failed_records = [
+        {
+            "case_id": record["case_id"],
+            "image_id": record.get("image_id"),
+            "error": record.get("error"),
+        }
+        for record in latest.values()
+        if record.get("run_status") == "failed"
+    ]
+    if failed_records:
+        st.subheader("Failed cases")
+        st.dataframe(failed_records, use_container_width=True, hide_index=True)
 
     metrics_path = output_directory / "metrics.csv"
     if metrics_path.is_file():
@@ -716,6 +732,19 @@ def render_batch_results(output_directory: Path) -> None:
             file_name="metrics.csv",
             mime="text/csv",
         )
+
+    log_path = output_directory / "experiment.log"
+    if log_path.is_file():
+        log_text = log_path.read_text(encoding="utf-8")
+        with st.expander("Experiment log", expanded=bool(failed_records)):
+            st.code("\n".join(log_text.splitlines()[-250:]), language="text")
+            st.download_button(
+                "Download complete experiment log",
+                data=log_text,
+                file_name="experiment.log",
+                mime="text/plain",
+            )
+    st.button("Refresh saved results")
 
 
 def batch_experiment_mode() -> None:
@@ -768,11 +797,7 @@ def batch_experiment_mode() -> None:
     runtime_config["cases"]["maximum_per_status"] = int(maximum) or None
     runtime_config["execution"]["variants"] = list(variants)
     runtime_config["execution"]["save_montages"] = save_montages
-    output_directory = (
-        resolve_experiment_path(
-            runtime_config["experiment"]["output_root"], PROJECT_ROOT
-        ) / runtime_config["experiment"]["name"]
-    ).resolve()
+    output_directory = experiment_output_directory(runtime_config, PROJECT_ROOT)
     estimated_cases = (
         "all eligible"
         if maximum == 0 else f"up to {maximum * len(runtime_config['cases']['statuses'])}"
@@ -793,7 +818,7 @@ def batch_experiment_mode() -> None:
                 run_assistance_experiment(runtime_config, PROJECT_ROOT)
             st.success("Batch comparison completed.")
         except Exception as error:
-            st.error(f"Batch run stopped: {error}")
+            st.exception(error)
             st.info("Completed cases were preserved. Correct the error and resume.")
 
     render_batch_results(output_directory)

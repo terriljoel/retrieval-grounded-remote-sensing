@@ -6,6 +6,7 @@ import json
 import platform
 import random
 import time
+import traceback
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -429,15 +430,30 @@ def _database_path(config: dict[str, Any], project_root: Path) -> Path:
     return find_latest_database(artifact_root)
 
 
-def run_assistance_experiment(
+def experiment_output_directory(
+    config: dict[str, Any], project_root: Path
+) -> Path:
+    experiment = config["experiment"]
+    return (
+        resolve_experiment_path(experiment["output_root"], project_root.resolve())
+        / experiment["name"]
+    ).resolve()
+
+
+def _append_experiment_log(output_directory: Path, message: str) -> None:
+    output_directory.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).isoformat()
+    with (output_directory / "experiment.log").open(
+        "a", encoding="utf-8", buffering=1
+    ) as log:
+        log.write(f"[{timestamp}] {message.rstrip()}\n")
+
+
+def _run_assistance_experiment(
     config: dict[str, Any], project_root: Path
 ) -> Path:
     project_root = project_root.resolve()
-    experiment = config["experiment"]
-    output_directory = (
-        resolve_experiment_path(experiment["output_root"], project_root)
-        / experiment["name"]
-    ).resolve()
+    output_directory = experiment_output_directory(config, project_root)
     output_directory.mkdir(parents=True, exist_ok=True)
     results_path = output_directory / "case_results.jsonl"
     execution = config["execution"]
@@ -639,6 +655,11 @@ def run_assistance_experiment(
             except Exception as error:
                 record["run_status"] = "failed"
                 record["error"] = f"{type(error).__name__}: {error}"
+                record["traceback"] = traceback.format_exc()
+                _append_experiment_log(
+                    output_directory,
+                    f"CASE FAILED {case.case_id}\n{record['traceback']}",
+                )
             record["finished_at_utc"] = datetime.now(timezone.utc).isoformat()
             results_file.write(json.dumps(record) + "\n")
             results_file.flush()
@@ -664,3 +685,30 @@ def run_assistance_experiment(
             "were preserved; rerun with resume=true after correcting the error."
         )
     return output_directory
+
+
+def run_assistance_experiment(
+    config: dict[str, Any], project_root: Path
+) -> Path:
+    """Run the experiment and always persist a diagnostic execution log."""
+    output_directory = experiment_output_directory(config, project_root)
+    cases = config["cases"]
+    execution = config["execution"]
+    _append_experiment_log(
+        output_directory,
+        "RUN START\n"
+        f"config={config.get('_config_path', '<in-memory>')}\n"
+        f"inference_directory={cases.get('inference_directory')}\n"
+        f"image_root={cases.get('image_root')}\n"
+        f"splits={cases.get('splits')}\n"
+        f"statuses={cases.get('statuses')}\n"
+        f"maximum_per_status={cases.get('maximum_per_status')}\n"
+        f"variants={execution.get('variants')}",
+    )
+    try:
+        result = _run_assistance_experiment(config, project_root)
+    except Exception:
+        _append_experiment_log(output_directory, f"RUN FAILED\n{traceback.format_exc()}")
+        raise
+    _append_experiment_log(output_directory, "RUN SUCCEEDED")
+    return result
