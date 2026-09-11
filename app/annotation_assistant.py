@@ -33,6 +33,7 @@ from src.annotation.service import DetectionEvidence, retrieve_detection_evidenc
 from src.annotation.storage import save_annotation_session
 from src.evaluation.assistance import (
     experiment_output_directory,
+    resolve_inference_directory,
     run_assistance_experiment,
 )
 from src.evaluation.config import (
@@ -798,6 +799,13 @@ def batch_experiment_mode() -> None:
     runtime_config["execution"]["variants"] = list(variants)
     runtime_config["execution"]["save_montages"] = save_montages
     output_directory = experiment_output_directory(runtime_config, PROJECT_ROOT)
+    try:
+        resolved_inference = resolve_inference_directory(
+            runtime_config["cases"], PROJECT_ROOT
+        )
+        st.success(f"Selected inference export: {resolved_inference}")
+    except Exception as error:
+        st.error(f"Inference export selection failed: {error}")
     estimated_cases = (
         "all eligible"
         if maximum == 0 else f"up to {maximum * len(runtime_config['cases']['statuses'])}"

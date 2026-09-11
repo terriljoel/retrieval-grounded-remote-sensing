@@ -47,6 +47,51 @@ def _read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(file))
 
 
+INFERENCE_TABLES = (
+    "inference_images.csv",
+    "detections.csv",
+    "ground_truth.csv",
+    "prediction_comparison.csv",
+)
+
+
+def resolve_inference_directory(
+    cases_config: dict[str, Any], project_root: Path
+) -> Path:
+    configured = cases_config["inference_directory"]
+    if configured != "latest":
+        return resolve_experiment_path(configured, project_root)
+
+    root = resolve_experiment_path(cases_config["inference_root"], project_root)
+    if not root.is_dir():
+        raise FileNotFoundError(f"Inference export root not found: {root}")
+    requested_splits = set(cases_config["splits"])
+    compatible: list[Path] = []
+    inspected: dict[str, list[str]] = {}
+    for image_table in root.rglob("inference_images.csv"):
+        directory = image_table.parent.resolve()
+        if not all((directory / name).is_file() for name in INFERENCE_TABLES):
+            continue
+        with image_table.open(encoding="utf-8", newline="") as file:
+            available_splits = {
+                row["source_split"] for row in csv.DictReader(file)
+            }
+        inspected[str(directory)] = sorted(available_splits)
+        if requested_splits <= available_splits:
+            compatible.append(directory)
+    if not compatible:
+        raise ValueError(
+            f"No complete inference export under {root} contains requested "
+            f"splits {sorted(requested_splits)}. Inspected exports: {inspected}"
+        )
+    return max(
+        compatible,
+        key=lambda directory: max(
+            (directory / name).stat().st_mtime for name in INFERENCE_TABLES
+        ),
+    )
+
+
 def _resolve_image_path(stored_path: str, image_root: Path | None) -> Path:
     stored = Path(stored_path).expanduser()
     if stored.is_file():
@@ -483,8 +528,12 @@ def _run_assistance_experiment(
         resolve_experiment_path(cases_config["image_root"], project_root)
         if cases_config.get("image_root") else None
     )
+    inference_directory = resolve_inference_directory(cases_config, project_root)
+    _append_experiment_log(
+        output_directory, f"resolved_inference_directory={inference_directory}"
+    )
     cases, excluded_false_negatives = load_assistance_cases(
-        resolve_experiment_path(cases_config["inference_directory"], project_root),
+        inference_directory,
         image_root=image_root,
         splits=cases_config["splits"],
         statuses=cases_config["statuses"],

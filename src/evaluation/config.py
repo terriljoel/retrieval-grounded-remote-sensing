@@ -30,6 +30,10 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
     cases = config["cases"]
     if not cases.get("inference_directory"):
         raise ValueError("cases.inference_directory must not be empty")
+    if cases["inference_directory"] == "latest" and not cases.get("inference_root"):
+        raise ValueError(
+            "cases.inference_root is required when inference_directory=latest"
+        )
     statuses = set(cases.get("statuses") or [])
     if not statuses or not statuses <= CASE_STATUSES:
         raise ValueError(f"cases.statuses must be drawn from {sorted(CASE_STATUSES)}")

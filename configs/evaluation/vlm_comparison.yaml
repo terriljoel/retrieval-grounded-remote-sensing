@@ -5,7 +5,10 @@ experiment:
 cases:
   # Directory produced by rs-export-predictions. It must contain all four CSV
   # tables, including ground truth and prediction_comparison.csv.
-  inference_directory: "${INFERENCE_EXPORT_ROOT}"
+  # "latest" selects the newest complete export containing every requested
+  # split. Set an explicit directory here when freezing the final experiment.
+  inference_directory: latest
+  inference_root: "${SHARED_RESOURCES_ROOT}/inference"
   # Used only if source_image_path stored in inference_images.csv is no longer
   # valid (for example, after moving from one Colab session to another).
   image_root: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"

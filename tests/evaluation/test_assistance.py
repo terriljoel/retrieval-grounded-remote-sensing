@@ -10,6 +10,7 @@ import src.evaluation.assistance as assistance_module
 from src.evaluation.assistance import (
     assessment_is_correct,
     load_assistance_cases,
+    resolve_inference_directory,
     write_assistance_metrics,
 )
 
@@ -128,3 +129,27 @@ def test_experiment_failure_is_written_to_local_log(monkeypatch, tmp_path):
     assert "splits=['val']" in log
     assert "RUN FAILED" in log
     assert "ValueError: diagnostic failure" in log
+
+
+def test_latest_inference_selects_export_containing_requested_split(tmp_path):
+    for name, split in (("older_external", "external"), ("manifest_export", "test")):
+        directory = tmp_path / name
+        directory.mkdir()
+        _write_csv(
+            directory / "inference_images.csv",
+            ("image_id", "source_split"),
+            [{"image_id": "image_1", "source_split": split}],
+        )
+        for table in ("detections.csv", "ground_truth.csv", "prediction_comparison.csv"):
+            (directory / table).write_text("id\n", encoding="utf-8")
+
+    selected = resolve_inference_directory(
+        {
+            "inference_directory": "latest",
+            "inference_root": str(tmp_path),
+            "splits": ["test"],
+        },
+        tmp_path,
+    )
+
+    assert selected == (tmp_path / "manifest_export").resolve()

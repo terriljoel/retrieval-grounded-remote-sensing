@@ -171,14 +171,17 @@ not enter the verified LanceDB evidence table automatically.
 Use the batch runner for the reproducible experiment; Streamlit remains the
 interactive control and results view. The Streamlit sidebar's **Batch** mode
 configures and runs this same reusable experiment service. First export detector
-predictions with ground-truth comparison enabled. Set `INFERENCE_EXPORT_ROOT`
-to the resulting directory, then run either the app or the CLI:
+predictions with ground-truth comparison enabled. By default, the evaluation
+configuration selects the newest complete export containing the requested
+split. Then run either the app or the CLI:
 
 ```bash
-export INFERENCE_EXPORT_ROOT="/path/to/object_detection_inference_run"
 rs-run-assistance-experiment \
   --config configs/evaluation/vlm_comparison.yaml
 ```
+
+For the final frozen experiment, replace `cases.inference_directory: latest`
+with the exact selected export directory in the evaluation YAML.
 
 The default configuration takes an equal seeded sample of test true positives,
 false positives, and class errors. It runs detector-only, detector plus
