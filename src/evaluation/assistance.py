@@ -138,6 +138,14 @@ def load_assistance_cases(
         if maximum_per_status is not None:
             candidates = candidates[:maximum_per_status]
         selected.extend(candidates)
+    if not selected:
+        split_counts = Counter(row["source_split"] for row in image_rows)
+        status_counts = Counter(row["status"] for row in comparison_rows)
+        raise ValueError(
+            "No eligible per-detection cases remain after applying split and "
+            f"status filters. Available source splits: {dict(split_counts)}. "
+            f"Available comparison statuses: {dict(status_counts)}."
+        )
     return sorted(selected, key=lambda item: item.case_id), false_negative_count
 
 
@@ -470,11 +478,6 @@ def run_assistance_experiment(
         ),
         seed=int(cases_config["seed"]),
     )
-    if not cases:
-        raise ValueError(
-            "No eligible per-detection cases remain after applying split and "
-            "status filters"
-        )
     existing = _latest_records(results_path)
     completed_ids = {
         case_id for case_id, row in existing.items()

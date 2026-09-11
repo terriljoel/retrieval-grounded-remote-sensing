@@ -7,11 +7,16 @@ detector:
 
 source:
   path: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
-  dataset_id: new_remote_sensing_dataset
-  split: external
-  manifest: null
-  dataset_root: null
-  allow_test: false
+  dataset_id: nwpu_vhr10
+  # Individual image splits are taken from the deterministic manifest. The
+  # fallback value is used only if an image is absent from that manifest.
+  split: manifest
+  manifest: "${SHARED_RESOURCES_ROOT}/datasets/manifests/nwpu_vhr10_multilabel_split_seed42.csv"
+  # Manifest image paths already begin with "NWPU VHR-10 dataset/...".
+  dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
+  # This export intentionally creates the frozen test cases used by the final
+  # assistance comparison. Test images remain queries, never retrieval evidence.
+  allow_test: true
 
 # Set this section to null for prediction-only exports. When annotations are
 # available, use format: yolo or format: nwpu and point path to the label folder.
