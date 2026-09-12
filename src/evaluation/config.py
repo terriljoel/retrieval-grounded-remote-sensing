@@ -34,6 +34,10 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
         raise ValueError(
             "cases.inference_root is required when inference_directory=latest"
         )
+    if bool(cases.get("manifest")) != bool(cases.get("manifest_dataset_root")):
+        raise ValueError(
+            "cases.manifest and cases.manifest_dataset_root must be set together"
+        )
     statuses = set(cases.get("statuses") or [])
     if not statuses or not statuses <= CASE_STATUSES:
         raise ValueError(f"cases.statuses must be drawn from {sorted(CASE_STATUSES)}")

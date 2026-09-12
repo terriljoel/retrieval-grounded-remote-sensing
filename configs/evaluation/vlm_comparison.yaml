@@ -9,6 +9,10 @@ cases:
   # split. Set an explicit directory here when freezing the final experiment.
   inference_directory: latest
   inference_root: "${SHARED_RESOURCES_ROOT}/inference"
+  # Enrich older inference exports whose rows were all labelled "external".
+  # This reuses their predictions; YOLO inference does not need to be rerun.
+  manifest: "${SHARED_RESOURCES_ROOT}/datasets/manifests/nwpu_vhr10_multilabel_split_seed42.csv"
+  manifest_dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
   # Used only if source_image_path stored in inference_images.csv is no longer
   # valid (for example, after moving from one Colab session to another).
   image_root: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"

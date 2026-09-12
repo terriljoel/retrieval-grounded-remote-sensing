@@ -18,6 +18,7 @@ from PIL import Image
 from src.annotation.models import Box, DetectionSuggestion
 from src.annotation.policy import evaluate_acceptance_policy
 from src.annotation.service import retrieve_detection_evidence
+from src.data.manifests import load_split_manifest
 from src.detection.config import save_resolved_config
 from src.evaluation.config import resolve_experiment_path
 from src.retrieval.lancedb_store import LanceDbEvidenceStore, find_latest_database
@@ -56,7 +57,9 @@ INFERENCE_TABLES = (
 
 
 def resolve_inference_directory(
-    cases_config: dict[str, Any], project_root: Path
+    cases_config: dict[str, Any],
+    project_root: Path,
+    split_lookup: dict[Path, str] | None = None,
 ) -> Path:
     configured = cases_config["inference_directory"]
     if configured != "latest":
@@ -66,16 +69,34 @@ def resolve_inference_directory(
     if not root.is_dir():
         raise FileNotFoundError(f"Inference export root not found: {root}")
     requested_splits = set(cases_config["splits"])
+    image_root = (
+        resolve_experiment_path(cases_config["image_root"], project_root)
+        if cases_config.get("image_root") else None
+    )
+    effective_lookup = split_lookup or _manifest_split_lookup(
+        cases_config, project_root
+    )
     compatible: list[Path] = []
     inspected: dict[str, list[str]] = {}
     for image_table in root.rglob("inference_images.csv"):
         directory = image_table.parent.resolve()
         if not all((directory / name).is_file() for name in INFERENCE_TABLES):
             continue
-        with image_table.open(encoding="utf-8", newline="") as file:
-            available_splits = {
-                row["source_split"] for row in csv.DictReader(file)
-            }
+        image_rows = _read_csv(image_table)
+        available_splits = set()
+        for row in image_rows:
+            effective_split = row["source_split"]
+            if effective_lookup:
+                try:
+                    image_path = _resolve_image_path(
+                        row["source_image_path"], image_root
+                    )
+                    effective_split = effective_lookup.get(
+                        image_path.resolve(), effective_split
+                    )
+                except (FileNotFoundError, ValueError):
+                    pass
+            available_splits.add(effective_split)
         inspected[str(directory)] = sorted(available_splits)
         if requested_splits <= available_splits:
             compatible.append(directory)
@@ -92,15 +113,40 @@ def resolve_inference_directory(
     )
 
 
+def _manifest_split_lookup(
+    cases_config: dict[str, Any], project_root: Path
+) -> dict[Path, str]:
+    if not cases_config.get("manifest"):
+        return {}
+    splits = load_split_manifest(
+        resolve_experiment_path(cases_config["manifest"], project_root),
+        resolve_experiment_path(
+            cases_config["manifest_dataset_root"], project_root
+        ),
+    )
+    return {
+        item.image_path.resolve(): split
+        for split, items in splits.items()
+        for item in items
+    }
+
+
 def _resolve_image_path(stored_path: str, image_root: Path | None) -> Path:
     stored = Path(stored_path).expanduser()
     if stored.is_file():
         return stored.resolve()
     if image_root is None:
         raise FileNotFoundError(f"Query image not found: {stored}")
-    direct = image_root / stored if not stored.is_absolute() else image_root / stored.name
-    if direct.is_file():
-        return direct.resolve()
+    candidates = []
+    if not stored.is_absolute():
+        candidates.append(image_root / stored)
+    if image_root.name in stored.parts:
+        root_index = stored.parts.index(image_root.name)
+        candidates.append(image_root.joinpath(*stored.parts[root_index + 1:]))
+    candidates.append(image_root / stored.name)
+    for candidate in candidates:
+        if candidate.is_file():
+            return candidate.resolve()
     matches = list(image_root.rglob(stored.name))
     if len(matches) == 1:
         return matches[0].resolve()
@@ -121,6 +167,7 @@ def load_assistance_cases(
     statuses: Iterable[str],
     maximum_per_status: int | None,
     seed: int,
+    split_lookup: dict[Path, str] | None = None,
 ) -> tuple[list[AssistanceCase], int]:
     inference_directory = inference_directory.resolve()
     image_rows = _read_csv(inference_directory / "inference_images.csv")
@@ -129,13 +176,23 @@ def load_assistance_cases(
     comparison_rows = _read_csv(inference_directory / "prediction_comparison.csv")
 
     images = {row["image_id"]: row for row in image_rows}
+    image_paths = {
+        image_id: _resolve_image_path(row["source_image_path"], image_root)
+        for image_id, row in images.items()
+    }
+    effective_splits = {
+        image_id: (split_lookup or {}).get(
+            image_paths[image_id].resolve(), row["source_split"]
+        )
+        for image_id, row in images.items()
+    }
     detections = {row["detection_id"]: row for row in detection_rows}
     ground_truths = {row["ground_truth_id"]: row for row in ground_truth_rows}
     wanted_splits = set(splits)
     wanted_statuses = set(statuses)
     false_negative_count = sum(
         row["status"] == "false_negative"
-        and images[row["image_id"]]["source_split"] in wanted_splits
+        and effective_splits[row["image_id"]] in wanted_splits
         for row in comparison_rows
     )
     grouped: dict[str, list[AssistanceCase]] = defaultdict(list)
@@ -144,7 +201,7 @@ def load_assistance_cases(
         if comparison["status"] not in wanted_statuses or not comparison["detection_id"]:
             continue
         image_row = images[comparison["image_id"]]
-        if image_row["source_split"] not in wanted_splits:
+        if effective_splits[comparison["image_id"]] not in wanted_splits:
             continue
         detection_row = detections[comparison["detection_id"]]
         ground_truth_id = comparison["ground_truth_id"] or None
@@ -164,8 +221,8 @@ def load_assistance_cases(
         grouped[comparison["status"]].append(AssistanceCase(
             case_id=comparison["comparison_id"],
             image_id=comparison["image_id"],
-            image_path=_resolve_image_path(image_row["source_image_path"], image_root),
-            source_split=image_row["source_split"],
+            image_path=image_paths[comparison["image_id"]],
+            source_split=effective_splits[comparison["image_id"]],
             detection=detection,
             ground_truth_id=ground_truth_id,
             ground_truth_class_id=(
@@ -185,7 +242,7 @@ def load_assistance_cases(
             candidates = candidates[:maximum_per_status]
         selected.extend(candidates)
     if not selected:
-        split_counts = Counter(row["source_split"] for row in image_rows)
+        split_counts = Counter(effective_splits.values())
         status_counts = Counter(row["status"] for row in comparison_rows)
         raise ValueError(
             "No eligible per-detection cases remain after applying split and "
@@ -528,7 +585,10 @@ def _run_assistance_experiment(
         resolve_experiment_path(cases_config["image_root"], project_root)
         if cases_config.get("image_root") else None
     )
-    inference_directory = resolve_inference_directory(cases_config, project_root)
+    split_lookup = _manifest_split_lookup(cases_config, project_root)
+    inference_directory = resolve_inference_directory(
+        cases_config, project_root, split_lookup
+    )
     _append_experiment_log(
         output_directory, f"resolved_inference_directory={inference_directory}"
     )
@@ -542,6 +602,7 @@ def _run_assistance_experiment(
             if cases_config.get("maximum_per_status") is not None else None
         ),
         seed=int(cases_config["seed"]),
+        split_lookup=split_lookup,
     )
     existing = _latest_records(results_path)
     completed_ids = {

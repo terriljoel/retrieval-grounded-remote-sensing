@@ -804,6 +804,11 @@ def batch_experiment_mode() -> None:
             runtime_config["cases"], PROJECT_ROOT
         )
         st.success(f"Selected inference export: {resolved_inference}")
+        if runtime_config["cases"].get("manifest"):
+            st.caption(
+                "Effective train/val/test provenance is joined from: "
+                f"{runtime_config['cases']['manifest']}"
+            )
     except Exception as error:
         st.error(f"Inference export selection failed: {error}")
     estimated_cases = (
