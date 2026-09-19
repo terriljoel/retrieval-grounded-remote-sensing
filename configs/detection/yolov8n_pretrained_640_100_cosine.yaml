@@ -1,0 +1,93 @@
+experiment:
+  name: yolov8n_pretrained_640_100_cosine_seed42
+  seed: 42
+
+data:
+  adapter: nwpu
+  archive_path: "${SHARED_RESOURCES_ROOT}/datasets/archive/NWPU VHR-10 dataset.zip"
+  raw_root: "${RAW_DATASET_ROOT}"
+  audit:
+    enabled: true
+    reuse_report: true
+    fail_on_issues: true
+    report_path: "${EXPERIMENT_OUTPUT_ROOT}/data_preparation/nwpu_audit.json"
+    expected_images: 800
+    expected_objects: 3896
+    expected_backgrounds: 150
+
+split:
+  strategy: multilabel
+  train: 0.70
+  val: 0.15
+  test: 0.15
+  manifest_path: "${MANIFEST_ROOT}/nwpu_vhr10_multilabel_split_seed42.csv"
+  reuse_manifest: true
+
+export:
+  format: yolo
+  output_root: "${PROCESSED_DATASET_ROOT}/nwpu_vhr10_yolo_seed42"
+  expected_images: 800
+  expected_objects: 3896
+  expected_backgrounds: 150
+
+classes:
+  - airplane
+  - ship
+  - storage_tank
+  - baseball_diamond
+  - tennis_court
+  - basketball_court
+  - ground_track_field
+  - harbor
+  - bridge
+  - vehicle
+
+detector:
+  backend: ultralytics
+  task: detect
+
+model:
+  weights: yolov8n.pt
+
+training:
+  epochs: 100
+  imgsz: 640
+  batch: 16
+  device: 0
+  workers: 2
+  patience: 15
+  optimizer: auto
+  warmup_epochs: 3.0
+  cos_lr: true
+  lrf: 0.01
+  deterministic: true
+  pretrained: true
+  save: true
+  save_period: 5
+  plots: true
+  verbose: true
+  exist_ok: false
+
+evaluation:
+  split: test
+  imgsz: 640
+  batch: 16
+  device: 0
+  workers: 2
+  plots: true
+  verbose: true
+  exist_ok: false
+
+prediction:
+  imgsz: 640
+  confidence: 0.25
+  iou: 0.70
+  device: 0
+  save_images: true
+  save_labels: true
+  save_confidence: true
+
+outputs:
+  training_root: "${EXPERIMENT_OUTPUT_ROOT}/detection"
+  evaluation_root: "${EXPERIMENT_OUTPUT_ROOT}/detection_test"
+  prediction_root: "${EXPERIMENT_OUTPUT_ROOT}/predictions"
