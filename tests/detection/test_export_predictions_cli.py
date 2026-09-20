@@ -13,7 +13,8 @@ CONFIG_PATH = (
 
 
 def test_export_predictions_cli_uses_only_config(monkeypatch, tmp_path):
-    monkeypatch.setenv("EXPERIMENT_OUTPUT_ROOT", str(tmp_path / "experiments"))
+    shared_root = tmp_path / "shared_resources"
+    monkeypatch.setenv("SHARED_RESOURCES_ROOT", str(shared_root))
     monkeypatch.setenv("JOB_LOG_ROOT", str(tmp_path / "jobs"))
     captured = {}
 
@@ -30,7 +31,7 @@ def test_export_predictions_cli_uses_only_config(monkeypatch, tmp_path):
 
     export_predictions.main()
 
-    assert captured["config"]["source"]["dataset_id"] == (
-        "new_remote_sensing_dataset"
-    )
-    assert captured["config"]["detector"]["checkpoint"] == "/path/to/best.pt"
+    assert captured["config"]["source"]["dataset_id"] == "nwpu_vhr10"
+    assert Path(captured["config"]["detector"]["checkpoint"]).resolve() == (
+        shared_root / "checkpoints" / "yolov8s_pretrained_1024_seed42.pt"
+    ).resolve()

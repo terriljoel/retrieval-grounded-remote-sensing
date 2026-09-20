@@ -193,6 +193,7 @@ def build_prompt(
             "is supplied in this diagnostic condition."
         )
         evidence_section = "Retrieved evidence: none"
+        evidence_ids_example = "[]"
     elif mode == "retrieval_grounded":
         panel_description = (
             "Q full is the complete query image with the proposed box marked and "
@@ -201,6 +202,7 @@ def build_prompt(
             "the corresponding object crop."
         )
         evidence_section = f"Retrieved evidence:\n{evidence_lines}"
+        evidence_ids_example = '["E1"]'
     else:
         raise ValueError(f"Unknown VLM assessment mode: {mode}")
 
@@ -244,7 +246,7 @@ Return only JSON:
   "confidence": 0.0,
   "observations": "short visual observation",
   "uncertainty": "short limitation or ambiguity",
-  "evidence_ids": ["E1"]
+  "evidence_ids": {evidence_ids_example}
 }}
 """
 

@@ -30,11 +30,21 @@ def load_background_screening_cases(
     seed: int,
     split_lookup: dict[Path, str] | None = None,
 ) -> list[dict[str, Any]]:
-    rows = _read_csv(inference_directory.resolve() / "inference_images.csv")
+    inference_directory = inference_directory.resolve()
+    rows = _read_csv(inference_directory / "inference_images.csv")
+    false_negative_images = {
+        row["image_id"]
+        for row in _read_csv(inference_directory / "prediction_comparison.csv")
+        if row["status"] == "false_negative"
+    }
     wanted_splits = set(splits)
     grouped = {"background": [], "missed_objects": []}
     for row in rows:
-        if int(row["prediction_count"]) != 0:
+        prediction_count = int(row["prediction_count"])
+        truth_count = int(row["ground_truth_count"])
+        is_background = prediction_count == 0 and truth_count == 0
+        has_missed_objects = row["image_id"] in false_negative_images
+        if not (is_background or has_missed_objects):
             continue
         image_path = _resolve_image_path(row["source_image_path"], image_root)
         source_split = (split_lookup or {}).get(
@@ -42,10 +52,9 @@ def load_background_screening_cases(
         )
         if source_split not in wanted_splits:
             continue
-        truth_count = int(row["ground_truth_count"])
-        label = "background" if truth_count == 0 else "missed_objects"
+        label = "missed_objects" if has_missed_objects else "background"
         grouped[label].append({
-            "case_id": f"zero_detection::{row['image_id']}",
+            "case_id": f"image_screening::{row['image_id']}",
             "image_id": row["image_id"],
             "image_path": image_path,
             "source_split": source_split,

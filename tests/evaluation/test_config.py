@@ -38,3 +38,10 @@ def test_policy_requires_grounded_variant():
     config["execution"]["variants"] = ["configured_policy"]
     with pytest.raises(ValueError, match="requires retrieval_grounded_vlm"):
         validate_assistance_experiment_config(config)
+
+
+def test_request_rate_must_be_positive():
+    config = copy.deepcopy(valid_config())
+    config["vlm"]["requests_per_minute"] = 0
+    with pytest.raises(ValueError, match="requests_per_minute must be positive"):
+        validate_assistance_experiment_config(config)

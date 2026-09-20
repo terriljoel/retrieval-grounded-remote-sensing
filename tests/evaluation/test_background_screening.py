@@ -23,12 +23,20 @@ def _write_images(path, rows):
         writer.writerows(rows)
 
 
-def test_load_screening_cases_selects_only_zero_detection_images(tmp_path):
+def _write_comparisons(path, rows):
+    with path.open("w", encoding="utf-8", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=("image_id", "status"))
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def test_load_screening_cases_selects_backgrounds_and_false_negative_images(tmp_path):
     rows = []
     for image_id, predictions, truth in (
         ("background", 0, 0),
         ("missed", 0, 2),
-        ("detected", 1, 1),
+        ("partly_detected", 1, 2),
+        ("fully_detected", 1, 1),
     ):
         image_path = tmp_path / f"{image_id}.jpg"
         Image.new("RGB", (64, 64), "gray").save(image_path)
@@ -40,6 +48,14 @@ def test_load_screening_cases_selects_only_zero_detection_images(tmp_path):
             "ground_truth_count": truth,
         })
     _write_images(tmp_path / "inference_images.csv", rows)
+    _write_comparisons(
+        tmp_path / "prediction_comparison.csv",
+        [
+            {"image_id": "missed", "status": "false_negative"},
+            {"image_id": "partly_detected", "status": "false_negative"},
+            {"image_id": "fully_detected", "status": "true_positive"},
+        ],
+    )
 
     cases = load_background_screening_cases(
         tmp_path,
@@ -49,7 +65,9 @@ def test_load_screening_cases_selects_only_zero_detection_images(tmp_path):
         seed=42,
     )
 
-    assert {case["image_id"] for case in cases} == {"background", "missed"}
+    assert {case["image_id"] for case in cases} == {
+        "background", "missed", "partly_detected"
+    }
     assert {case["ground_truth_label"] for case in cases} == {
         "background", "missed_objects"
     }

@@ -55,6 +55,8 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
         raise ValueError("retrieval.top_k must be positive")
 
     vlm = config["vlm"]
+    if float(vlm.get("requests_per_minute", 30)) <= 0:
+        raise ValueError("vlm.requests_per_minute must be positive")
     max_evidence = int(vlm.get("max_evidence", 0))
     if not 1 <= max_evidence <= top_k:
         raise ValueError("vlm.max_evidence must be between 1 and retrieval.top_k")

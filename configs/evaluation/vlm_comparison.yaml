@@ -1,5 +1,5 @@
 experiment:
-  name: nwpu_yolov8s1024_vlm_30_per_status_seed42_v1
+  name: nwpu_yolov8s1024_vlm_40_per_status_seed42_v2
   output_root: "${SHARED_RESOURCES_ROOT}/experiment_outputs/assistance_comparisons"
 
 cases:
@@ -7,7 +7,7 @@ cases:
   # tables, including ground truth and prediction_comparison.csv.
   # "latest" selects the newest complete export containing every requested
   # split. Set an explicit directory here when freezing the final experiment.
-  inference_directory: latest
+  inference_directory: "${SHARED_RESOURCES_ROOT}/inference/nwpu_yolov8s_1024_final_predictions_nwpu_vhr10_manifest-3"
   inference_root: "${SHARED_RESOURCES_ROOT}/inference"
   # Enrich older inference exports whose rows were all labelled "external".
   # This reuses their predictions; YOLO inference does not need to be rerun.
@@ -45,9 +45,9 @@ embedding:
   device: null
 
 retrieval:
-  database_path: null
+  database_path: "${SHARED_RESOURCES_ROOT}/embeddings/remoteclip_nwpu_vhr10_queries_vit_b32_seed42_20260920T180606Z/lancedb"
   artifact_root: "${SHARED_RESOURCES_ROOT}/embeddings"
-  artifact: latest
+  artifact: remoteclip_nwpu_vhr10_queries_vit_b32_seed42_20260920T180606Z
   table: remoteclip_embeddings
   dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
   # Do not use test examples as evidence for test queries.

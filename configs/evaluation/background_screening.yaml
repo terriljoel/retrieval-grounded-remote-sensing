@@ -1,5 +1,5 @@
 experiment:
-  name: nwpu_zero_detection_screening_seed42
+  name: nwpu_missed_object_screening_seed42_v2
   output_root: "${SHARED_RESOURCES_ROOT}/experiment_outputs/background_screening"
 
 cases:
@@ -9,8 +9,8 @@ cases:
   manifest_dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
   image_root: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
   splits: [test]
-  # Use 5 for a smoke test; set null to screen all zero-detection images.
-  maximum_per_label: 5
+  # Use 5 for a smoke test; null screens all missed-object and background images.
+  maximum_per_label: null
   seed: 42
 
 classes:

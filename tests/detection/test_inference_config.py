@@ -19,26 +19,28 @@ CONFIG_PATH = (
 def test_load_inference_config_is_independent_from_training(
     monkeypatch, tmp_path
 ):
-    output_root = tmp_path / "experiments"
-    monkeypatch.setenv("EXPERIMENT_OUTPUT_ROOT", str(output_root))
+    shared_root = tmp_path / "shared_resources"
+    monkeypatch.setenv("SHARED_RESOURCES_ROOT", str(shared_root))
 
     config = load_inference_config(CONFIG_PATH)
 
     assert config["detector"]["backend"] == "ultralytics"
-    assert config["detector"]["checkpoint"] == "/path/to/best.pt"
-    assert config["source"]["dataset_id"] == "new_remote_sensing_dataset"
-    assert config["source"]["split"] == "external"
+    assert Path(config["detector"]["checkpoint"]).resolve() == (
+        shared_root / "checkpoints" / "yolov8s_pretrained_1024_seed42.pt"
+    ).resolve()
+    assert config["source"]["dataset_id"] == "nwpu_vhr10"
+    assert config["source"]["split"] == "manifest"
     assert config["inference"]["confidence"] == 0.05
-    assert config["ground_truth"] is None
+    assert config["ground_truth"]["format"] == "nwpu"
     assert Path(config["outputs"]["root"]).resolve() == (
-        output_root / "inference"
+        shared_root / "inference"
     ).resolve()
     assert "training" not in config
     assert "evaluation" not in config
 
 
-def test_load_inference_config_requires_output_environment(monkeypatch):
-    monkeypatch.delenv("EXPERIMENT_OUTPUT_ROOT", raising=False)
+def test_load_inference_config_requires_shared_resources_environment(monkeypatch):
+    monkeypatch.delenv("SHARED_RESOURCES_ROOT", raising=False)
 
     with pytest.raises(ValueError, match="Missing environment variables"):
         load_inference_config(CONFIG_PATH)

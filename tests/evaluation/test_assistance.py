@@ -7,12 +7,14 @@ from PIL import Image
 import pytest
 
 import src.evaluation.assistance as assistance_module
+from src.annotation.models import Box, DetectionSuggestion
 from src.evaluation.assistance import (
     assessment_is_correct,
     load_assistance_cases,
     resolve_inference_directory,
     write_assistance_metrics,
 )
+from src.vlm.nim import build_prompt
 
 
 def _write_csv(path, fieldnames, rows):
@@ -153,3 +155,15 @@ def test_latest_inference_selects_export_containing_requested_split(tmp_path):
     )
 
     assert selected == (tmp_path / "manifest_export").resolve()
+
+
+def test_query_only_prompt_requires_empty_evidence_ids():
+    prompt = build_prompt(
+        DetectionSuggestion("det_1", 0, "airplane", 0.9, Box(1, 2, 30, 40)),
+        [],
+        ("airplane",),
+        "query_only",
+    )
+
+    assert '"evidence_ids": []' in prompt
+    assert '"evidence_ids": ["E1"]' not in prompt
