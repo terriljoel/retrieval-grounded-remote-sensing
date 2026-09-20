@@ -39,6 +39,9 @@ def validate_inference_config(config: dict[str, Any]) -> None:
         value = config["inference"].get(name)
         if not isinstance(value, (int, float)) or not 0.0 <= value <= 1.0:
             raise ValueError(f"inference.{name} must be between 0 and 1")
+    batch = config["inference"].get("batch")
+    if not isinstance(batch, int) or isinstance(batch, bool) or batch <= 0:
+        raise ValueError("inference.batch must be a positive integer")
 
     ground_truth = config.get("ground_truth")
     if ground_truth is not None:

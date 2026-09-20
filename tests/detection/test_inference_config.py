@@ -58,7 +58,7 @@ def test_validate_inference_config_accepts_ground_truth_without_manifest():
             "path": "labels",
             "iou_threshold": 0.5,
         },
-        "inference": {"confidence": 0.05, "iou": 0.7},
+        "inference": {"batch": 8, "confidence": 0.05, "iou": 0.7},
         "outputs": {"root": "outputs"},
     }
 
@@ -74,9 +74,29 @@ def test_validate_inference_config_requires_dataset_root_for_manifest():
             "dataset_id": "new_dataset",
             "manifest": "split.csv",
         },
-        "inference": {"confidence": 0.05, "iou": 0.7},
+        "inference": {"batch": 8, "confidence": 0.05, "iou": 0.7},
         "outputs": {"root": "outputs"},
     }
 
     with pytest.raises(ValueError, match="source.dataset_root"):
+        validate_inference_config(config)
+
+
+def test_validate_inference_config_rejects_non_positive_batch():
+    config = {
+        "run": {"name": "evaluation"},
+        "detector": {"backend": "ultralytics", "checkpoint": "best.pt"},
+        "source": {
+            "path": "images",
+            "dataset_id": "new_dataset",
+            "manifest": None,
+        },
+        "ground_truth": None,
+        "inference": {"batch": 0, "confidence": 0.05, "iou": 0.7},
+        "outputs": {"root": "outputs"},
+    }
+
+    with pytest.raises(
+        ValueError, match="inference.batch must be a positive integer"
+    ):
         validate_inference_config(config)

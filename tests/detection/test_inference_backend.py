@@ -22,10 +22,14 @@ class FakeModel:
     def __init__(self, synthetic_result_paths: bool = False):
         self.predictor = None
         self.synthetic_result_paths = synthetic_result_paths
+        self.predict_calls = []
 
     def predict(self, **arguments):
+        self.predict_calls.append(arguments)
         run_directory = Path(arguments["project"]) / arguments["name"]
-        run_directory.mkdir(parents=True)
+        run_directory.mkdir(
+            parents=True, exist_ok=arguments.get("exist_ok", False)
+        )
         self.predictor = SimpleNamespace(save_dir=run_directory)
         results = []
         for index, source in enumerate(arguments["source"]):
@@ -142,6 +146,63 @@ def test_export_predictions_accepts_external_directory(
     }
     assert len(detection_rows) == 1
     assert detection_rows[0]["predicted_class_name"] == "airplane"
+
+
+def test_export_predictions_enforces_configured_batch_size(
+    monkeypatch, tmp_path
+):
+    source = tmp_path / "images"
+    source.mkdir()
+    for index in range(5):
+        (source / f"tile_{index}.jpg").touch()
+    checkpoint = tmp_path / "best.pt"
+    checkpoint.touch()
+    model = FakeModel()
+    config = {
+        "run": {"name": "batched_inference"},
+        "detector": {
+            "backend": "ultralytics",
+            "checkpoint": str(checkpoint),
+        },
+        "source": {
+            "path": str(source),
+            "dataset_id": "tiles",
+            "split": "external",
+            "manifest": None,
+            "dataset_root": None,
+            "allow_test": False,
+        },
+        "ground_truth": None,
+        "inference": {
+            "imgsz": 1024,
+            "batch": 2,
+            "confidence": 0.05,
+            "iou": 0.7,
+            "device": 0,
+            "save_rendered_images": True,
+            "save_yolo_labels": True,
+            "save_confidence": True,
+            "verbose": False,
+            "exist_ok": False,
+        },
+        "outputs": {"root": str(tmp_path / "inference")},
+    }
+    monkeypatch.setattr(ultralytics_backend, "_load_yolo", lambda _: model)
+    monkeypatch.setattr(
+        ultralytics_backend, "collect_runtime_metadata", lambda _: {}
+    )
+
+    run_directory = ultralytics_backend.export_predictions(config, tmp_path)
+
+    assert [len(call["source"]) for call in model.predict_calls] == [2, 2, 1]
+    assert {call["batch"] for call in model.predict_calls} == {2}
+    output_directories = {
+        Path(call["project"]) / call["name"] for call in model.predict_calls
+    }
+    assert len(output_directories) == 1
+    assert run_directory == (
+        tmp_path / "inference" / "batched_inference_tiles_external"
+    ).resolve()
 
 
 def test_export_predictions_compares_nwpu_ground_truth_without_manifest(

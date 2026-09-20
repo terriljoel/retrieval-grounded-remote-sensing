@@ -53,6 +53,73 @@ def _ultralytics_save_dir(model: Any, results: Any, stage: str) -> Path:
     return Path(save_dir).resolve()
 
 
+def _predict_in_batches(
+    model: Any,
+    source_images: list[Path],
+    inference: dict[str, Any],
+    output_root: Path,
+    run_name: str,
+) -> tuple[list[Any], Path]:
+    """Predict in bounded chunks while preserving one output directory.
+
+    Some Ultralytics versions treat an in-memory list of image paths as one
+    source batch. Passing the complete dataset can therefore ignore the
+    configured batch size and exhaust GPU memory. Explicit chunking makes
+    ``inference.batch`` an actual upper bound.
+    """
+    batch_size = inference["batch"]
+    results: list[Any] = []
+    run_directory: Path | None = None
+
+    for start in range(0, len(source_images), batch_size):
+        batch_paths = source_images[start : start + batch_size]
+        if run_directory is None:
+            project = output_root
+            name = run_name
+            exist_ok = inference["exist_ok"]
+        else:
+            project = run_directory.parent
+            name = run_directory.name
+            exist_ok = True
+
+        batch_results = model.predict(
+            source=[str(path) for path in batch_paths],
+            imgsz=inference["imgsz"],
+            batch=batch_size,
+            conf=inference["confidence"],
+            iou=inference["iou"],
+            device=inference["device"],
+            save=inference["save_rendered_images"],
+            save_txt=inference["save_yolo_labels"],
+            save_conf=inference["save_confidence"],
+            verbose=inference["verbose"],
+            project=str(project),
+            name=name,
+            exist_ok=exist_ok,
+        )
+        if len(batch_results) != len(batch_paths):
+            raise RuntimeError(
+                f"Ultralytics returned {len(batch_results)} results for "
+                f"a batch of {len(batch_paths)} images"
+            )
+
+        batch_run_directory = _ultralytics_save_dir(
+            model, batch_results[-1], "prediction"
+        )
+        if run_directory is None:
+            run_directory = batch_run_directory
+        elif batch_run_directory != run_directory:
+            raise RuntimeError(
+                "Ultralytics changed output directory between inference "
+                f"batches: {run_directory} -> {batch_run_directory}"
+            )
+        results.extend(batch_results)
+
+    if run_directory is None:
+        raise RuntimeError("No inference batches were produced")
+    return results, run_directory
+
+
 def train_detector(config: dict[str, Any], project_root: Path) -> Path:
     if config["detector"]["backend"] != "ultralytics":
         raise ValueError("train_detector currently supports the ultralytics backend")
@@ -321,20 +388,12 @@ def export_predictions(
         f"{config['run']['name']}_{safe_dataset_id}_{safe_source_split}"
     )
     model = _load_yolo(checkpoint)
-    results = model.predict(
-        source=[str(path) for path in source_images],
-        imgsz=inference["imgsz"],
-        batch=inference["batch"],
-        conf=inference["confidence"],
-        iou=inference["iou"],
-        device=inference["device"],
-        save=inference["save_rendered_images"],
-        save_txt=inference["save_yolo_labels"],
-        save_conf=inference["save_confidence"],
-        verbose=inference["verbose"],
-        project=str(output_root),
-        name=run_name,
-        exist_ok=inference["exist_ok"],
+    results, run_directory = _predict_in_batches(
+        model=model,
+        source_images=source_images,
+        inference=inference,
+        output_root=output_root,
+        run_name=run_name,
     )
     if len(results) != len(source_images):
         raise RuntimeError(
@@ -429,7 +488,6 @@ def export_predictions(
                 ymax=ymax,
             ))
 
-    run_directory = _ultralytics_save_dir(model, results[-1], "prediction")
     comparison_records: list[ComparisonRecord] | None = None
     if compare_ground_truth:
         comparison_records = compare_predictions_to_ground_truth(
