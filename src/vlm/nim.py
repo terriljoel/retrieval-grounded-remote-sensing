@@ -4,6 +4,7 @@ import base64
 import hashlib
 import io
 import json
+import logging
 import os
 import re
 import time
@@ -314,7 +315,15 @@ class NvidiaNimClient:
                 last_error = error
             if attempt == 3:
                 raise RuntimeError(f"NVIDIA NIM request failed: {last_error}")
-            time.sleep(min(2 ** attempt, 30))
+            delay = min(2 ** attempt, 30)
+            logging.warning(
+                "NVIDIA NIM request attempt %d/4 failed (%s); retrying in "
+                "%d second(s).",
+                attempt + 1,
+                last_error,
+                delay,
+            )
+            time.sleep(delay)
 
         self.cache_root.mkdir(parents=True, exist_ok=True)
         cache_path.write_text(json.dumps(payload), encoding="utf-8")
