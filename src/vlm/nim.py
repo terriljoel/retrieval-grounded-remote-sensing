@@ -33,10 +33,81 @@ class VlmAssessment:
     raw_response: str
 
 
+@dataclass(frozen=True)
+class ImageScreeningAssessment:
+    decision: str
+    possible_classes: tuple[str, ...]
+    confidence: float | None
+    observations: str
+    uncertainty: str
+    suspicious_tiles: tuple[str, ...]
+    raw_response: str
+
+
 def encode_image(image: Image.Image, quality: int = 90) -> str:
     buffer = io.BytesIO()
     image.convert("RGB").save(buffer, format="JPEG", quality=quality)
     return "data:image/jpeg;base64," + base64.b64encode(buffer.getvalue()).decode()
+
+
+def create_overlapping_tiles(
+    image: Image.Image, tile_size: int, overlap_fraction: float
+) -> list[tuple[str, Image.Image]]:
+    if tile_size <= 0:
+        raise ValueError("tile_size must be positive")
+    if not 0.0 <= overlap_fraction < 1.0:
+        raise ValueError("overlap_fraction must be in [0, 1)")
+    step = max(1, round(tile_size * (1.0 - overlap_fraction)))
+
+    def starts(length: int) -> list[int]:
+        if length <= tile_size:
+            return [0]
+        values = list(range(0, length - tile_size + 1, step))
+        final = length - tile_size
+        if values[-1] != final:
+            values.append(final)
+        return values
+
+    tiles = []
+    for row, top in enumerate(starts(image.height)):
+        for column, left in enumerate(starts(image.width)):
+            right = min(left + tile_size, image.width)
+            bottom = min(top + tile_size, image.height)
+            tiles.append((
+                f"T{row + 1}_{column + 1}",
+                image.crop((left, top, right, bottom)),
+            ))
+    return tiles
+
+
+def build_screening_prompt(
+    classes: Iterable[str], tile_ids: Iterable[str]
+) -> str:
+    readable_classes = ", ".join(name.replace("_", " ") for name in classes)
+    readable_tiles = ", ".join(tile_ids)
+    return f"""You screen aerial images that received zero object detections.
+
+The first supplied image is the complete scene. The remaining images are
+overlapping high-resolution tiles identified in order as: {readable_tiles}.
+Allowed target classes: {readable_classes}
+
+Inspect the complete scene for context, then inspect every tile for small target
+objects. Use "likely_background" only when no allowed target object is visible
+and no tile is suspicious. Use "possible_target_object" when an allowed object
+may be present. Use "uncertain" whenever resolution, occlusion, scale, or scene
+ambiguity prevents a confident background decision. Prefer human review over
+incorrectly clearing a positive image. Do not invent objects.
+
+Return only JSON:
+{{
+  "decision": "likely_background" | "possible_target_object" | "uncertain",
+  "possible_classes": ["allowed_class"],
+  "confidence": 0.0,
+  "observations": "short visual observation",
+  "uncertainty": "short limitation or ambiguity",
+  "suspicious_tiles": ["T1_1"]
+}}
+"""
 
 
 def grounded_montage(
@@ -186,12 +257,17 @@ class NvidiaNimClient:
         base_url: str = "https://integrate.api.nvidia.com/v1",
         api_key_variable: str = "NIM_API_KEY",
         timeout: float = 120.0,
+        requests_per_minute: float = 30.0,
     ):
+        if requests_per_minute <= 0:
+            raise ValueError("requests_per_minute must be positive")
         self.model = model
         self.cache_root = Path(cache_root).resolve()
         self.base_url = base_url.rstrip("/")
         self.api_key_variable = api_key_variable
         self.timeout = timeout
+        self.minimum_request_interval = 60.0 / requests_per_minute
+        self._last_request_time: float | None = None
 
     def _api_key(self) -> str:
         value = os.environ.get(self.api_key_variable, "").strip()
@@ -221,6 +297,10 @@ class NvidiaNimClient:
         )
         last_error: Exception | None = None
         for attempt in range(4):
+            if self._last_request_time is not None:
+                elapsed = time.monotonic() - self._last_request_time
+                time.sleep(max(0.0, self.minimum_request_interval - elapsed))
+            self._last_request_time = time.monotonic()
             try:
                 with urllib.request.urlopen(request, timeout=self.timeout) as response:
                     payload = json.loads(response.read().decode())
@@ -289,6 +369,34 @@ class NvidiaNimClient:
         raw = (payload["choices"][0].get("message") or {}).get("content") or ""
         return parse_assessment(raw, classes)
 
+    def screen_image(
+        self,
+        *,
+        image: Image.Image,
+        tiles: list[tuple[str, Image.Image]],
+        classes: Iterable[str],
+    ) -> ImageScreeningAssessment:
+        tile_ids = [tile_id for tile_id, _ in tiles]
+        prompt = build_screening_prompt(classes, tile_ids)
+        content: list[dict[str, Any]] = [{"type": "text", "text": prompt}]
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": encode_image(image)},
+        })
+        content.extend({
+            "type": "image_url",
+            "image_url": {"url": encode_image(tile)},
+        } for _, tile in tiles)
+        body = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": content}],
+            "temperature": 0.0,
+            "max_tokens": 700,
+        }
+        payload = self._request(body)
+        raw = (payload["choices"][0].get("message") or {}).get("content") or ""
+        return parse_screening_assessment(raw, classes, tile_ids)
+
 
 def parse_assessment(raw: str, classes: Iterable[str]) -> VlmAssessment:
     match = re.search(r"\{.*\}", raw, flags=re.DOTALL)
@@ -336,5 +444,51 @@ def parse_assessment(raw: str, classes: Iterable[str]) -> VlmAssessment:
         observations=str(parsed.get("observations", "")),
         uncertainty=str(parsed.get("uncertainty", "")),
         evidence_ids=tuple(map(str, parsed.get("evidence_ids") or [])),
+        raw_response=raw,
+    )
+
+
+def parse_screening_assessment(
+    raw: str, classes: Iterable[str], tile_ids: Iterable[str]
+) -> ImageScreeningAssessment:
+    match = re.search(r"\{.*\}", raw, flags=re.DOTALL)
+    parsed: dict[str, Any] = {}
+    parse_error = ""
+    if not match:
+        parse_error = "The VLM response was not valid structured JSON."
+    else:
+        try:
+            parsed = json.loads(match.group())
+        except json.JSONDecodeError:
+            parse_error = "The VLM response contained invalid JSON."
+
+    allowed_classes = set(classes)
+    possible_classes = []
+    for value in parsed.get("possible_classes") or []:
+        normalized = str(value).strip().replace(" ", "_")
+        if normalized in allowed_classes and normalized not in possible_classes:
+            possible_classes.append(normalized)
+    allowed_tiles = set(tile_ids)
+    suspicious_tiles = tuple(
+        value for value in map(str, parsed.get("suspicious_tiles") or [])
+        if value in allowed_tiles
+    )
+    decision = str(parsed.get("decision", "uncertain"))
+    if decision not in {
+        "likely_background", "possible_target_object", "uncertain"
+    }:
+        decision = "uncertain"
+    confidence = parsed.get("confidence")
+    try:
+        confidence = min(max(float(confidence), 0.0), 1.0)
+    except (TypeError, ValueError):
+        confidence = None
+    return ImageScreeningAssessment(
+        decision=decision,
+        possible_classes=tuple(possible_classes),
+        confidence=confidence,
+        observations=str(parsed.get("observations", raw.strip())),
+        uncertainty=parse_error or str(parsed.get("uncertainty", "")),
+        suspicious_tiles=suspicious_tiles,
         raw_response=raw,
     )

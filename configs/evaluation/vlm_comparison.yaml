@@ -1,5 +1,5 @@
 experiment:
-  name: nwpu_vlm_comparison_seed42
+  name: nwpu_yolov8s1024_vlm_30_per_status_seed42_v1
   output_root: "${SHARED_RESOURCES_ROOT}/experiment_outputs/assistance_comparisons"
 
 cases:
@@ -20,7 +20,7 @@ cases:
   statuses: [true_positive, false_positive, class_error]
   # Begin with 5 for a smoke test. Freeze the prompt, then increase to 25 or
   # set null to process every eligible detection.
-  maximum_per_status: 5
+  maximum_per_status: 40
   seed: 42
 
 classes:
@@ -62,6 +62,7 @@ vlm:
   base_url: https://integrate.api.nvidia.com/v1
   api_key_variable: NIM_API_KEY
   timeout: 120
+  requests_per_minute: 30
   cache_root: "${SHARED_RESOURCES_ROOT}/vlm_cache"
   max_evidence: 3
 

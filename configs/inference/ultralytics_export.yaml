@@ -27,7 +27,7 @@ ground_truth:
 
 inference:
   imgsz: 1024
-  batch: 8
+  batch: 16
   confidence: 0.05
   iou: 0.70
   device: 0

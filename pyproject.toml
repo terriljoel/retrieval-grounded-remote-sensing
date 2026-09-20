@@ -28,6 +28,7 @@ rs-evaluate-detector = "scripts.evaluate_detector:main"
 rs-export-predictions = "scripts.export_predictions:main"
 rs-predict-detector = "scripts.predict_detector:main"
 rs-run-assistance-experiment = "scripts.run_assistance_experiment:main"
+rs-run-background-screening = "scripts.run_background_screening:main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}

@@ -58,6 +58,7 @@ vlm:
   base_url: https://integrate.api.nvidia.com/v1
   api_key_variable: NIM_API_KEY
   timeout: 120
+  requests_per_minute: 30
   cache_root: "${SHARED_RESOURCES_ROOT}/vlm_cache"
 
 # A final "accept" recommendation is made only when every gate passes. The

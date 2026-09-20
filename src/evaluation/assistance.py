@@ -642,6 +642,7 @@ def _run_assistance_experiment(
             base_url=vlm_config["base_url"],
             api_key_variable=vlm_config["api_key_variable"],
             timeout=float(vlm_config["timeout"]),
+            requests_per_minute=float(vlm_config.get("requests_per_minute", 30)),
         )
 
     montage_directory = output_directory / "montages"
