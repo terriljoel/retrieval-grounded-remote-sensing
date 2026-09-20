@@ -1,9 +1,9 @@
 run:
-  name: nwpu_yolov8s_1024_final_predictions
+  name: object_detection_inference
 
 detector:
   backend: ultralytics
-  checkpoint: "${SHARED_RESOURCES_ROOT}/checkpoints/yolov8s_pretrained_1024_seed42.pt"
+  checkpoint: "${SHARED_RESOURCES_ROOT}/checkpoints/best.pt"
 
 source:
   path: "${SHARED_RESOURCES_ROOT}/datasets/raw/NWPU VHR-10 dataset"
@@ -26,8 +26,8 @@ ground_truth:
   iou_threshold: 0.5
 
 inference:
-  imgsz: 1024
-  batch: 8
+  imgsz: 640
+  batch: 16
   confidence: 0.05
   iou: 0.70
   device: 0
