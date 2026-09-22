@@ -1,0 +1,32 @@
+run:
+  name: hrrsd_yolov8s_1024_external
+
+detector:
+  backend: ultralytics
+  checkpoint: "${SHARED_RESOURCES_ROOT}/checkpoints/yolov8s_pretrained_1024_seed42.pt"
+
+source:
+  path: "${SHARED_RESOURCES_ROOT}/datasets/raw/HRRSD_external_subset_seed42/JPEGImages"
+  dataset_id: hrrsd_external
+  split: external
+  allow_test: false
+
+ground_truth:
+  format: yolo
+  path: "${SHARED_RESOURCES_ROOT}/datasets/raw/HRRSD_external_subset_seed42/labels_nwpu"
+  iou_threshold: 0.5
+
+inference:
+  imgsz: 1024
+  batch: 8
+  confidence: 0.05
+  iou: 0.70
+  device: 0
+  save_rendered_images: true
+  save_yolo_labels: true
+  save_confidence: true
+  verbose: true
+  exist_ok: false
+
+outputs:
+  root: "${SHARED_RESOURCES_ROOT}/inference"
