@@ -1,0 +1,28 @@
+dataset:
+  id: hrrsd_external
+  name: HRRSD External Subset
+  root: "${SHARED_RESOURCES_ROOT}/datasets/raw/HRRSD_external_subset_seed42"
+
+source:
+  images: JPEGImages
+  annotations: Annotations
+  annotation_format: pascal_voc
+  image_extensions: [.jpg, .jpeg, .png]
+
+output:
+  annotation_format: yolo
+  labels: labels_nwpu
+  overwrite: true
+
+# HRRSD class names mapped to the zero-based IDs used by the NWPU detector.
+class_mapping:
+  airplane: 0
+  ship: 1
+  storage tank: 2
+  bridge: 8
+
+conversion:
+  clamp_boxes: true
+  create_empty_labels: true
+  fail_on_missing_annotation: true
+  fail_on_invalid_box: true

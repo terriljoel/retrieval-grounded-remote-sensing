@@ -94,12 +94,18 @@ def test_metrics_keep_variants_separate(tmp_path):
             "unsupported_evidence_ids": [],
             "latency_seconds": 0.3,
         },
-        "configured_policy": {"recommendation": "human_review"},
+        "configured_policy": {
+            "recommendation": "human_review",
+            "detector_passed": False,
+            "retrieval_passed": False,
+        },
     }]
 
     metrics = write_assistance_metrics(records, tmp_path)
     indexed = {(row["variant"], row["metric"]): row for row in metrics}
 
+    assert indexed[("detector_only", "decision_accuracy")]["value"] == 1.0
+    assert indexed[("detector_retrieval", "decision_accuracy")]["value"] == 1.0
     assert indexed[("query_only_vlm", "verification_accuracy")]["value"] == 1.0
     assert indexed[("retrieval_grounded_vlm", "verification_accuracy")]["value"] == 0.0
     assert indexed[("retrieval_grounded_vlm", "false_accept_rate")]["value"] == 1.0

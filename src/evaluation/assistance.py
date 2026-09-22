@@ -351,6 +351,33 @@ def _mean_metric(
     }
 
 
+def _decision_metrics(
+    rows: list[dict[str, Any]], variant: str, accepted
+) -> list[dict[str, Any]]:
+    accepted_rows = [row for row in rows if accepted(row)]
+    incorrect_rows = [
+        row for row in rows
+        if row["ground_truth_status"] != "true_positive"
+    ]
+    return [
+        _metric(
+            rows,
+            variant,
+            "decision_accuracy",
+            lambda row: accepted(row)
+            == (row["ground_truth_status"] == "true_positive"),
+        ),
+        _metric(rows, variant, "auto_accept_coverage", accepted),
+        _metric(
+            accepted_rows,
+            variant,
+            "auto_accept_precision",
+            lambda row: row["ground_truth_status"] == "true_positive",
+        ),
+        _metric(incorrect_rows, variant, "false_accept_rate", accepted),
+    ]
+
+
 def _macro_decision_f1(rows: list[dict[str, Any]], key: str) -> float | None:
     if not rows:
         return None
@@ -385,22 +412,21 @@ def write_assistance_metrics(
     records: Iterable[dict[str, Any]], output_directory: Path
 ) -> list[dict[str, Any]]:
     completed = [row for row in records if row.get("run_status") == "completed"]
-    incorrect = [row for row in completed if row["ground_truth_status"] != "true_positive"]
     matched = [row for row in completed if row.get("ground_truth_class_name")]
-    metrics = [
-        _metric(
-            completed,
-            "detector_only",
-            "verification_accuracy",
-            lambda row: row["ground_truth_status"] == "true_positive",
+    policy_rows = [row for row in completed if row.get("configured_policy")]
+    metrics = _decision_metrics(
+        policy_rows,
+        "detector_only",
+        lambda row: row["configured_policy"]["detector_passed"],
+    )
+    metrics.extend(_decision_metrics(
+        policy_rows,
+        "detector_retrieval",
+        lambda row: (
+            row["configured_policy"]["detector_passed"]
+            and row["configured_policy"]["retrieval_passed"]
         ),
-        _metric(
-            incorrect,
-            "detector_only",
-            "false_accept_rate",
-            lambda row: True,
-        ),
-    ]
+    ))
     retrieval_rows = [row for row in matched if row.get("retrieval")]
     metrics.append(_metric(
         retrieval_rows,
@@ -441,6 +467,11 @@ def write_assistance_metrics(
         ("retrieval_grounded_vlm", "retrieval_grounded_vlm"),
     ):
         rows = [row for row in completed if row.get(key)]
+        metrics.extend(_decision_metrics(
+            rows,
+            variant,
+            lambda row, k=key: row[k]["decision"] == "accept",
+        ))
         metrics.append(_metric(
             rows, variant, "verification_accuracy", lambda row, k=key: row[k]["correct"]
         ))
@@ -460,13 +491,6 @@ def write_assistance_metrics(
             "class_correction_accuracy",
             lambda row, k=key: row[k]["correct"],
         ))
-        wrong_rows = [row for row in rows if row["ground_truth_status"] != "true_positive"]
-        metrics.append(_metric(
-            wrong_rows,
-            variant,
-            "false_accept_rate",
-            lambda row, k=key: row[k]["decision"] == "accept",
-        ))
         metrics.append(_metric(
             rows,
             variant,
@@ -479,32 +503,10 @@ def write_assistance_metrics(
             "mean_latency_seconds",
             lambda row, k=key: row[k]["latency_seconds"],
         ))
-    policy_rows = [row for row in completed if row.get("configured_policy")]
-    metrics.extend([
-        _metric(
-            policy_rows,
-            "configured_policy",
-            "decision_accuracy",
-            lambda row: (
-                row["configured_policy"]["recommendation"] == "accept"
-            ) == (row["ground_truth_status"] == "true_positive"),
-        ),
-        _metric(
-            policy_rows,
-            "configured_policy",
-            "auto_accept_coverage",
-            lambda row: row["configured_policy"]["recommendation"] == "accept",
-        ),
-    ])
-    accepted = [
-        row for row in policy_rows
-        if row["configured_policy"]["recommendation"] == "accept"
-    ]
-    metrics.append(_metric(
-        accepted,
+    metrics.extend(_decision_metrics(
+        policy_rows,
         "configured_policy",
-        "auto_accept_precision",
-        lambda row: row["ground_truth_status"] == "true_positive",
+        lambda row: row["configured_policy"]["recommendation"] == "accept",
     ))
 
     output_directory.mkdir(parents=True, exist_ok=True)

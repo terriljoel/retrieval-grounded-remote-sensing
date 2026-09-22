@@ -22,6 +22,7 @@ annotation = [
 ]
 
 [project.scripts]
+rs-convert-dataset = "scripts.convert_dataset:main"
 rs-prepare-detector = "scripts.prepare_dataset:main"
 rs-train-detector = "scripts.train_detector:main"
 rs-evaluate-detector = "scripts.evaluate_detector:main"
