@@ -60,6 +60,12 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
     vlm = config["vlm"]
     if float(vlm.get("requests_per_minute", 30)) <= 0:
         raise ValueError("vlm.requests_per_minute must be positive")
+    if int(vlm.get("max_retries", 3)) < 0:
+        raise ValueError("vlm.max_retries must not be negative")
+    if float(vlm.get("retry_initial_delay_seconds", 1.0)) < 0:
+        raise ValueError("vlm.retry_initial_delay_seconds must not be negative")
+    if float(vlm.get("retry_delay_increment_seconds", 1.0)) < 0:
+        raise ValueError("vlm.retry_delay_increment_seconds must not be negative")
     max_evidence = int(vlm.get("max_evidence", 0))
     if not 1 <= max_evidence <= top_k:
         raise ValueError("vlm.max_evidence must be between 1 and retrieval.top_k")

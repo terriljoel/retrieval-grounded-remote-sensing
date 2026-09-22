@@ -261,15 +261,23 @@ class NvidiaNimClient:
         api_key_variable: str = "NIM_API_KEY",
         timeout: float = 120.0,
         requests_per_minute: float = 30.0,
+        max_retries: int = 3,
+        retry_initial_delay_seconds: float = 1.0,
+        retry_delay_increment_seconds: float = 1.0,
     ):
         if requests_per_minute <= 0:
             raise ValueError("requests_per_minute must be positive")
+        if max_retries < 0:
+            raise ValueError("max_retries must not be negative")
         self.model = model
         self.cache_root = Path(cache_root).resolve()
         self.base_url = base_url.rstrip("/")
         self.api_key_variable = api_key_variable
         self.timeout = timeout
         self.minimum_request_interval = 60.0 / requests_per_minute
+        self.max_retries = max_retries
+        self.retry_initial_delay_seconds = retry_initial_delay_seconds
+        self.retry_delay_increment_seconds = retry_delay_increment_seconds
         self._last_request_time: float | None = None
 
     def _api_key(self) -> str:
@@ -299,7 +307,8 @@ class NvidiaNimClient:
             method="POST",
         )
         last_error: Exception | None = None
-        for attempt in range(4):
+        total_attempts = self.max_retries + 1
+        for attempt in range(total_attempts):
             if self._last_request_time is not None:
                 elapsed = time.monotonic() - self._last_request_time
                 time.sleep(max(0.0, self.minimum_request_interval - elapsed))
@@ -315,13 +324,17 @@ class NvidiaNimClient:
                 last_error = error
             except (urllib.error.URLError, TimeoutError) as error:
                 last_error = error
-            if attempt == 3:
+            if attempt == self.max_retries:
                 raise RuntimeError(f"NVIDIA NIM request failed: {last_error}")
-            delay = min(2 ** attempt, 30)
+            delay = (
+                self.retry_initial_delay_seconds
+                + attempt * self.retry_delay_increment_seconds
+            )
             logging.warning(
-                "NVIDIA NIM request attempt %d/4 failed (%s); retrying in "
-                "%d second(s).",
+                "NVIDIA NIM request attempt %d/%d failed (%s); retrying in "
+                "%.1f second(s).",
                 attempt + 1,
+                total_attempts,
                 last_error,
                 delay,
             )

@@ -653,6 +653,13 @@ def _run_assistance_experiment(
             api_key_variable=vlm_config["api_key_variable"],
             timeout=float(vlm_config["timeout"]),
             requests_per_minute=float(vlm_config.get("requests_per_minute", 30)),
+            max_retries=int(vlm_config.get("max_retries", 3)),
+            retry_initial_delay_seconds=float(
+                vlm_config.get("retry_initial_delay_seconds", 1.0)
+            ),
+            retry_delay_increment_seconds=float(
+                vlm_config.get("retry_delay_increment_seconds", 1.0)
+            ),
         )
 
     montage_directory = output_directory / "montages"
