@@ -1,0 +1,70 @@
+experiment:
+  name: hrrsd_yolov8s1024_vlm_high_confidence_seed42
+  output_root: "${SHARED_RESOURCES_ROOT}/experiment_outputs/assistance_comparisons"
+
+cases:
+  inference_directory: "${SHARED_RESOURCES_ROOT}/inference/hrrsd_yolov8s_1024_external_hrrsd_external_external"
+  image_root: "${SHARED_RESOURCES_ROOT}/datasets/raw/HRRSD_external_subset_seed42/JPEGImages"
+  splits: [external]
+  statuses: [true_positive, false_positive, class_error]
+  minimum_detector_confidence: 0.80
+  maximum_per_status: 30
+  seed: 42
+
+classes:
+  - airplane
+  - ship
+  - storage_tank
+  - baseball_diamond
+  - tennis_court
+  - basketball_court
+  - ground_track_field
+  - harbor
+  - bridge
+  - vehicle
+
+embedding:
+  model_name: ViT-B-32
+  repository: chendelong/RemoteCLIP
+  filename: RemoteCLIP-ViT-B-32.pt
+  dimension: 512
+  context_margin: 0.25
+  cache_dir: "${SHARED_RESOURCES_ROOT}/model_cache/huggingface"
+  device: null
+
+retrieval:
+  database_path: "${SHARED_RESOURCES_ROOT}/embeddings/remoteclip_nwpu_vhr10_queries_vit_b32_seed42_20260920T180606Z/lancedb"
+  artifact_root: "${SHARED_RESOURCES_ROOT}/embeddings"
+  artifact: remoteclip_nwpu_vhr10_queries_vit_b32_seed42_20260920T180606Z
+  table: remoteclip_embeddings
+  dataset_root: "${SHARED_RESOURCES_ROOT}/datasets/raw"
+  evidence_splits: [train]
+  top_k: 5
+  candidate_limit: 100
+
+vlm:
+  enabled: true
+  provider: nvidia_nim
+  model: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+  base_url: https://integrate.api.nvidia.com/v1
+  api_key_variable: NIM_API_KEY
+  timeout: 120
+  requests_per_minute: 30
+  cache_root: "${SHARED_RESOURCES_ROOT}/vlm_cache"
+  max_evidence: 3
+
+decision_policy:
+  detector_min_confidence: 0.80
+  retrieval_min_cosine_similarity: 0.90
+  retrieval_min_supporting_neighbors: 3
+  vlm_min_confidence: 0.85
+
+execution:
+  variants:
+    - detector_only
+    - detector_retrieval
+    - query_only_vlm
+    - retrieval_grounded_vlm
+    - configured_policy
+  resume: true
+  save_montages: true

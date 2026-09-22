@@ -168,6 +168,7 @@ def load_assistance_cases(
     maximum_per_status: int | None,
     seed: int,
     split_lookup: dict[Path, str] | None = None,
+    minimum_detector_confidence: float = 0.0,
 ) -> tuple[list[AssistanceCase], int]:
     inference_directory = inference_directory.resolve()
     image_rows = _read_csv(inference_directory / "inference_images.csv")
@@ -204,6 +205,8 @@ def load_assistance_cases(
         if effective_splits[comparison["image_id"]] not in wanted_splits:
             continue
         detection_row = detections[comparison["detection_id"]]
+        if float(detection_row["confidence"]) < minimum_detector_confidence:
+            continue
         ground_truth_id = comparison["ground_truth_id"] or None
         ground_truth = ground_truths.get(ground_truth_id or "")
         detection = DetectionSuggestion(
@@ -246,7 +249,9 @@ def load_assistance_cases(
         status_counts = Counter(row["status"] for row in comparison_rows)
         raise ValueError(
             "No eligible per-detection cases remain after applying split and "
-            f"status filters. Available source splits: {dict(split_counts)}. "
+            f"status filters at detector confidence >= "
+            f"{minimum_detector_confidence:.3f}. Available source splits: "
+            f"{dict(split_counts)}. "
             f"Available comparison statuses: {dict(status_counts)}."
         )
     return sorted(selected, key=lambda item: item.case_id), false_negative_count
@@ -605,6 +610,9 @@ def _run_assistance_experiment(
         ),
         seed=int(cases_config["seed"]),
         split_lookup=split_lookup,
+        minimum_detector_confidence=float(
+            cases_config.get("minimum_detector_confidence", 0.0)
+        ),
     )
     existing = _latest_records(results_path)
     completed_ids = {
@@ -816,6 +824,8 @@ def run_assistance_experiment(
         f"splits={cases.get('splits')}\n"
         f"statuses={cases.get('statuses')}\n"
         f"maximum_per_status={cases.get('maximum_per_status')}\n"
+        f"minimum_detector_confidence="
+        f"{cases.get('minimum_detector_confidence', 0.0)}\n"
         f"variants={execution.get('variants')}",
     )
     try:

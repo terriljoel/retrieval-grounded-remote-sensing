@@ -74,6 +74,17 @@ def test_load_cases_aligns_exported_tables_and_excludes_false_negatives(tmp_path
         "decision": "accept", "suggested_class": "airplane"
     })
 
+    with pytest.raises(ValueError, match="confidence >= 0.950"):
+        load_assistance_cases(
+            tmp_path,
+            image_root=None,
+            splits=["test"],
+            statuses=["true_positive"],
+            maximum_per_status=None,
+            seed=42,
+            minimum_detector_confidence=0.95,
+        )
+
 
 def test_metrics_keep_variants_separate(tmp_path):
     records = [{

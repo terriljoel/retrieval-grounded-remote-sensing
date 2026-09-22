@@ -44,6 +44,9 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
     maximum = cases.get("maximum_per_status")
     if maximum is not None and int(maximum) <= 0:
         raise ValueError("cases.maximum_per_status must be null or positive")
+    minimum_confidence = float(cases.get("minimum_detector_confidence", 0.0))
+    if not 0.0 <= minimum_confidence <= 1.0:
+        raise ValueError("cases.minimum_detector_confidence must be between 0 and 1")
 
     retrieval = config["retrieval"]
     if not retrieval.get("database_path") and not retrieval.get("artifact_root"):
