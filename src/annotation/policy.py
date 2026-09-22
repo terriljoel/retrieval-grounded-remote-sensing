@@ -14,6 +14,9 @@ class AcceptancePolicyResult:
     detector_passed: bool
     retrieval_passed: bool
     vlm_passed: bool
+    query_vlm_passed: bool
+    rescue_passed: bool
+    acceptance_path: str
     supporting_neighbors: int
     required_supporting_neighbors: int
     reasons: tuple[str, ...]
@@ -29,6 +32,7 @@ def evaluate_acceptance_policy(
     detection: DetectionSuggestion,
     evidence: list[EvidenceRecord],
     assessment: VlmAssessment,
+    query_assessment: VlmAssessment | None = None,
     settings: dict[str, Any],
 ) -> AcceptancePolicyResult:
     detector_minimum = float(settings["detector_min_confidence"])
@@ -49,6 +53,39 @@ def evaluate_acceptance_policy(
         and assessment.confidence is not None
         and assessment.confidence >= vlm_minimum
         and assessment.suggested_class in {None, detection.class_name}
+    )
+
+    rescue = settings.get("low_confidence_rescue") or {}
+    rescue_enabled = bool(rescue.get("enabled", False))
+    rescue_supporting = [
+        item for item in evidence
+        if item.class_name == detection.class_name
+        and item.cosine_similarity
+        >= float(rescue.get("retrieval_min_cosine_similarity", 1.0))
+    ]
+    query_vlm_passed = bool(
+        query_assessment
+        and query_assessment.decision == "accept"
+        and query_assessment.confidence is not None
+        and query_assessment.confidence
+        >= float(rescue.get("query_vlm_min_confidence", 1.0))
+        and query_assessment.suggested_class in {None, detection.class_name}
+    )
+    rescue_grounded_passed = (
+        assessment.decision == "accept"
+        and assessment.confidence is not None
+        and assessment.confidence
+        >= float(rescue.get("grounded_vlm_min_confidence", 1.0))
+        and assessment.suggested_class in {None, detection.class_name}
+    )
+    rescue_passed = (
+        rescue_enabled
+        and float(rescue["detector_min_confidence"]) <= detection.confidence
+        < float(rescue["detector_max_confidence"])
+        and len(rescue_supporting)
+        >= int(rescue["retrieval_min_supporting_neighbors"])
+        and query_vlm_passed
+        and rescue_grounded_passed
     )
 
     reasons: list[str] = []
@@ -73,12 +110,22 @@ def evaluate_acceptance_policy(
             f">= {vlm_minimum:.3f} and no conflicting class required"
         )
 
-    accepted = detector_passed and retrieval_passed and vlm_passed
+    standard_passed = detector_passed and retrieval_passed and vlm_passed
+    accepted = standard_passed or rescue_passed
+    if accepted:
+        reasons = []
     return AcceptancePolicyResult(
         recommendation="accept" if accepted else "human_review",
         detector_passed=detector_passed,
         retrieval_passed=retrieval_passed,
         vlm_passed=vlm_passed,
+        query_vlm_passed=query_vlm_passed,
+        rescue_passed=rescue_passed,
+        acceptance_path=(
+            "standard" if standard_passed
+            else "low_confidence_rescue" if rescue_passed
+            else "none"
+        ),
         supporting_neighbors=len(supporting),
         required_supporting_neighbors=required_neighbors,
         reasons=tuple(reasons),

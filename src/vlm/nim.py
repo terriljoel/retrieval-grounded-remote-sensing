@@ -188,18 +188,19 @@ def build_prompt(
     readable_classes = ", ".join(name.replace("_", " ") for name in classes)
     if mode == "query_only":
         panel_description = (
-            "Q full is the complete query image with the proposed box marked. "
-            "Q crop is the corresponding tight object crop. No retrieved evidence "
-            "is supplied in this diagnostic condition."
+            "The first supplied image is a high-resolution Q full scene with the "
+            "proposed box marked. The second image is a comparison montage containing "
+            "Q full and Q crop. No retrieved evidence is supplied in this diagnostic "
+            "condition."
         )
         evidence_section = "Retrieved evidence: none"
         evidence_ids_example = "[]"
     elif mode == "retrieval_grounded":
         panel_description = (
-            "Q full is the complete query image with the proposed box marked and "
-            "Q crop is its tight crop. Each E row contains a retrieved verified "
-            "example: its complete source image with the verified box marked, then "
-            "the corresponding object crop."
+            "The first supplied image is a high-resolution Q full scene with the "
+            "proposed box marked. The second image is a comparison montage containing "
+            "Q full, Q crop, and each retrieved E example as a marked source image "
+            "plus its object crop."
         )
         evidence_section = f"Retrieved evidence:\n{evidence_lines}"
         evidence_ids_example = '["E1"]'
@@ -216,21 +217,22 @@ Allowed classes: {readable_classes}
 
 {evidence_section}
 
-Follow this decision order strictly:
-1. Inspect Q full first. Identify the global scene type and the structures
-   surrounding the marked box.
-2. Decide whether that global scene is compatible with the proposed class.
-3. Inspect Q crop and decide whether its local visual features independently
-   support the proposed class.
-4. Only after steps 1-3, inspect any retrieved evidence. Use retrieval to
-   corroborate the query, never to override contradictory query context.
+Perform two stages in this order.
 
-An "accept" decision is permitted only when BOTH Q full context and Q crop
-support the detector class. If the crop resembles the class but the global
-scene contradicts it, return "human_review" (or "correct" only when another
-allowed class is clearly visible). If retrieval supports the detector but the
-query itself does not, return "human_review". A high cosine similarity is not
-proof of identity. Retrieved examples can reinforce a wrong prediction.
+Stage A -- object validity: Inspect the high-resolution Q full image and Q crop
+while ignoring detector confidence and retrieved evidence. Decide whether the
+marked box contains a complete, spatially coherent target object. If it contains
+background, only part of a structure, an unclear object, or context that
+contradicts the proposal, return "human_review". Retrieved examples cannot
+establish object presence and must never change this outcome to "accept".
+
+Stage B -- class verification: Only after independently establishing that a
+valid target object exists, compare its local features and global context with
+the detector class and any retrieved examples. Return "accept" only when Q full
+and Q crop independently support the detector class. Return "correct" only when
+another allowed class is clearly supported. Otherwise return "human_review".
+A high cosine similarity is not proof of identity; retrieved positive examples
+can reinforce a false detection.
 
 Do not invent repeated instances in Q full, and do not call surrounding objects
 similar examples unless they are visibly so. The correct object may be outside
@@ -264,11 +266,14 @@ class NvidiaNimClient:
         max_retries: int = 3,
         retry_initial_delay_seconds: float = 1.0,
         retry_delay_increment_seconds: float = 1.0,
+        query_image_max_size: int = 1024,
     ):
         if requests_per_minute <= 0:
             raise ValueError("requests_per_minute must be positive")
         if max_retries < 0:
             raise ValueError("max_retries must not be negative")
+        if query_image_max_size <= 0:
+            raise ValueError("query_image_max_size must be positive")
         self.model = model
         self.cache_root = Path(cache_root).resolve()
         self.base_url = base_url.rstrip("/")
@@ -278,6 +283,7 @@ class NvidiaNimClient:
         self.max_retries = max_retries
         self.retry_initial_delay_seconds = retry_initial_delay_seconds
         self.retry_delay_increment_seconds = retry_delay_increment_seconds
+        self.query_image_max_size = query_image_max_size
         self._last_request_time: float | None = None
 
     def _api_key(self) -> str:
@@ -377,12 +383,23 @@ class NvidiaNimClient:
             selected_images,
             selected_crops,
         )
+        query_scene = query_image.convert("RGB").copy()
+        draw = ImageDraw.Draw(query_scene)
+        line_width = max(4, round(min(query_scene.size) / 180))
+        draw.rectangle(
+            detection.box.as_list(), outline="#00d4ff", width=line_width
+        )
+        query_scene.thumbnail(
+            (self.query_image_max_size, self.query_image_max_size),
+            Image.Resampling.LANCZOS,
+        )
         body = {
             "model": self.model,
             "messages": [{
                 "role": "user",
                 "content": [
                     {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": encode_image(query_scene)}},
                     {"type": "image_url", "image_url": {"url": encode_image(montage)}},
                 ],
             }],

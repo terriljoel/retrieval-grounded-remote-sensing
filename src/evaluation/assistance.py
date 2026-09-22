@@ -169,6 +169,7 @@ def load_assistance_cases(
     seed: int,
     split_lookup: dict[Path, str] | None = None,
     minimum_detector_confidence: float = 0.0,
+    maximum_detector_confidence: float | None = None,
 ) -> tuple[list[AssistanceCase], int]:
     inference_directory = inference_directory.resolve()
     image_rows = _read_csv(inference_directory / "inference_images.csv")
@@ -205,7 +206,10 @@ def load_assistance_cases(
         if effective_splits[comparison["image_id"]] not in wanted_splits:
             continue
         detection_row = detections[comparison["detection_id"]]
-        if float(detection_row["confidence"]) < minimum_detector_confidence:
+        confidence = float(detection_row["confidence"])
+        if confidence < minimum_detector_confidence:
+            continue
+        if maximum_detector_confidence is not None and confidence >= maximum_detector_confidence:
             continue
         ground_truth_id = comparison["ground_truth_id"] or None
         ground_truth = ground_truths.get(ground_truth_id or "")
@@ -613,6 +617,10 @@ def _run_assistance_experiment(
         minimum_detector_confidence=float(
             cases_config.get("minimum_detector_confidence", 0.0)
         ),
+        maximum_detector_confidence=(
+            float(cases_config["maximum_detector_confidence"])
+            if cases_config.get("maximum_detector_confidence") is not None else None
+        ),
     )
     existing = _latest_records(results_path)
     completed_ids = {
@@ -660,6 +668,7 @@ def _run_assistance_experiment(
             retry_delay_increment_seconds=float(
                 vlm_config.get("retry_delay_increment_seconds", 1.0)
             ),
+            query_image_max_size=int(vlm_config.get("query_image_max_size", 1024)),
         )
 
     montage_directory = output_directory / "montages"
@@ -773,10 +782,21 @@ def _run_assistance_experiment(
                         evidence_ids=tuple(grounded["evidence_ids"]),
                         raw_response=grounded["raw_response"],
                     )
+                    query = record.get("query_only_vlm")
+                    query_assessment = VlmAssessment(
+                        decision=query["decision"],
+                        suggested_class=query["suggested_class"],
+                        confidence=query["confidence"],
+                        observations=query["observations"],
+                        uncertainty=query["uncertainty"],
+                        evidence_ids=tuple(query["evidence_ids"]),
+                        raw_response=query["raw_response"],
+                    ) if query else None
                     record["configured_policy"] = evaluate_acceptance_policy(
                         detection=case.detection,
                         evidence=vlm_evidence,
                         assessment=assessment,
+                        query_assessment=query_assessment,
                         settings=config["decision_policy"],
                     ).to_dict()
                 record["run_status"] = "completed"
@@ -833,6 +853,8 @@ def run_assistance_experiment(
         f"maximum_per_status={cases.get('maximum_per_status')}\n"
         f"minimum_detector_confidence="
         f"{cases.get('minimum_detector_confidence', 0.0)}\n"
+        f"maximum_detector_confidence="
+        f"{cases.get('maximum_detector_confidence')}\n"
         f"variants={execution.get('variants')}",
     )
     try:

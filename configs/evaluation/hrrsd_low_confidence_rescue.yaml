@@ -1,5 +1,5 @@
 experiment:
-  name: hrrsd_yolov8s1024_vlm_highres_v2_seed42
+  name: hrrsd_yolov8s1024_low_confidence_rescue_seed42
   output_root: "${SHARED_RESOURCES_ROOT}/experiment_outputs/assistance_comparisons"
 
 cases:
@@ -7,7 +7,8 @@ cases:
   image_root: "${SHARED_RESOURCES_ROOT}/datasets/raw/HRRSD_external_subset_seed42/JPEGImages"
   splits: [external]
   statuses: [true_positive, false_positive, class_error]
-  minimum_detector_confidence: 0.80
+  minimum_detector_confidence: 0.20
+  maximum_detector_confidence: 0.50
   maximum_per_status: 30
   seed: 42
 
@@ -62,6 +63,14 @@ decision_policy:
   retrieval_min_cosine_similarity: 0.90
   retrieval_min_supporting_neighbors: 3
   vlm_min_confidence: 0.85
+  low_confidence_rescue:
+    enabled: true
+    detector_min_confidence: 0.20
+    detector_max_confidence: 0.50
+    retrieval_min_cosine_similarity: 0.92
+    retrieval_min_supporting_neighbors: 3
+    query_vlm_min_confidence: 0.90
+    grounded_vlm_min_confidence: 0.90
 
 execution:
   variants:

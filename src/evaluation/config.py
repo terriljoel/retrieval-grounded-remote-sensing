@@ -47,6 +47,14 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
     minimum_confidence = float(cases.get("minimum_detector_confidence", 0.0))
     if not 0.0 <= minimum_confidence <= 1.0:
         raise ValueError("cases.minimum_detector_confidence must be between 0 and 1")
+    maximum_confidence = cases.get("maximum_detector_confidence")
+    if maximum_confidence is not None:
+        maximum_confidence = float(maximum_confidence)
+        if not minimum_confidence < maximum_confidence <= 1.0:
+            raise ValueError(
+                "cases.maximum_detector_confidence must be greater than the "
+                "minimum and at most 1"
+            )
 
     retrieval = config["retrieval"]
     if not retrieval.get("database_path") and not retrieval.get("artifact_root"):
@@ -66,6 +74,8 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
         raise ValueError("vlm.retry_initial_delay_seconds must not be negative")
     if float(vlm.get("retry_delay_increment_seconds", 1.0)) < 0:
         raise ValueError("vlm.retry_delay_increment_seconds must not be negative")
+    if int(vlm.get("query_image_max_size", 1024)) <= 0:
+        raise ValueError("vlm.query_image_max_size must be positive")
     max_evidence = int(vlm.get("max_evidence", 0))
     if not 1 <= max_evidence <= top_k:
         raise ValueError("vlm.max_evidence must be between 1 and retrieval.top_k")
@@ -85,8 +95,29 @@ def validate_assistance_experiment_config(config: dict[str, Any]) -> None:
         )
     if "configured_policy" in variants and "retrieval_grounded_vlm" not in variants:
         raise ValueError("configured_policy requires retrieval_grounded_vlm")
+    rescue = config["decision_policy"].get("low_confidence_rescue") or {}
+    if rescue.get("enabled", False):
+        if "configured_policy" not in variants or "query_only_vlm" not in variants:
+            raise ValueError(
+                "low_confidence_rescue requires configured_policy and query_only_vlm"
+            )
+        lower = float(rescue["detector_min_confidence"])
+        upper = float(rescue["detector_max_confidence"])
+        if not 0.0 <= lower < upper <= 1.0:
+            raise ValueError("low-confidence rescue detector range is invalid")
+        for key in (
+            "retrieval_min_cosine_similarity",
+            "query_vlm_min_confidence",
+            "grounded_vlm_min_confidence",
+        ):
+            if not 0.0 <= float(rescue[key]) <= 1.0:
+                raise ValueError(f"decision_policy.low_confidence_rescue.{key} is invalid")
+        if int(rescue["retrieval_min_supporting_neighbors"]) <= 0:
+            raise ValueError("low-confidence rescue supporting neighbours must be positive")
     if any("vlm" in variant for variant in variants) and not vlm.get("enabled", True):
         raise ValueError("VLM variants require vlm.enabled=true")
+
+
 def load_assistance_experiment_config(path: Path) -> dict[str, Any]:
     config = load_yaml_config(path)
     validate_assistance_experiment_config(config)
