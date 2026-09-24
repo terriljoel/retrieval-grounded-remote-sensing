@@ -16,11 +16,11 @@ classes:
 detector:
   backend: ultralytics
   models:
-    yolo_baseline: "${SHARED_RESOURCES_ROOT}/checkpoints/best.pt"
+    yolo_baseline: "${SHARED_RESOURCES_ROOT}/checkpoints/yolov8s_pretrained_1024_seed42.pt"
   default_model: yolo_baseline
   confidence: 0.25
   iou: 0.70
-  image_size: 640
+  image_size: 1024
   # null lets Ultralytics select CUDA in Colab and CPU locally.
   device: null
 
