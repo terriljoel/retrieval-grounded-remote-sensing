@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import numpy as np
 from PIL import Image
 
 from src.annotation.models import Box, DetectionSuggestion
@@ -32,7 +31,7 @@ class UltralyticsDetector:
         device: str | int | None,
     ) -> list[DetectionSuggestion]:
         result = self.model.predict(
-            source=np.asarray(image.convert("RGB")),
+            source=image.convert("RGB"),
             conf=confidence,
             iou=iou,
             imgsz=image_size,
