@@ -15,6 +15,9 @@ classes:
 
 detector:
   backend: ultralytics
+  # Every .pt file below this directory appears in the Detector dropdown.
+  checkpoint_root: "${SHARED_RESOURCES_ROOT}/checkpoints"
+  # Optional friendly names; default_model selects one of these initially.
   models:
     yolo_baseline: "${SHARED_RESOURCES_ROOT}/checkpoints/yolov8s_pretrained_1024_seed42.pt"
   default_model: yolo_baseline

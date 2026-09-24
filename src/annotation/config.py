@@ -34,8 +34,12 @@ def validate_annotation_config(config: dict[str, Any]) -> None:
     detector = config["detector"]
     if detector.get("backend") != "ultralytics":
         raise ValueError("The annotation prototype currently supports ultralytics")
-    if not detector.get("checkpoint") and not detector.get("models"):
-        raise ValueError("Set detector.checkpoint or detector.models")
+    if not any(
+        detector.get(key) for key in ("checkpoint", "models", "checkpoint_root")
+    ):
+        raise ValueError(
+            "Set detector.checkpoint, detector.models, or detector.checkpoint_root"
+        )
     if detector.get("models") and not isinstance(detector["models"], dict):
         raise ValueError("detector.models must map model names to checkpoints")
 

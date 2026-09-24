@@ -114,17 +114,37 @@ def load_evidence_store(
 
 def detector_models(config: dict) -> dict[str, Path]:
     detector = config["detector"]
-    configured = detector.get("models")
-    if configured:
-        return {
-            name: resolve_runtime_path(path, PROJECT_ROOT)
-            for name, path in configured.items()
-        }
-    return {
-        detector.get("name", "detector"): resolve_runtime_path(
-            detector["checkpoint"], PROJECT_ROOT
-        )
+    configured = detector.get("models") or {}
+    models = {
+        name: resolve_runtime_path(path, PROJECT_ROOT)
+        for name, path in configured.items()
     }
+    known_paths = {path.resolve() for path in models.values()}
+
+    checkpoint_root = detector.get("checkpoint_root")
+    if checkpoint_root:
+        root = resolve_runtime_path(checkpoint_root, PROJECT_ROOT)
+        if root.is_dir():
+            for checkpoint in sorted(root.rglob("*.pt")):
+                resolved = checkpoint.resolve()
+                if resolved in known_paths:
+                    continue
+                relative = checkpoint.relative_to(root).with_suffix("").as_posix()
+                label = f"checkpoint: {relative}"
+                models[label] = resolved
+                known_paths.add(resolved)
+
+    if models:
+        return models
+    if detector.get("checkpoint"):
+        return {
+            detector.get("name", "detector"): resolve_runtime_path(
+                detector["checkpoint"], PROJECT_ROOT
+            )
+        }
+    raise FileNotFoundError(
+        f"No .pt checkpoints found under {checkpoint_root}"
+    )
 
 
 def resolve_database_path(config: dict) -> Path:
@@ -329,7 +349,9 @@ def single_image_mode(config: dict) -> None:
         return
 
     image_bytes = uploaded.getvalue()
-    image_key = hashlib.sha256(image_bytes).hexdigest()
+    image_key = hashlib.sha256(
+        image_bytes + str(models[model_name]).encode("utf-8")
+    ).hexdigest()
     reset_image_state(image_key)
     image = Image.open(uploaded).convert("RGB")
 
