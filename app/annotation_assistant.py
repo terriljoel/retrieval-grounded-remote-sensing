@@ -129,8 +129,7 @@ def detector_models(config: dict) -> dict[str, Path]:
                 resolved = checkpoint.resolve()
                 if resolved in known_paths:
                     continue
-                relative = checkpoint.relative_to(root).with_suffix("").as_posix()
-                label = f"checkpoint: {relative}"
+                label = checkpoint.relative_to(root).with_suffix("").as_posix()
                 models[label] = resolved
                 known_paths.add(resolved)
 
